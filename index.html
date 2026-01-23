@@ -11,15 +11,16 @@
         /* Header Section */
         header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
         
-        /* LOGO FIX: Background white hataya aur object-fit lagaya */
+        /* LOGO STYLE (Nayi JPG ke liye optimized) */
         .logo-img { 
             width: 80px; 
             height: 80px; 
             border-radius: 50%; /* Golaakar banata hai */
-            border: 2px solid white; 
+            border: 3px solid white; /* Safed border */
             vertical-align: middle; 
             margin-right: 15px; 
-            object-fit: cover; /* Yeh important hai: Image ko circle mein fit karega aur kone kaat dega */
+            /* background: white; <-- Yeh hata diya taaki nayi image puri dikhe */
+            object-fit: cover; /* Important: Image ko circle mein fit karega */
         }
         
         header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
@@ -34,16 +35,16 @@
         .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); }
         .column { flex: 1; min-width: 320px; padding: 20px; }
         
-        /* STUDENT PHOTO FIX: Border hataya aur fit kiya */
+        /* STUDENT PHOTO STYLE (Nayi JPG ke liye optimized) */
         .img-fluid { 
             width: 100%; 
             max-width: 400px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            border-radius: 12px; /* Thode gole kone */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Achhi shadow */
             display: block; 
             margin-bottom: 15px; 
-            object-fit: cover; /* Image ko container mein fit karega */
-            /* border: 3px solid #eee;  <-- Yeh border hata diya taaki white space kam lage */
+            object-fit: cover; 
+            /* border: 3px solid #eee; <-- Mota border hata diya clean look ke liye */
         }
         
         .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
@@ -130,4 +131,9 @@
             📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
         </div>
         <div class="loc-box">
-            📍 MAYONG BAZAR, RAJAM
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
+    </footer>
+
+</body>
+</html>
