@@ -10,7 +10,18 @@
         
         /* Header Section */
         header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
-        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid white; vertical-align: middle; margin-right: 15px; background: white; }
+        
+        /* LOGO FIX: Background white hataya aur object-fit lagaya */
+        .logo-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; /* Golaakar banata hai */
+            border: 2px solid white; 
+            vertical-align: middle; 
+            margin-right: 15px; 
+            object-fit: cover; /* Yeh important hai: Image ko circle mein fit karega aur kone kaat dega */
+        }
+        
         header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
         header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
         
@@ -23,8 +34,18 @@
         .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); }
         .column { flex: 1; min-width: 320px; padding: 20px; }
         
-        /* Images Style */
-        .img-fluid { width: 100%; max-width: 400px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: block; margin-bottom: 15px; border: 3px solid #eee; }
+        /* STUDENT PHOTO FIX: Border hataya aur fit kiya */
+        .img-fluid { 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            display: block; 
+            margin-bottom: 15px; 
+            object-fit: cover; /* Image ko container mein fit karega */
+            /* border: 3px solid #eee;  <-- Yeh border hata diya taaki white space kam lage */
+        }
+        
         .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
         
         /* Text Styles */
@@ -105,15 +126,8 @@
 
     <footer>
         <div class="footer-red">▶ Special classes for class 9th and 10th students</div>
-        
         <div class="contact-box">
             📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
         </div>
-        
         <div class="loc-box">
-            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
-        </div>
-    </footer>
-
-</body>
-</html>
+            📍 MAYONG BAZAR, RAJAM
