@@ -8,19 +8,31 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
         header { background-color: #1a0066; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; }
         header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
-        .container { padding: 30px; max-width: 600px; margin: auto; }
+        .container { padding: 30px; max-width: 650px; margin: auto; }
         
         .form-box { background: white; padding: 30px; border-radius: 15px; border: 3px solid red; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         h2.form-title { color: #1a0066; text-align: center; text-transform: uppercase; text-decoration: underline; margin-bottom: 25px; }
+        
         .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #1a0066; }
+        /* Label mein English aur Assamese dono dikhenge */
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #1a0066; font-size: 1.05rem; }
         input, select, textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
         input:focus, select:focus, textarea:focus { border-color: #0044ff; outline: none; }
         
-        .submit-btn { background-color: #0044ff; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; transition: background 0.3s; }
+        /* Magic Box Styles */
+        .magic-box { background: #f0f8ff; padding: 15px; border: 2px dashed #0044ff; border-radius: 10px; margin-bottom: 15px; }
+        
+        /* Hide Sections Logic */
+        .hidden { display: none; }
+
+        /* Radio Buttons Design */
+        .radio-container { display: flex; gap: 20px; margin-top: 5px; }
+        .radio-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        input[type="radio"] { width: 20px; height: 20px; accent-color: red; cursor: pointer; }
+
+        .submit-btn { background-color: #0044ff; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; transition: background 0.3s; margin-top: 20px; }
         .submit-btn:hover { background-color: #0022aa; }
         
-        /* Success Message styling */
         #success-message { display: none; text-align: center; background: #e6ffe6; padding: 30px; border-radius: 15px; border: 3px solid green; }
         .success-icon { font-size: 4rem; color: green; margin-bottom: 10px; }
         .approval-text { color: green; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-transform: uppercase; }
@@ -40,49 +52,116 @@
     <div class="container">
         
         <div id="form-section" class="form-box">
-            <h2 class="form-title">New Student Admission Form</h2>
+            <h2 class="form-title">NEW STUDENT ADMISSION FORM</h2>
             
             <form id="my-form" action="https://formspree.io/f/mdaeenrb" method="POST">
                 
                 <div class="input-group">
-                    <label>Full Name (पूरा नाम):</label>
-                    <input type="text" name="name" required placeholder="Enter student's name">
+                    <label>1. Student Name (ছাত্ৰ/ছাত্ৰীৰ নাম):</label>
+                    <input type="text" name="student_name" required placeholder="Enter Full Name">
                 </div>
 
                 <div class="input-group">
-                    <label>Mobile Number (मोबाइल नंबर):</label>
-                    <input type="tel" name="phone" required placeholder="Enter 10 digit number">
+                    <label>2. Father's / Mother's Name (পিতৃ বা মাতৃৰ নাম):</label>
+                    <input type="text" name="parent_name" required placeholder="Enter Parent Name">
                 </div>
 
                 <div class="input-group">
-                    <label>Email Address (ईमेल):</label>
-                    <input type="email" name="email" required placeholder="Enter your email">
+                    <label>3. School Address (বিদ্যালয়ৰ ঠিকনা):</label>
+                    <input type="text" name="school_address" placeholder="Enter School Name & Place">
                 </div>
 
                 <div class="input-group">
-                    <label>Select Class (कक्षा चुनें):</label>
-                    <select name="class" required>
-                        <option value="">-- Select --</option>
-                        <option value="Class 6">Class 6th</option>
-                        <option value="Class 7">Class 7th</option>
-                        <option value="Class 8">Class 8th</option>
-                        <option value="Class 9">Class 9th</option>
-                        <option value="Class 10">Class 10th</option>
-                        <option value="Class 11">Class 11th</option>
-                        <option value="Class 12">Class 12th</option>
-                    </select>
+                    <label>4. Your Address (নিজৰ ঠিকনা):</label>
+                    <textarea name="personal_address" rows="2" required placeholder="Village, PO, District..."></textarea>
                 </div>
 
-                <button type="submit" class="submit-btn">SUBMIT FORM</button>
+                <div class="input-group magic-box">
+                    <label>5. Select Medium (মাধ্যম বাছনি কৰক):</label>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" name="medium" value="Assamese" required> Assamese Medium
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="medium" value="English"> English Medium
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group" style="background: #ffffcc; padding: 15px; border: 1px solid #ffd700; border-radius: 10px;">
+                    <label style="color: red; font-size: 1.2rem;">6. Select Course Type (কোৰ্চৰ প্ৰকাৰ):</label>
+                    <div class="radio-container">
+                        <label class="radio-label">
+                            <input type="radio" name="course_type" value="School_Classes" onclick="toggleCourse('school')" required> School Classes
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="course_type" value="Competitive_Exams" onclick="toggleCourse('competitive')"> Competitive Exams
+                        </label>
+                    </div>
+                </div>
+
+                <div id="school-section" class="hidden magic-box">
+                    <div class="input-group">
+                        <label>Select Class (শ্ৰেণী বাছনি কৰক):</label>
+                        <select name="class_selected" id="class_select" onchange="showSubjects()">
+                            <option value="">-- Select Class --</option>
+                            <option value="Class 6">Class 6th</option>
+                            <option value="Class 7">Class 7th</option>
+                            <option value="Class 8">Class 8th</option>
+                            <option value="Class 9">Class 9th</option>
+                            <option value="Class 10">Class 10th</option>
+                            <option value="Class 11">Class 11th</option>
+                            <option value="Class 12">Class 12th</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group hidden" id="subject-group">
+                        <label>Select Subject (বিষয় বাছনি কৰক):</label>
+                        <select name="subject_selected">
+                            <option value="">-- Select Subject --</option>
+                            <option value="MATHS">MATHS</option>
+                            <option value="SCIENCE">SCIENCE</option>
+                            <option value="ENGLISH">ENGLISH</option>
+                            <option value="SOCIAL SCIENCE">SOCIAL SCIENCE</option>
+                            <option value="COMMERCE">COMMERCE</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="competitive-section" class="hidden magic-box">
+                    <div class="input-group">
+                        <label>Select Competitive Course (কোৰ্চ বাছনি কৰক):</label>
+                        <select name="competitive_course_selected">
+                            <option value="">-- Select Course --</option>
+                            <option value="ADRE">ADRE</option>
+                            <option value="ASSAM POLICE">ASSAM POLICE</option>
+                            <option value="ASSAM TET">ASSAM TET</option>
+                            <option value="DHS">DHS</option>
+                            <option value="OTHERS">OTHERS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>7. Mobile Number (মবাইল নম্বৰ):</label>
+                    <input type="tel" name="phone" required placeholder="10 Digit Mobile Number">
+                </div>
+
+                <div class="input-group">
+                    <label>8. Email Address (ই-মেইল):</label>
+                    <input type="email" name="email" required placeholder="Enter Email ID">
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Form (ফৰ্ম দাখিল কৰক)</button>
+
             </form>
             <div id="status"></div>
         </div>
 
-
         <div id="success-message">
             <div class="success-icon">✔</div>
             <div class="approval-text">YOUR APPROVAL DONE!</div>
-            <p style="font-size: 1.1rem;">Thank you. Your form has been sent to <strong>thecatalystassamadmission@gmail.com</strong>.</p>
+            <p style="font-size: 1.1rem;">Thank you. Your details have been sent to <strong>thecatalystassamadmission@gmail.com</strong>.</p>
             
             <div class="location-box">
                 📍 CONTENT LOCATION:<br>
@@ -100,6 +179,33 @@
     </footer>
 
     <script>
+        // Course Type Logic
+        function toggleCourse(type) {
+            var schoolSec = document.getElementById('school-section');
+            var compSec = document.getElementById('competitive-section');
+
+            if (type === 'school') {
+                schoolSec.style.display = 'block'; // Show School
+                compSec.style.display = 'none';    // Hide Competitive
+            } else {
+                schoolSec.style.display = 'none';  // Hide School
+                compSec.style.display = 'block';   // Show Competitive
+            }
+        }
+
+        // Subject Show Logic (Class select karne ke baad hi subject aayega)
+        function showSubjects() {
+            var classVal = document.getElementById('class_select').value;
+            var subjectGroup = document.getElementById('subject-group');
+            
+            if (classVal !== "") {
+                subjectGroup.style.display = 'block'; // Show Subject
+            } else {
+                subjectGroup.style.display = 'none';  // Hide Subject
+            }
+        }
+
+        // Form Submit Logic (Same as before)
         var form = document.getElementById("my-form");
         var formSection = document.getElementById("form-section");
         var successMessage = document.getElementById("success-message");
