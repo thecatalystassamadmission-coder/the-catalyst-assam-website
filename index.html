@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Catalyst Assam - Home</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        
+        /* Header Section */
+        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        
+        /* LOGO STYLE */
+        .logo-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            border: 3px solid white; 
+            vertical-align: middle; 
+            margin-right: 15px; 
+            object-fit: cover; 
+            background-color: white; 
+        }
+        
+        header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
+        header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
+        
+        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
+        .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        
+        .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); }
+        .column { flex: 1; min-width: 320px; padding: 20px; }
+        
+        .img-fluid { 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            display: block; 
+            margin-bottom: 15px; 
+            object-fit: cover; 
+        }
+        
+        .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; }
+        ul { list-style: none; padding: 0; }
+        ul li { font-size: 1.05rem; margin-bottom: 12px; font-weight: 500; }
+        ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 5px; }
+        
+        .admission-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .admission-circle { background: radial-gradient(circle, #0055ff, #0022aa); color: white; width: 170px; height: 170px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 1.4rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); animation: pulse 2s infinite; text-transform: uppercase; line-height: 1.2; }
+        
+        .form-btn { background-color: red; color: yellow; padding: 10px 25px; border-radius: 30px; font-weight: bold; margin-top: 20px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); text-decoration: none; display: inline-block; border: 2px solid yellow; transition: transform 0.2s; }
+        .form-btn:hover { transform: scale(1.05); background-color: #cc0000; }
+
+        /* NEW MAP BUTTON STYLE */
+        .map-btn {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            text-decoration: none;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #1a0066;
+            color: #1a0066;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .map-btn:hover { background-color: #e6e6ff; transform: scale(1.05); }
+        .map-icon-small { width: 24px; height: 24px; margin-right: 8px; }
+
+        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; }
+        
+        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; }
+        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.3rem; text-transform: uppercase; }
+        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
+        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+        
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @media (max-width: 800px) { .container { flex-direction: column; } .column { min-width: 100%; padding: 10px; } header h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1>THE CATALYST ASSAM</h1>
+        <p>SHAPING TALENT</p>
+    </header>
+
+    <div class="red-banner">
+        <h2>SEBA & CBSE</h2>
+        <div style="font-size: 1.1rem; color: yellow; font-weight:bold; margin-bottom: 5px;">(ASSAMESE & ENGLISH MEDIUM)</div>
+        <div class="subjects">
+            MATHS | SCIENCE | ENGLISH | SOCIAL SCIENCE | COMMERCE<br>
+            Classes – 6th | 7th | 8th | 9th | 10th | 11th | 12th
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="column">
+            <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
+            <h3 class="section-title">HIGHLIGHTS</h3>
+            <ul>
+                <li>Special Teaching Quality by Well Qualified Teachers.</li>
+                <li>Individual Attention.</li>
+                <li>Regular Class Test.</li>
+                <li>Doubt Clearing Session.</li>
+            </ul>
+        </div>
+
+        <div class="column admission-wrapper">
+            <div class="admission-circle">Admission<br>Open</div>
+            
+            <a href="admission.html" class="form-btn">📝 Admission Form Link</a>
+            
+            <a href="https://www.google.com/maps/search/?api=1&query=Mayong+Bazar&query_place_id=ChIJw_CjE7PlWjcREIuR6lXQMg0" target="_blank" class="map-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Google_Maps_icon_%282015-2020%29.svg" alt="Map" class="map-icon-small">
+                Locate on Google Map (মায়ং বজাৰ)
+            </a>
+
+        </div>
+
+        <div class="column">
+            <h3 class="section-title">COMPETITIVE EXAMS COURSES</h3>
+            <ul>
+                <li>ADRE</li>
+                <li>ASSAM POLICE</li>
+                <li>ASSAM TET</li>
+                <li>DHS</li>
+                <li>OTHERS.</li>
+            </ul>
+            <div class="teacher-card" style="margin-top: 30px;">
+                <img src="teacher.png" alt="Mr. Nitu Sarkar" class="teacher-photo">
+                <div style="color:red; font-weight:bold; font-size:1.4rem; margin-top:5px; text-transform:uppercase;">MR. NITU SARKAR</div>
+                <div style="font-weight:bold; color: red; font-size: 0.95rem;">B.TECH, NIT RAIPUR<br>(APSC MAINS APPEARED)</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-red">▶ Special classes for class 9th and 10th students</div>
+        <div class="contact-box">
+            📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
+        </div>
+        <div class="loc-box">
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
+    </footer>
+
+</body>
+</html>
