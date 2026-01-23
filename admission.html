@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form - The Catalyst Assam</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        header { background-color: #1a0066; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; }
+        header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
+        .container { padding: 30px; max-width: 600px; margin: auto; }
+        
+        .form-box { background: white; padding: 30px; border-radius: 15px; border: 3px solid red; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2.form-title { color: #1a0066; text-align: center; text-transform: uppercase; text-decoration: underline; margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #1a0066; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #0044ff; outline: none; }
+        
+        .submit-btn { background-color: #0044ff; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; transition: background 0.3s; }
+        .submit-btn:hover { background-color: #0022aa; }
+        
+        /* Success Message styling */
+        #success-message { display: none; text-align: center; background: #e6ffe6; padding: 30px; border-radius: 15px; border: 3px solid green; }
+        .success-icon { font-size: 4rem; color: green; margin-bottom: 10px; }
+        .approval-text { color: green; font-size: 1.8rem; font-weight: bold; margin: 10px 0; text-transform: uppercase; }
+        .location-box { background: #1a0066; color: white; padding: 15px; margin-top: 20px; border-radius: 10px; font-weight: bold; }
+
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #1a0066; text-decoration: none; font-weight: bold; }
+        footer { text-align: center; background-color: #0000cc; color: white; padding: 15px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Catalyst Assam</h1>
+        <p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">ADMISSION PORTAL</p>
+    </header>
+
+    <div class="container">
+        
+        <div id="form-section" class="form-box">
+            <h2 class="form-title">New Student Admission Form</h2>
+            
+            <form id="my-form" action="https://formspree.io/f/mdaeenrb" method="POST">
+                
+                <div class="input-group">
+                    <label>Full Name (पूरा नाम):</label>
+                    <input type="text" name="name" required placeholder="Enter student's name">
+                </div>
+
+                <div class="input-group">
+                    <label>Mobile Number (मोबाइल नंबर):</label>
+                    <input type="tel" name="phone" required placeholder="Enter 10 digit number">
+                </div>
+
+                <div class="input-group">
+                    <label>Email Address (ईमेल):</label>
+                    <input type="email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="input-group">
+                    <label>Select Class (कक्षा चुनें):</label>
+                    <select name="class" required>
+                        <option value="">-- Select --</option>
+                        <option value="Class 6">Class 6th</option>
+                        <option value="Class 7">Class 7th</option>
+                        <option value="Class 8">Class 8th</option>
+                        <option value="Class 9">Class 9th</option>
+                        <option value="Class 10">Class 10th</option>
+                        <option value="Class 11">Class 11th</option>
+                        <option value="Class 12">Class 12th</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">SUBMIT FORM</button>
+            </form>
+            <div id="status"></div>
+        </div>
+
+
+        <div id="success-message">
+            <div class="success-icon">✔</div>
+            <div class="approval-text">YOUR APPROVAL DONE!</div>
+            <p style="font-size: 1.1rem;">Thank you. Your form has been sent to <strong>thecatalystassamadmission@gmail.com</strong>.</p>
+            
+            <div class="location-box">
+                📍 CONTENT LOCATION:<br>
+                MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+            </div>
+            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;">Fill Another Form</button>
+        </div>
+
+        <a href="index.html" class="back-link">⬅ Back to Home Page</a>
+
+    </div>
+
+    <footer>
+        Contact for Query: thecatalystassam@gmail.com
+    </footer>
+
+    <script>
+        var form = document.getElementById("my-form");
+        var formSection = document.getElementById("form-section");
+        var successMessage = document.getElementById("success-message");
+        
+        async function handleSubmit(event) {
+            event.preventDefault();
+            var status = document.getElementById("status");
+            var data = new FormData(event.target);
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    form.reset();
+                    formSection.style.display = "none";
+                    successMessage.style.display = "block";
+                } else {
+                    status.innerHTML = "Oops! Error sending form.";
+                    status.style.color = "red";
+                }
+            }).catch(error => {
+                status.innerHTML = "Oops! Error sending form.";
+                status.style.color = "red";
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+
+</body>
+</html>
