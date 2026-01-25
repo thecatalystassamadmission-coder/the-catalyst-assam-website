@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form - The Catalyst Assam</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        header { background-color: #1a0066; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; }
+        header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
+        .container { padding: 30px; max-width: 650px; margin: auto; }
+        
+        .form-box { background: white; padding: 30px; border-radius: 15px; border: 3px solid red; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2.form-title { color: #1a0066; text-align: center; text-transform: uppercase; text-decoration: underline; margin-bottom: 25px; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #1a0066; font-size: 1.05rem; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #0044ff; outline: none; }
+        
+        /* PHOTO UPLOAD STYLE */
+        .photo-upload-box {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px dashed #1a0066;
+            border-radius: 10px;
+            background: #f0f8ff;
+        }
+        .photo-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover; /* Photo katega nahi, fit hoga */
+            border-radius: 10px;
+            border: 3px solid red;
+            background-color: #ddd;
+            display: block;
+            margin: 10px auto;
+        }
+        
+        /* AGE & DOB Box */
+        .dob-container { display: flex; gap: 15px; }
+        .dob-box { flex: 1; }
+        .age-box { flex: 1; }
+        input[readonly] { background-color: #e9ecef; cursor: not-allowed; font-weight: bold; color: #555; }
+
+        /* Magic Box Styles */
+        .magic-box { background: #f0f8ff; padding: 15px; border: 2px dashed #0044ff; border-radius: 10px; margin-bottom: 15px; }
+        
+        /* Checkbox & Radio Design */
+        .radio-container { display: flex; gap: 20px; margin-top: 5px; flex-wrap: wrap; }
+        .radio-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        input[type="radio"], input[type="checkbox"] { width: 20px; height: 20px; accent-color: red; cursor: pointer; }
+
+        /* Save Button for Subjects */
+        .save-btn-small {
+            background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; display: inline-block;
+        }
+        .saved-list {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e6ffe6;
+            border-left: 5px solid green;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Submit Button (Locked State) */
+        .submit-btn { 
+            background-color: #ccc; /* Grey initially */
+            color: white; 
+            border: none; 
+            padding: 15px; 
+            width: 100%; 
+            border-radius: 30px; 
+            cursor: not-allowed; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            text-transform: uppercase; 
+            transition: background 0.3s; 
+            margin-top: 20px; 
+        }
+        .submit-btn.active {
+            background-color: #0044ff; /* Blue when active */
+            cursor: pointer;
+        }
+        .submit-btn.active:hover { background-color: #0022aa; }
+        
+        #success-message { display: none; text-align: center; background: #e6ffe6; padding: 30px; border-radius: 15px; border: 3px solid green; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #1a0066; text-decoration: none; font-weight: bold; }
+        footer { text-align: center; background-color: #0000cc; color: white; padding: 15px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Catalyst Assam</h1>
+        <p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">ADMISSION PORTAL</p>
+    </header>
+
+    <div class="container">
+        
+        <div id="form-section" class="form-box">
+            <h2 class="form-title">NEW STUDENT ADMISSION FORM</h2>
+            
+            <form id="my-form" action="https://formspree.io/f/mdaeenrb" method="POST" enctype="multipart/form-data" oninput="checkFormValidity()">
+                
+                <div class="photo-upload-box">
+                    <label>Upload Student Photo (ছাত্র/ছাত্রীৰ ফটো):</label>
+                    <img id="preview-img" src="https://via.placeholder.com/150?text=No+Photo" class="photo-preview" alt="Student Photo">
+                    <input type="file" name="photo" id="photo-input" accept="image/*,.pdf" onchange="previewImage(event)" required>
+                    <small style="color: red;">* Upload JPG/PNG only. Photo will auto-fit.</small>
+                </div>
+
+                <div class="input-group">
+                    <label>1. Student Name (ছাত্র/ছাত্রীৰ নাম):</label>
+                    <input type="text" name="student_name" id="s_name" required placeholder="Enter Full Name">
+                </div>
+
+                <div class="input-group">
+                    <label>2. Father's / Mother's Name (পিতৃ বা মাতৃৰ নাম):</label>
+                    <input type="text" name="parent_name" id="p_name" required placeholder="Enter Parent Name">
+                </div>
+
+                <div class="input-group">
+                    <label>3. School Name & Address (বিদ্যালয়ৰ নাম আৰু ঠিকনা):</label>
+                    <input type="text" name="school_address" id="s_address" required placeholder="School Name, Place">
+                </div>
+
+                <div class="input-group">
+                    <label>(I) Select Gender (লিংগ):</label>
+                    <div class="radio-container">
+                        <label class="radio-label"><input type="radio" name="gender" value="Male" required> Male</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="Female"> Female</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="Others"> Others</label>
+                    </div>
+                </div>
+
+                <div class="input-group dob-container">
+                    <div class="dob-box">
+                        <label>(II) Date of Birth (জন্ম তাৰিখ):</label>
+                        <input type="date" name="dob" id="dob_input" required onchange="calculateAge()">
+                    </div>
+                    <div class="age-box">
+                        <label>Age (বয়স):</label>
+                        <input type="text" name="age" id="age_display" readonly placeholder="Auto Calc">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>4. Your Personal Address (নিজৰ ঠিকনা):</label>
+                    <textarea name="personal_address" id="per_address" rows="2" required placeholder="Village, PO, District..."></textarea>
+                </div>
+
+                <div class="input-group magic-box">
+                    <label>5. Select Medium (মাধ্যম বাছনি কৰক):</label>
+                    <div class="radio-container">
+                        <label class="radio-label"><input type="radio" name="medium" value="Assamese" required> Assamese Medium</label>
+                        <label class="radio-label"><input type="radio" name="medium" value="English"> English Medium</label>
+                    </div>
+                </div>
+
+                <div class="input-group" style="background: #ffffcc; padding: 15px; border: 1px solid #ffd700; border-radius: 10px;">
+                    <label style="color: red; font-size: 1.2rem;">6. Select Course Type (কোৰ্চৰ প্ৰকাৰ):</label>
+                    <div class="radio-container">
+                        <label class="radio-label"><input type="radio" name="course_type" value="School_Classes" onclick="toggleCourse('school')" required> School Classes</label>
+                        <label class="radio-label"><input type="radio" name="course_type" value="Competitive_Exams" onclick="toggleCourse('competitive')"> Competitive Exams</label>
+                    </div>
+                </div>
+
+                <div id="school-section" class="hidden magic-box">
+                    <div class="input-group">
+                        <label>Select Class (শ্ৰেণী):</label>
+                        <select name="class_selected" id="class_select">
+                            <option value="">-- Select Class --</option>
+                            <option value="Class 6">Class 6th</option>
+                            <option value="Class 7">Class 7th</option>
+                            <option value="Class 8">Class 8th</option>
+                            <option value="Class 9">Class 9th</option>
+                            <option value="Class 10">Class 10th</option>
+                            <option value="Class 11">Class 11th</option>
+                            <option value="Class 12">Class 12th</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Select Subjects (Multiple Select):</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="MATHS"> MATHS</label>
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="SCIENCE"> SCIENCE</label>
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="ENGLISH"> ENGLISH</label>
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="SOCIAL SCIENCE"> SOCIAL SCIENCE</label>
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="ECONOMICS"> ECONOMICS</label>
+                            <label class="radio-label"><input type="checkbox" class="school-subj" value="COMMERCE"> COMMERCE</label>
+                        </div>
+                        <button type="button" class="save-btn-small" onclick="saveSubjects()">✔ Save Subjects</button>
+                        <div id="saved-subjects-display" class="saved-list"></div>
+                        <input type="hidden" name="final_subjects" id="final_subjects_input">
+                    </div>
+                </div>
+
+                <div id="competitive-section" class="hidden magic-box">
+                    <div class="input-group">
+                        <label>Select Courses (Multiple Select):</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label class="radio-label"><input type="checkbox" class="comp-course" value="ADRE"> ADRE</label>
+                            <label class="radio-label"><input type="checkbox" class="comp-course" value="ASSAM POLICE"> ASSAM POLICE</label>
+                            <label class="radio-label"><input type="checkbox" class="comp-course" value="ASSAM TET"> ASSAM TET</label>
+                            <label class="radio-label"><input type="checkbox" class="comp-course" value="DHS"> DHS</label>
+                            <label class="radio-label"><input type="checkbox" class="comp-course" value="OTHERS"> OTHERS</label>
+                        </div>
+                        <button type="button" class="save-btn-small" onclick="saveCourses()">✔ Save Courses</button>
+                        <div id="saved-courses-display" class="saved-list"></div>
+                        <input type="hidden" name="final_courses" id="final_courses_input">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>7. Mobile Number (মবাইল নম্বৰ):</label>
+                    <input type="tel" name="phone" id="phone" required placeholder="10 Digit Mobile Number" pattern="[0-9]{10}">
+                </div>
+
+                <div class="input-group">
+                    <label>8. Email Address (ই-মেইল):</label>
+                    <input type="email" name="email" id="email" required placeholder="Enter Email ID">
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn" disabled>🔒 Fill All Fields to Unlock Submit</button>
+
+            </form>
+            <div id="status"></div>
+        </div>
+
+        <div id="success-message">
+            <div class="success-icon">✔</div>
+            <div class="approval-text">SUBMITTED SUCCESSFULLY!</div>
+            <p>Your admission form has been received.</p>
+            <div class="location-box">📍 MAYONG BAZAR, RAJAMAYONG</div>
+            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px;">Fill Another Form</button>
+        </div>
+
+        <a href="index.html" class="back-link">⬅ Back to Home Page</a>
+
+    </div>
+
+    <footer>Contact for Query: thecatalystassam@gmail.com</footer>
+
+    <script>
+        // 1. Photo Preview Logic
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('preview-img');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+            checkFormValidity();
+        }
+
+        // 2. Age Calculation Logic
+        function calculateAge() {
+            var dobInput = document.getElementById("dob_input").value;
+            if(dobInput) {
+                var dob = new Date(dobInput);
+                var diff_ms = Date.now() - dob.getTime();
+                var age_dt = new Date(diff_ms); 
+                var age = Math.abs(age_dt.getUTCFullYear() - 1970);
+                document.getElementById("age_display").value = age + " Years";
+            }
+            checkFormValidity();
+        }
+
+        // 3. Toggle Course Sections
+        function toggleCourse(type) {
+            document.getElementById('school-section').style.display = (type === 'school') ? 'block' : 'none';
+            document.getElementById('competitive-section').style.display = (type === 'school') ? 'none' : 'block';
+            checkFormValidity();
+        }
+
+        // 4. SAVE SUBJECTS Logic (Line by Line Display)
+        function saveSubjects() {
+            var checkboxes = document.querySelectorAll('.school-subj:checked');
+            var list = [];
+            checkboxes.forEach((checkbox) => { list.push(checkbox.value); });
+            
+            if(list.length > 0) {
+                var displayHTML = "Selected Subjects:<br>" + list.join("<br>"); // Line by line
+                document.getElementById('saved-subjects-display').innerHTML = displayHTML;
+                document.getElementById('saved-subjects-display').style.display = 'block';
+                document.getElementById('final_subjects_input').value = list.join(", ");
+            } else {
+                document.getElementById('saved-subjects-display').style.display = 'none';
+                document.getElementById('final_subjects_input').value = "";
+            }
+            checkFormValidity();
+        }
+
+        // 5. SAVE COURSES Logic
+        function saveCourses() {
+            var checkboxes = document.querySelectorAll('.comp-course:checked');
+            var list = [];
+            checkboxes.forEach((checkbox) => { list.push(checkbox.value); });
+
+            if(list.length > 0) {
+                var displayHTML = "Selected Courses:<br>" + list.join("<br>");
+                document.getElementById('saved-courses-display').innerHTML = displayHTML;
+                document.getElementById('saved-courses-display').style.display = 'block';
+                document.getElementById('final_courses_input').value = list.join(", ");
+            } else {
+                document.getElementById('saved-courses-display').style.display = 'none';
+                document.getElementById('final_courses_input').value = "";
+            }
+            checkFormValidity();
+        }
+
+        // 6. MASTER VALIDATION (Unlock Submit Button)
+        function checkFormValidity() {
+            var btn = document.getElementById("submit-btn");
+            var form = document.getElementById("my-form");
+            
+            // Check Basic Fields
+            var isValid = form.checkValidity(); // Checks required fields like Name, Email, Phone
+            
+            // Custom Logic: Check if Subjects or Courses are saved
+            var courseType = document.querySelector('input[name="course_type"]:checked');
+            if (courseType) {
+                if (courseType.value === "School_Classes") {
+                    if (document.getElementById('final_subjects_input').value === "") isValid = false;
+                } else {
+                    if (document.getElementById('final_courses_input').value === "") isValid = false;
+                }
+            } else {
+                isValid = false; // Course Type not selected
+            }
+
+            // Check Photo
+            if(document.getElementById('photo-input').files.length === 0) isValid = false;
+
+            // Enable or Disable Button
+            if (isValid) {
+                btn.disabled = false;
+                btn.classList.add("active");
+                btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)";
+            } else {
+                btn.disabled = true;
+                btn.classList.remove("active");
+                btn.innerHTML = "🔒 Fill All Fields & Save to Unlock";
+            }
+        }
+
+        // Form Submit Handler
+        var form = document.getElementById("my-form");
+        var formSection = document.getElementById("form-section");
+        var successMessage = document.getElementById("success-message");
+        
+        async function handleSubmit(event) {
+            event.preventDefault();
+            var data = new FormData(event.target);
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    form.reset();
+                    formSection.style.display = "none";
+                    successMessage.style.display = "block";
+                    window.scrollTo(0,0);
+                } else {
+                    alert("Error submitting form.");
+                }
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+
+</body>
+</html>
