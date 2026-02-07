@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admission Form (Single Subject) - The Catalyst Assam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        header { background-color: #1a0066; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; }
+        header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
+        .container { padding: 30px; max-width: 650px; margin: auto; }
+        .form-box { background: white; padding: 30px; border-radius: 15px; border: 3px solid red; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2.form-title { color: #1a0066; text-align: center; text-transform: uppercase; text-decoration: underline; margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #1a0066; font-size: 1.05rem; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #0044ff; outline: none; }
+        .photo-upload-box { text-align: center; margin-bottom: 20px; padding: 15px; border: 2px dashed #1a0066; border-radius: 10px; background: #f0f8ff; }
+        .photo-frame { width: 140px; height: 180px; border: 3px solid red; background: #ddd; overflow: hidden; border-radius: 5px; margin: 0 auto 10px auto; position: relative; }
+        .photo-preview { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: object-position 0.2s ease; }
+        .adjust-btn { background: #1a0066; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin: 0 5px; }
+        .radio-container { display: flex; gap: 20px; margin-top: 5px; flex-wrap: wrap; }
+        .radio-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        input[type="radio"], input[type="checkbox"] { width: 20px; height: 20px; accent-color: red; cursor: pointer; }
+        .submit-btn { background-color: #ccc; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: not-allowed; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; margin-top: 20px; }
+        .submit-btn.active { background-color: #0044ff; cursor: pointer; }
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; text-align: center; color: white; padding-top: 200px; }
+        #success-message { display: none; text-align: center; background: #e6ffe6; padding: 30px; border-radius: 15px; border: 3px solid green; }
+        .dob-container { display: flex; gap: 15px; }
+        .dob-box { flex: 1; }
+        .age-box { flex: 1; }
+        input[readonly] { background-color: #e9ecef; }
+        .magic-box { background: #f0f8ff; padding: 15px; border: 2px dashed #0044ff; border-radius: 10px; margin-bottom: 15px; }
+        
+        /* Auto Display Box (Replaces Selection) */
+        .auto-info-box { background: #fff8dc; border: 2px solid #ffcc00; padding: 15px; border-radius: 8px; margin-top: 10px; color: #333; }
+        .package-title { color: #1a0066; font-weight: bold; text-decoration: underline; font-size: 1.2rem; margin-bottom: 8px; text-transform: uppercase; }
+        .free-tag { background: yellow; padding: 2px 8px; font-weight: bold; color: red; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        #receipt-template { display: none; padding: 30px; background: white; border: 5px solid #1a0066; margin-top: 20px; color: black; }
+        .rec-header { text-align: center; border-bottom: 3px solid #1a0066; padding-bottom: 15px; margin-bottom: 20px; }
+        .rec-row { display: flex; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .rec-label { font-weight: bold; width: 40%; color: #1a0066; }
+        .rec-val { width: 60%; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay"><div style="font-size: 3rem;">🚀</div><h2>Submitting Form...</h2><p>Saving Data & Sending Receipt Email...</p></div>
+    <header><h1>The Catalyst Assam</h1><p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">6TH TO 8TH SINGLE SUBJECT</p></header>
+    <div class="container">
+        <div id="form-section" class="form-box">
+            <h2 class="form-title">ADMISSION FORM</h2>
+            <form id="my-form" oninput="checkFormValidity()">
+                
+                <div class="photo-upload-box">
+                    <label style="margin-bottom:10px; display:block; font-weight:bold;">Upload Student Photo (Passport Size):</label>
+                    <div class="photo-frame"><img id="preview-img" src="https://via.placeholder.com/140x180?text=Photo" class="photo-preview" alt="Student Photo"></div>
+                    <div style="margin-bottom: 10px;"><button type="button" class="adjust-btn" onclick="movePhoto(-10)">⬆ Up</button><button type="button" class="adjust-btn" onclick="movePhoto(10)">⬇ Down</button></div>
+                    <input type="file" id="photo-input" accept="image/*" onchange="previewImage(event)" required>
+                </div>
+
+                <div class="input-group"><label>1. Student Name (ছাত্র/ছাত্রীৰ নাম):</label><input type="text" name="student_name" id="s_name" required></div>
+                <div class="input-group"><label>2. Father's / Mother's Name (পিতৃ বা মাতৃৰ নাম):</label><input type="text" name="parent_name" id="p_name" required></div>
+                <div class="input-group"><label>3. School / College Name (বিদ্যালয় / মহাবিদ্যালয়ৰ নাম):</label><input type="text" name="school_college_name" id="s_name_school" required></div>
+                
+                <div class="input-group"><label>(I) Select Gender (লিংগ):</label>
+                    <div class="radio-container">
+                        <label class="radio-label"><input type="radio" name="gender" value="Male" required onclick="checkFormValidity()"> (a) Male</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="Female" onclick="checkFormValidity()"> (b) Female</label>
+                        <label class="radio-label"><input type="radio" name="gender" value="Others" onclick="checkFormValidity()"> (c) Others</label>
+                    </div>
+                </div>
+
+                <div class="input-group dob-container">
+                    <div class="dob-box"><label>(II) (b) Date of Birth (জন্ম তাৰিখ):</label><input type="date" name="dob" id="dob_input" required onchange="calculateAge()"></div>
+                    <div class="age-box"><label>(a) Age (বয়স):</label><input type="text" name="age" id="age_display" readonly></div>
+                </div>
+
+                <div class="input-group"><label>4. Your Personal Address (নিজৰ ঠিকনা):</label><textarea name="personal_address" id="per_address" rows="2" required></textarea></div>
+
+                <div class="input-group magic-box" id="medium-section">
+                    <label>5. Selected Package Details (নিৰ্বাচিত বিষয়):</label>
+                    
+                    <div id="auto-display" class="auto-info-box">
+                        <div class="package-title" id="disp-medium">LOADING...</div>
+                        <div style="font-weight:bold; color:blue; margin-bottom:10px;">Subjects: <span id="disp-subjects" style="color:black;"></span></div>
+                        <div style="font-weight:bold; font-size:1.1rem; color:red;">Admission Fees: ₹ <span id="disp-adm">0</span></div>
+                        <div style="margin-bottom:5px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:bold;">Monthly Fee: ₹ <span id="disp-mon">0</span></div>
+                    </div>
+                </div>
+
+                <div class="input-group" style="background:#ffffcc; padding:15px; border-radius:10px;">
+                    <label style="color:red; font-size:1.1rem; font-weight:bold;">6. Select Class (শ্ৰেণী বাছনি কৰক):</label>
+                    <select name="class_selected" id="class_select" required onchange="checkFormValidity()">
+                        <option value="">-- Select Class --</option>
+                        <option value="Class 6">Class 6th</option>
+                        <option value="Class 7">Class 7th</option>
+                        <option value="Class 8">Class 8th</option>
+                    </select>
+                </div>
+
+                <div class="input-group"><label>7. Mobile Number (মবাইল নম্বৰ):</label><input type="tel" name="phone" id="phone" required pattern="[0-9]{10}" placeholder="10 Digit Number"></div>
+                <div class="input-group"><label>8. Email Address (ই-মেইল) - Optional:</label><input type="email" name="email" id="email" placeholder="Required for Email Receipt"></div>
+                <button type="submit" id="submit-btn" class="submit-btn" disabled>🔒 Fill All Fields to Unlock</button>
+            </form>
+        </div>
+
+        <div id="success-message">
+            <div style="font-size:4rem; color:green;">✔</div>
+            <h2 style="color:green;">SUBMITTED SUCCESSFULLY!</h2>
+            <p>Email Sent & Data Saved.</p>
+            <hr>
+            <div style="color:red; font-weight:bold; font-size:1rem; border:3px solid red; padding:15px; background:#fff0f0; line-height:1.6; text-align:center; max-width: 500px; margin: 0 auto;">
+                Downloading is mandatory, and you must bring that PDF file to The Catalyst Assam Head Office.<br>-------------------------------------<br>ডাউনলোড কৰাটো বাধ্যতামূলক আৰু সেই PDF ফাইলটো 'The Catalyst Assam'ৰ মুখ্য কাৰ্যালয়লৈ (Head Office) লৈ আহিব লাগিব।
+            </div>
+            <hr>
+            <button onclick="downloadReceipt()" style="background:#0044ff; color:white; padding:15px 30px; border:none; border-radius:30px; cursor:pointer; font-weight:bold; margin-top:20px; font-size:1.1rem; box-shadow: 0 5px 15px rgba(0,68,255,0.4);">📥 DOWNLOAD RECEIPT (PDF)</button>
+            <br><br><button onclick="location.reload()" style="padding:10px 20px; cursor:pointer;">Fill New Form</button>
+        </div>
+
+        <div id="receipt-template">
+            <div class="rec-header"><h1 style="margin:0; color:#1a0066; font-size:24px;">THE CATALYST ASSAM</h1><p style="margin:5px 0;">ADMISSION ACKNOWLEDGEMENT RECEIPT (Single Subject)</p><p style="margin:0; font-size:12px;">Mayong Bazar, Rajamayong, Morigaon</p></div>
+            <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                <div style="width:65%;">
+                    <div class="rec-row"><div class="rec-label">Student Name:</div><div class="rec-val" id="r_name"></div></div>
+                    <div class="rec-row"><div class="rec-label">Father/Mother:</div><div class="rec-val" id="r_parent"></div></div>
+                    <div class="rec-row"><div class="rec-label">School:</div><div class="rec-val" id="r_school"></div></div>
+                    <div class="rec-row"><div class="rec-label">Address:</div><div class="rec-val" id="r_address"></div></div>
+                    <div class="rec-row"><div class="rec-label">Gender:</div><div class="rec-val" id="r_gender"></div></div>
+                    <div class="rec-row"><div class="rec-label">Age:</div><div class="rec-val" id="r_age"></div></div>
+                    <div class="rec-row"><div class="rec-label">Mobile:</div><div class="rec-val" id="r_phone"></div></div>
+                    <div class="rec-row"><div class="rec-label">Class:</div><div class="rec-val" id="r_class"></div></div>
+                    
+                    <div class="rec-row" style="background:#ffffcc; padding:5px; border:1px solid #ddd;">
+                        <div class="rec-label" style="width:100%;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.9rem; color:black;"></span></div>
+                    </div>
+                    <div class="rec-row"><div class="rec-label">Date:</div><div class="rec-val" id="r_date"></div></div>
+                </div>
+                <div style="width:30%; text-align:center;"><img id="r_photo" src="" style="width:120px; height:150px; object-fit:cover; border:2px solid #000;"><p style="font-size:12px; margin-top:5px;">Student Photo</p></div>
+            </div>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;"><div><p>___________________</p><p>Student Signature</p></div><div><p>___________________</p><p>Office Seal & Sign</p></div></div>
+        </div>
+    </div>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
+        
+        let urlMed = "", urlSub = "", urlAdm = "", urlMon = "";
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            urlMed = params.get('medium') || "Unknown";
+            urlSub = params.get('subjects') || "None";
+            urlAdm = params.get('adm') || "0";
+            urlMon = params.get('mon') || "0";
+
+            document.getElementById('disp-medium').innerText = urlMed.toUpperCase() + " MEDIUM";
+            document.getElementById('disp-subjects').innerText = urlSub;
+            document.getElementById('disp-adm').innerText = urlAdm;
+            document.getElementById('disp-mon').innerText = urlMon;
+        }
+
+        let photoData = ""; let currentPos = 20;
+        function movePhoto(amount) { let img = document.getElementById('preview-img'); currentPos += amount; if(currentPos < 0) currentPos = 0; if(currentPos > 100) currentPos = 100; img.style.objectPosition = `center ${currentPos}%`; }
+        function previewImage(event) { let file = event.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = function(e) { document.getElementById('preview-img').src = e.target.result; photoData = e.target.result; }; reader.readAsDataURL(file); } checkFormValidity(); }
+        function calculateAge() { let dob = new Date(document.getElementById("dob_input").value); let diff = Date.now() - dob.getTime(); let age = new Date(diff).getUTCFullYear() - 1970; document.getElementById("age_display").value = age + " Years"; checkFormValidity(); }
+        
+        function checkFormValidity() {
+            let btn = document.getElementById("submit-btn"); let isValid = true;
+            if(document.getElementById('s_name').value === "") isValid = false;
+            if(document.getElementById('p_name').value === "") isValid = false;
+            if(document.getElementById('s_name_school').value === "") isValid = false;
+            if(document.getElementById('phone').value === "") isValid = false;
+            if(document.getElementById('dob_input').value === "") isValid = false;
+            if(!photoData) isValid = false;
+            if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
+            if(document.getElementById('class_select').value === "") isValid = false;
+            // Medium is already selected from previous page, so it's valid
+            if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } else { btn.disabled = true; btn.classList.remove("active"); }
+        }
+
+        function downloadReceipt() {
+            document.getElementById('r_name').innerText = document.getElementById('s_name').value;
+            document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
+            document.getElementById('r_school').innerText = document.getElementById('s_name_school').value;
+            document.getElementById('r_address').innerText = document.getElementById('per_address').value;
+            document.getElementById('r_gender').innerText = document.querySelector('input[name="gender"]:checked').value;
+            document.getElementById('r_age').innerText = document.getElementById('age_display').value;
+            document.getElementById('r_phone').innerText = document.getElementById('phone').value;
+            document.getElementById('r_class').innerText = document.getElementById('class_select').value;
+            
+            // Generate Receipt Text from URL Data
+            let pkgText = `${urlMed} MEDIUM\n`;
+            pkgText += `Subjects: ${urlSub}\n`;
+            pkgText += `Fees: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly: ₹${urlMon}`;
+
+            document.getElementById('r_package_text').innerText = pkgText;
+            document.getElementById('r_date').innerText = new Date().toLocaleDateString();
+            document.getElementById('r_photo').src = photoData;
+            var element = document.getElementById('receipt-template'); element.style.display = 'block'; 
+            var opt = { margin: 5, filename: 'Catalyst_Receipt_' + document.getElementById('s_name').value + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; });
+        }
+
+        document.getElementById('my-form').addEventListener('submit', function(e) {
+            e.preventDefault(); document.getElementById('loading-overlay').style.display = 'block';
+            let formData = new FormData(this); let obj = {}; formData.forEach((value, key) => obj[key] = value); obj.photo = photoData; 
+            
+            obj.course_type = "Single Subject (6-8)"; 
+            obj.medium = urlMed; // Send Medium to Excel
+            obj.final_subjects = `${urlSub} [Adm:${urlAdm}, Mon:${urlMon}]`; // Send Subjects & Fee to Excel
+
+            fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(obj), headers: { "Content-Type": "application/json" } })
+            .then(() => { document.getElementById('loading-overlay').style.display = 'none'; document.getElementById('form-section').style.display = 'none'; document.getElementById('success-message').style.display = 'block'; window.scrollTo(0,0); })
+            .catch(err => { document.getElementById('loading-overlay').style.display = 'none'; alert("Submission Failed! Please check internet."); });
+        });
+    </script>
+</body>
+</html>
