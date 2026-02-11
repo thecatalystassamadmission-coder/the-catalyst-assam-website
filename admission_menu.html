@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Menu - The Catalyst Assam</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; padding: 0; 
+            background: url('world-map-png-30718.png') no-repeat center center fixed; 
+            background-size: cover; /* Map pure background par */
+            color: #333; 
+        }
+        
+        /* Header Section */
+        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        
+        .logo-img { 
+            width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; 
+        }
+        
+        header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
+        header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
+        
+        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
+        .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 30px; 
+            /* Transparent white overlay taaki text dikhe */
+            background: rgba(255, 255, 255, 0.85); 
+            min-height: 100vh;
+        }
+
+        /* --- MENU GRID STYLES --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 Columns */
+            gap: 40px;
+            width: 100%;
+            max-width: 900px;
+            justify-items: center;
+            margin-top: 20px;
+        }
+
+        /* Each Menu Item Container */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: transform 0.2s;
+            animation: bounce 2s infinite; /* BLINK/BOUNCE EFFECT */
+        }
+        .menu-item:hover { transform: scale(1.05); }
+
+        /* --- ALAG ALAG TIME PAR BLINK KARNE KE LIYE DELAY --- */
+        .menu-grid a:nth-child(1) { animation-delay: 0s; }
+        .menu-grid a:nth-child(2) { animation-delay: 0.3s; }
+        .menu-grid a:nth-child(3) { animation-delay: 0.6s; }
+        .menu-grid a:nth-child(4) { animation-delay: 0.9s; }
+        .menu-grid a:nth-child(5) { animation-delay: 1.2s; }
+        .menu-grid a:nth-child(6) { animation-delay: 1.5s; }
+        .menu-grid a:nth-child(7) { animation-delay: 1.8s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* IMAGE BUBBLE (Left) */
+        .menu-img-bubble {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 20px; /* 2x2 Round Corner */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1a0066;
+            padding: 5px;
+        }
+        .menu-img-bubble img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* TEXT BUBBLE (Right) */
+        .menu-text-bubble {
+            background: radial-gradient(circle, #0033cc, #002288); /* Default Blue */
+            color: white;
+            padding: 15px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border: 2px solid white;
+            width: 180px;
+        }
+
+        /* Distinct Colors for Text Bubbles */
+        .c1 { background: radial-gradient(circle, #0033cc, #002288); } /* Blue */
+        .c2 { background: radial-gradient(circle, #28a745, #1e7e34); } /* Green */
+        .c3 { background: radial-gradient(circle, #5a2d9c, #3e1b75); } /* Purple */
+        .c4 { background: radial-gradient(circle, #cc5500, #a04000); } /* Orange */
+        .c5 { background: radial-gradient(circle, #118c8e, #0b6668); } /* Teal */
+        .c6 { background: radial-gradient(circle, #b0156d, #800e4e); } /* Pink */
+        .c7 { background: radial-gradient(circle, #0a5f56, #063d38); } /* Dark Cyan */
+
+        /* SPECIAL CLASS BUBBLE (Top) */
+        .special-bubble-top {
+            background: white;
+            color: red;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 2px solid #1a0066;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 0; }
+        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; }
+        .welcome-bubble {
+            background-color: yellow; color: #1a0066; padding: 5px 25px;
+            border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            animation: bounce 2s infinite;
+        }
+        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
+        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+        
+        @media (max-width: 800px) { .menu-grid { grid-template-columns: 1fr; } header h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1>THE CATALYST ASSAM</h1>
+        <p>SHAPING TALENT</p>
+    </header>
+
+    <div class="red-banner">
+        <h2>SEBA & CBSE</h2>
+        <div style="font-size: 1.1rem; color: yellow; font-weight:bold; margin-bottom: 5px;">(ASSAMESE & ENGLISH MEDIUM)</div>
+        <div class="subjects">
+            | MATHS | SCIENCE | ENGLISH | SOCIAL SCIENCE | ECONOMICS | COMMERCE |<br>
+            Classes – | 6th | 7th | 8th | 9th | 10th | 11th | 12th |
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="special-bubble-top">
+            ▶ Special classes for class 9th and 10th students
+        </div>
+
+        <div class="menu-grid">
+            
+            <a href="package_6_to_8_final.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="6 to 8 package.png" alt="6-8"></div>
+                <div class="menu-text-bubble c1">6th to 8th<br>Package</div>
+            </a>
+
+            <a href="package_9_to_10_final.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="9 to 10.png" alt="9-10"></div>
+                <div class="menu-text-bubble c2">9th to 10th<br>Package</div>
+            </a>
+
+            <a href="11th_to_12th_single_Subject.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="11 to 12.png" alt="11-12"></div>
+                <div class="menu-text-bubble c3">11th to 12th<br>Courses</div>
+            </a>
+
+            <a href="6th_to_8th_single_Subject.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="6  to 8 single subject.png" alt="Single 6-8"></div>
+                <div class="menu-text-bubble c4">6th to 8th<br>Single Subject</div>
+            </a>
+
+            <a href="9th_to_10th_single_Subject.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="9 to 10 single subject.png" alt="Single 9-10"></div>
+                <div class="menu-text-bubble c5">9th to 10th<br>Single Subject</div>
+            </a>
+
+            <a href="degree_Courses.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="degree.png" alt="Degree"></div>
+                <div class="menu-text-bubble c6">Degree<br>Courses</div>
+            </a>
+
+            <a href="competitive_exams_courses.html" class="menu-item">
+                <div class="menu-img-bubble"><img src="competitive exams courrser 1.png" alt="Competitive"></div>
+                <div class="menu-text-bubble c7">COMPETITIVE<br>EXAMS COURSES</div>
+            </a>
+
+        </div>
+
+        <a href="index.html" style="display:block; margin-top:40px; font-weight:bold; color:red; text-decoration:none; font-size:1.1rem; border:2px solid red; padding:10px 20px; border-radius:30px; background:white;">⬅ BACK TO HOME</a>
+
+    </div>
+
+    <footer>
+        <div class="footer-red">
+            <span class="welcome-bubble">WELCOME / স্বাগতম</span>
+        </div>
+        <div class="contact-box">
+            📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
+        </div>
+        <div class="loc-box">
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
+    </footer>
+
+</body>
+</html>

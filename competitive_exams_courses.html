@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Exams - The Catalyst Assam</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; padding: 0; 
+            background: url('world-map-png-30718.png') no-repeat center center fixed; 
+            background-size: cover; 
+            color: #333; 
+        }
+        
+        /* Theme Color: Dark Cyan (#008080) */
+        header { background-color: #008080; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; }
+        header h1 { display: inline-block; margin: 0; font-size: 2.5rem; vertical-align: middle; text-transform: uppercase; }
+        header p { letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .page-title-box { background-color: #ff0000; color: yellow; text-align: center; padding: 15px; font-size: 1.8rem; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px; border-bottom: 3px solid #008080; }
+        
+        .container { display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(255, 255, 255, 0.95); min-height: 100vh; }
+        
+        /* Grid for 4 Boxes */
+        .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; width: 100%; max-width: 1100px; justify-items: center; margin-top: 20px; }
+        
+        .package-card { background: white; border: 3px solid #008080; border-radius: 20px; width: 100%; max-width: 500px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.3); transition: all 0.3s; display: flex; flex-direction: column; }
+        .package-card:hover { transform: scale(1.02); }
+        
+        .card-header { background: #008080; color: white; padding: 15px; font-size: 1.4rem; font-weight: bold; text-transform: uppercase; border-bottom: 4px solid yellow; text-align: center; }
+        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .desc-box { font-size: 0.95rem; line-height: 1.5; color: #333; margin-bottom: 15px; text-align: justify; flex-grow: 1; }
+        .assamese-text { color: #0000cc; margin-top: 10px; display: block; font-weight: 500; }
+        
+        .price-box { background-color: #e0f2f1; border: 2px dashed #008080; padding: 10px; border-radius: 10px; margin-bottom: 15px; text-align: center; }
+        .price-amount { font-size: 1.6rem; font-weight: bold; color: red; margin: 5px 0; }
+        
+        .form-btn { background: linear-gradient(to right, #008080, #004d4d); color: white; text-decoration: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; display: block; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid white; font-size: 1.1rem; transition: 0.3s; text-transform: uppercase; }
+        .form-btn:hover { background: #ff0000; border-color: yellow; transform: translateY(-3px); }
+
+        /* Summary Table Styles */
+        .table-container { width: 100%; max-width: 1000px; margin-top: 50px; overflow-x: auto; }
+        .summary-header { background: #008080; color: white; padding: 10px; text-align: center; font-size: 1.5rem; font-weight: bold; border-radius: 10px 10px 0 0; border-bottom: 4px solid yellow; }
+        .summary-table { width: 100%; border-collapse: collapse; background: white; border: 2px solid #008080; }
+        .summary-table th, .summary-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .summary-table th { background-color: #e0f2f1; color: #008080; font-weight: bold; text-transform: uppercase; }
+        .summary-table tr:hover { background-color: #f9f9f9; }
+
+        .back-btn { display: block; margin-top: 40px; font-weight: bold; color: red; text-decoration: none; font-size: 1.1rem; border: 2px solid red; padding: 10px 20px; border-radius: 30px; background: white; }
+        
+        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 0; }
+        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.3rem; text-transform: uppercase; }
+        .welcome-bubble { background-color: yellow; color: #008080; padding: 5px 25px; border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3); animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        
+        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
+        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1>THE CATALYST ASSAM</h1>
+        <p>SHAPING TALENT</p>
+    </header>
+    <div class="page-title-box">COMPETITIVE EXAMS COURSES</div>
+    
+    <div class="container">
+        <div class="package-grid">
+            
+            <div class="package-card">
+                <div class="card-header">1. ADRE (Assam Direct Recruitment)</div>
+                <div class="card-body">
+                    <div class="desc-box">
+                        This is a massive exam conducted by the state government to hire employees for various departments at once.
+                        <br><b>What do you become?</b> You can get a job in Grade III (Junior Assistant, Computer Operator) or Grade IV (Peon, Chowkidar, Helper, Driver) positions in departments like PWD, Irrigation, Transport, etc.
+                        <br><b>Benefits:</b> It offers a permanent government job with a secure salary, pension benefits (NPS), and holidays.
+                        <br><b>Qualification:</b> Class 10, Class 12, or Graduation (Degree).
+                        <span class="assamese-text">
+                        অসম চৰকাৰৰ বিভিন্ন বিভাগত একেলগে বহুতো কৰ্মচাৰী নিযুক্তি দিয়াৰ বাবে এইটো এটা বিশেষ পৰীক্ষা।
+                        <br><b>কি হ'ব পাৰি?</b> এই পৰীক্ষা পাছ কৰিলে আপুনি বিভিন্ন চৰকাৰী বিভাগত তৃতীয় বৰ্গ (যেনে- কনিষ্ঠ সহায়ক) বা চতুৰ্থ বৰ্গৰ (যেনে- পিয়ন, চকীদাৰ, ড্ৰাইভাৰ) চাকৰি পাব পাৰে।
+                        <br><b>লাভসমূহ:</b> ই এক স্থায়ী চৰকাৰী চাকৰি। ইয়াত ভাল দৰমহা, পেঞ্চনৰ সুবিধা আৰু চৰকাৰী বন্ধ পোৱা যায়।
+                        </span>
+                    </div>
+                    <div class="price-box">
+                        <div class="price-title">Complete Course Fee</div>
+                        <div class="price-amount">₹ 4999</div>
+                    </div>
+                    <a href="competitive_exams_courses_admission.html?course=ADRE (Assam Direct Recruitment)&fee=4999" class="form-btn">Admission Now ➡</a>
+                </div>
+            </div>
+
+            <div class="package-card">
+                <div class="card-header">2. ASSAM POLICE</div>
+                <div class="card-body">
+                    <div class="desc-box">
+                        This is the recruitment for the law and order force of the state.
+                        <br><b>What do you become?</b> Depending on your qualification, you can become a Constable (AB/UB) or a Sub-Inspector (SI).
+                        <br><b>Benefits:</b> You get a Uniform, respect in society, housing allowances, and a good salary. It is a job of power and responsibility.
+                        <br><b>Qualification:</b> Class 10/12 for Constable; Graduation for SI. You must also be physically fit.
+                        <span class="assamese-text">
+                        ৰাজ্যৰ আইন-শৃংখলা ৰক্ষা কৰা আৰক্ষী বাহিনীত যোগদান কৰাৰ বাবে এই নিযুক্তি অনুষ্ঠিত হয়।
+                        <br><b>কি হ'ব পাৰি?</b> আপুনি কনিষ্টবল (Constable) বা উপ-পৰিদৰ্শক (Sub-Inspector/SI) হ'ব পাৰিব।
+                        <br><b>লাভসমূহ:</b> সমাজত সন্মান, চৰকাৰী ইউনিফৰ্ম (Uniform), আৰু থকা-খোৱাৰ সুবিধা (Allowances) পোৱা যায়। দেশ সেৱা কৰাৰ এইটো এটা ভাল সুযোগ।
+                        </span>
+                    </div>
+                    <div class="price-box">
+                        <div class="price-title">Complete Course Fee</div>
+                        <div class="price-amount">₹ 3999</div>
+                    </div>
+                    <a href="competitive_exams_courses_admission.html?course=ASSAM POLICE&fee=3999" class="form-btn">Admission Now ➡</a>
+                </div>
+            </div>
+
+            <div class="package-card">
+                <div class="card-header">3. ASSAM TET (Teacher Eligibility)</div>
+                <div class="card-body">
+                    <div class="desc-box">
+                        This is an eligibility test strictly for those who want to become teachers in government schools.
+                        <br><b>What do you become?</b> You become a Teacher in Lower Primary (LP) or Upper Primary (UP) schools.
+                        <br><b>Benefits:</b> This is a very respectful job with fixed timing (usually 9 AM to 3 PM), many holidays, and a good salary structure.
+                        <br><b>Qualification:</b> You must complete a D.El.Ed or B.Ed course after your Class 12 or Graduation to sit for this exam.
+                        <span class="assamese-text">
+                        চৰকাৰী স্কুলত শিক্ষকতা কৰিব বিচৰা সকলৰ বাবে এইটো এটা বাধ্যতামূলক পৰীক্ষা।
+                        <br><b>কি হ'ব পাৰি?</b> এল.পি (LP) বা ইউ.পি (UP) স্কুলৰ শিক্ষক (Teacher) হ'ব পাৰিব।
+                        <br><b>লাভসমূহ:</b> শিক্ষকতা এক সন্মানীয় পেছা। ইয়াত কামৰ সময় নিৰ্ধাৰিত থাকে আৰু গৰম বা পূজাৰ বন্ধ যথেষ্ট পোৱা যায়।
+                        <br><b>প্ৰয়োজনীয় কোৰ্চ:</b> এই পৰীক্ষা দিবলৈ হ'লে আপুনি ডি.এল.এড (D.El.Ed) বা বি.এড (B.Ed) কোৰ্চ সম্পূৰ্ণ কৰিব লাগিব।
+                        </span>
+                    </div>
+                    <div class="price-box">
+                        <div class="price-title">Complete Course Fee</div>
+                        <div class="price-amount">₹ 3999</div>
+                    </div>
+                    <a href="competitive_exams_courses_admission.html?course=ASSAM TET (Teacher Eligibility)&fee=3999" class="form-btn">Admission Now ➡</a>
+                </div>
+            </div>
+
+            <div class="package-card">
+                <div class="card-header">4. DHS (Directorate of Health Services)</div>
+                <div class="card-body">
+                    <div class="desc-box">
+                        Recruitment fills medical and technical posts in government hospitals and health centers.
+                        <br><b>What do you become?</b> You can become a Staff Nurse, Pharmacist, Laboratory Technician, ANM, or Grade IV hospital staff.
+                        <br><b>Benefits:</b> You get to work in the medical field, serve patients, and earn a good salary with technical allowances.
+                        <br><b>Qualification:</b> You need specific medical courses like GNM / B.Sc Nursing (for Nurse), D.Pharm (for Pharmacist), or Lab Technician courses.
+                        <span class="assamese-text">
+                        চৰকাৰী হাস্পতাল আৰু স্বাস্থ্য কেন্দ্ৰসমূহত খালী থকা পদ পূৰণ কৰিবলৈ এই পৰীক্ষা হয়।
+                        <br><b>কি হ'ব পাৰি?</b> আপুনি নাৰ্ছ (Nurse), ফাৰ্মাচিষ্ট (Pharmacist), লেব টেকনিচিয়ান বা হাস্পতালৰ সহায়ক কৰ্মচাৰী হ'ব পাৰে।
+                        <br><b>লাভসমূহ:</b> চিকিৎসা সেৱাৰ লগত জৰিত হৈ মানুহে সেৱা কৰাৰ সুযোগ আৰু পেছাদাৰী জীৱন গঢ়াৰ সুবিধা থাকে।
+                        <br><b>প্ৰয়োজনীয় কোৰ্চ:</b> ইয়াৰ বাবে নাৰ্চিং (GNM/BSc), ফাৰ্মাচী (Pharmacy) বা পেৰামেডিকেলৰ ডিগ্ৰী বা ডিপ্লমা থকাটো জৰুৰী।
+                        </span>
+                    </div>
+                    <div class="price-box">
+                        <div class="price-title">Complete Course Fee</div>
+                        <div class="price-amount">₹ 3999</div>
+                    </div>
+                    <a href="competitive_exams_courses_admission.html?course=DHS (Health Services)&fee=3999" class="form-btn">Admission Now ➡</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="table-container">
+            <div class="summary-header">5. Summary Table (চমু বিৱৰণ)</div>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Main Role (চাকৰি)</th>
+                        <th>Qualification Needed (অৰ্হতা)</th>
+                        <th>Main Benefit (প্ৰধান লাভ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight:bold; color:#008080;">ADRE</td>
+                        <td>Office Assistant / Staff</td>
+                        <td>Class 10 / 12 / Degree</td>
+                        <td>Standard Govt Job (চৰকাৰী চাকৰি)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; color:#008080;">Police</td>
+                        <td>Constable / SI</td>
+                        <td>10th / 12th / Degree</td>
+                        <td>Power & Uniform (ক্ষমতা আৰু ইউনিফৰ্ম)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; color:#008080;">TET</td>
+                        <td>Teacher</td>
+                        <td>D.El.Ed / B.Ed</td>
+                        <td>Respect & Holidays (সন্মান আৰু ছুটী)</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; color:#008080;">DHS</td>
+                        <td>Nurse / Tech</td>
+                        <td>Nursing / Pharmacy Course</td>
+                        <td>Medical Service (চিকিৎসা সেৱা)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="admission_menu.html" class="back-btn">⬅ BACK TO MENU</a>
+    </div>
+    
+    <footer>
+        <div class="footer-red">
+            <span class="welcome-bubble">WELCOME / স্বাগতম</span>
+        </div>
+        <div class="contact-box">📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com</div>
+        <div class="loc-box">📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411</div>
+    </footer>
+</body>
+</html>

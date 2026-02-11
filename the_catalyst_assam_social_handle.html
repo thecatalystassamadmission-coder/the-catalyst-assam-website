@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Handles - The Catalyst Assam</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f0f8ff; color: #333; }
+        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        header h1 { margin: 0; font-size: 2.5rem; text-transform: uppercase; }
+        
+        .container { display: flex; flex-direction: column; align-items: center; padding: 30px; min-height: 80vh; }
+        .grid-social { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; width: 100%; max-width: 800px; margin-top: 30px; }
+        
+        .social-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 3px solid transparent;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .social-card:hover { transform: translateY(-5px); }
+        
+        .social-icon { width: 80px; height: 80px; margin-bottom: 15px; object-fit: contain; }
+        .social-name { font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        
+        /* Individual Colors */
+        .yt { border-color: red; }
+        .fb { border-color: #1877F2; }
+        .wa { border-color: #25D366; }
+        .ig { border-color: #C13584; }
+
+        .banner-img { width: 150px; margin-bottom: 10px; }
+
+        .back-btn { display: inline-block; margin-top: 40px; font-weight: bold; color: red; text-decoration: none; font-size: 1.1rem; border: 2px solid red; padding: 10px 20px; border-radius: 30px; background: white; }
+        
+        footer { text-align: center; background-color: #0000cc; color: white; padding: 20px; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>THE CATALYST ASSAM</h1>
+        <p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">CONNECT WITH US</p>
+    </header>
+
+    <div class="container">
+        <img src="the_catalyst_assam_social_handle.png" alt="Social Banner" class="banner-img">
+        <h2 style="color:#1a0066; border-bottom:3px solid red; display:inline-block;">OUR SOCIAL HANDLES</h2>
+
+        <div class="grid-social">
+            
+            <a href="https://youtube.com/@thecatalystassam?feature=shared" target="_blank" class="social-card yt">
+                <img src="youtube.png" alt="YouTube" class="social-icon">
+                <div class="social-name" style="color:red;">YOUTUBE</div>
+            </a>
+
+            <a href="https://www.facebook.com/share/17xLXBAiQC/" target="_blank" class="social-card fb">
+                <img src="facebook.png" alt="Facebook" class="social-icon">
+                <div class="social-name" style="color:#1877F2;">FACEBOOK</div>
+            </a>
+
+            <a href="https://chat.whatsapp.com/IrgdcrmYs0x3zZoqo6Piqs?mode=gi_t" target="_blank" class="social-card wa">
+                <img src="whatsapp.png" alt="WhatsApp" class="social-icon">
+                <div class="social-name" style="color:#25D366;">WHATSAPP</div>
+            </a>
+
+            <a href="https://www.instagram.com/thecatalystassam?igsh=MTR1NzkzNjd6ZWMyNQ==" target="_blank" class="social-card ig">
+                <img src="instagram.png" alt="Instagram" class="social-icon">
+                <div class="social-name" style="color:#C13584;">INSTAGRAM</div>
+            </a>
+
+        </div>
+
+        <a href="index.html" class="back-btn">⬅ BACK TO HOME</a>
+    </div>
+
+    <footer>
+        <div>📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON</div>
+    </footer>
+
+</body>
+</html>
