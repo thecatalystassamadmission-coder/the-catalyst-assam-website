@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Catalyst Assam - Home</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        
+        /* Header Section */
+        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        
+        /* LOGO STYLE */
+        .logo-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            border: 3px solid white; 
+            vertical-align: middle; 
+            margin-right: 15px; 
+            object-fit: cover; 
+            background-color: white; 
+        }
+        
+        header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
+        header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
+        
+        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
+        .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        
+        .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); }
+        .column { flex: 1; min-width: 320px; padding: 20px; }
+        
+        .img-fluid { 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            display: block; 
+            margin-bottom: 15px; 
+            object-fit: cover; 
+        }
+        
+        .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        .pulen-photo {
+            width: 130px; height: auto; border-radius: 10px; border: 4px solid #1a0066; display: block; margin: 10px auto; background-color: #eee;
+        }
+
+        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; }
+        ul { list-style: none; padding: 0; }
+        ul li { font-size: 1.05rem; margin-bottom: 12px; font-weight: 500; }
+        ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 5px; }
+        
+        .admission-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        
+        /* --- IMAGE BOX GRID STYLES (2x2 Layout) --- */
+        .image-box-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 50% - 50% Split */
+            gap: 40px; /* Space between boxes */
+            justify-items: center;
+            align-items: start;
+            margin-bottom: 30px;
+            margin-top: 140px; 
+            position: relative; /* Anchor for bubble */
+            width: 100%;
+            max-width: 600px; 
+        }
+
+        .img-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* SPECIAL CLASS BUBBLE STYLE */
+        .special-bubble {
+            position: absolute;
+            top: -70px; 
+            left: 50%;
+            transform: translateX(-50%); 
+            background: white;
+            color: red;
+            font-weight: 900; 
+            font-size: 20px;  
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 3px solid #1a0066; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 10;
+            white-space: nowrap; 
+            width: max-content;
+            animation: bounce 2s infinite;
+        }
+
+        /* ANNOUNCEMENT BUBBLE (MOVED HIGHER) */
+        .announcement-bubble {
+            position: absolute;
+            top: -160px; /* Thoda aur upar kiya */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffff00; 
+            color: #1a0066;
+            font-weight: 900;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 3px solid red;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            text-align: center;
+            z-index: 11;
+            cursor: pointer;
+            display: none; 
+            animation: bounce-announce 2s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -8px); }
+        }
+
+        @keyframes bounce-announce {
+            0% { transform: translate(-50%, 0); }
+            100% { transform: translate(-50%, -5px); }
+        }
+
+        @keyframes bounce-footer {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .custom-img {
+            width: 150px; 
+            height: 150px;
+            object-fit: contain; 
+            border-radius: 20px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: white;
+            padding: 10px;
+            transition: transform 0.2s;
+        }
+        .custom-img:hover { transform: scale(1.05); }
+
+        .action-btn {
+            background-color: red; 
+            color: yellow; 
+            padding: 12px 10px; 
+            border-radius: 30px; 
+            font-weight: bold; 
+            margin-top: 15px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+            text-decoration: none; 
+            display: inline-block; 
+            border: 2px solid yellow; 
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%; 
+            max-width: 180px;
+        }
+        .action-btn:hover { transform: scale(1.05); background-color: #cc0000; }
+
+        .map-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+            text-decoration: none;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid #1a0066;
+            color: #1a0066;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .map-btn:hover { background-color: #e6e6ff; transform: scale(1.05); }
+        .map-icon-small { width: 24px; height: 24px; margin-right: 8px; }
+
+        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; }
+        
+        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; }
+        
+        .footer-red { 
+            background: red; 
+            padding: 15px; 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            text-transform: uppercase; 
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .welcome-bubble {
+            background-color: yellow;
+            color: #1a0066; 
+            padding: 5px 25px;
+            border-radius: 30px;
+            display: inline-block;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            animation: bounce-footer 2s infinite; 
+        }
+
+        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
+        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+
+        /* --- ANNOUNCEMENT MODAL CSS (5x7 Inch Updated) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            position: relative;
+            width: 5in;  /* 5 Inch Width */
+            height: 7in; /* 7 Inch Height */
+            background: white;
+            border: 5px solid #ffcc00;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-width: 95vw; /* Mobile safety */
+            max-height: 90vh;
+        }
+        .modal-close {
+            position: absolute;
+            top: 5px; right: 5px;
+            background: red;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 35px; height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; 
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 600px) { 
+            .container { flex-direction: column; } 
+            .column { min-width: 100%; padding: 10px; } 
+            header h1 { font-size: 1.8rem; } 
+            
+            .image-box-container {
+                grid-template-columns: 1fr; /* Single Column */
+                gap: 50px;
+                margin-top: 150px; 
+            }
+            .special-bubble {
+                font-size: 16px; 
+                white-space: normal; 
+                width: 90%;
+            }
+            .announcement-bubble {
+                width: auto;
+                font-size: 16px;
+                top: -160px; /* Moved up here too */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="announcementModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-close" onclick="closeAnnouncement()">X</div>
+            <img src="announcements.png" alt="Announcement" class="modal-img">
+        </div>
+    </div>
+
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1>THE CATALYST ASSAM</h1>
+        <p>SHAPING TALENT</p>
+    </header>
+
+    <div class="red-banner">
+        <h2>SEBA & CBSE</h2>
+        <div style="font-size: 1.1rem; color: yellow; font-weight:bold; margin-bottom: 5px;">(ASSAMESE & ENGLISH MEDIUM)</div>
+        <div class="subjects">
+            | MATHS | SCIENCE | ENGLISH | SOCIAL SCIENCE | ECONOMICS | COMMERCE |<br>
+            Classes – | 6th | 7th | 8th | 9th | 10th | 11th | 12th |
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="column">
+            <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
+            <h3 class="section-title">HIGHLIGHTS</h3>
+            
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img src="pulen.jpg" alt="Mr. Pulen Rahang" class="pulen-photo">
+                <div style="font-weight: bold; color: #1a0066; font-size: 1.1rem;">MR. PULEN RAHANG</div>
+            </div>
+
+            <ul>
+                <li>Special Teaching Quality by Well Qualified Teachers.</li>
+                <li>Individual Attention.</li>
+                <li>Regular Class Test.</li>
+                <li>Doubt Clearing Session.</li>
+            </ul>
+        </div>
+
+        <div class="column admission-wrapper">
+            
+            <div class="image-box-container">
+                
+                <div id="bubble-announce" class="announcement-bubble" onclick="openAnnouncement()">
+                    📢 ANNOUNCEMENTS
+                </div>
+
+                <div class="special-bubble">
+                    ▶ Special classes for class 9th and 10th students
+                </div>
+
+                <div class="img-card">
+                    <img src="the_catalyst_book_source.jpg" alt="Book Source" class="custom-img">
+                    <a href="the_catalyst_assam_book_source.html" class="action-btn">BOOK SOURCE</a>
+                </div>
+
+                <div class="img-card">
+                    <img src="—Pngtree—admission open banner abstract shape_8531507.png" alt="Admission Open" class="custom-img">
+                    <a href="admission_menu.html" class="action-btn">ADMISSION</a>
+                </div>
+
+                <div class="img-card">
+                    <img src="—Pngtree—open book logo_15366757.png" alt="Class Routine" class="custom-img">
+                    <a href="routine.html" class="action-btn">MONTHLY CLASS ROUTINE</a>
+                </div>
+
+                <div class="img-card">
+                    <img src="the_catalyst_assam_social_handle.png" alt="Social Handle" class="custom-img">
+                    <a href="the_catalyst_assam_social_handle.html" class="action-btn">SOCIAL HANDLE</a>
+                </div>
+
+            </div>
+            
+            <a href="https://maps.app.goo.gl/QzmL5sCzsZ2knXGL9?g_st=aw" target="_blank" class="map-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/Google_Maps_icon_%282015-2020%29.svg" alt="Map" class="map-icon-small">
+                Locate on Google Map (The Catalyst Assam coaching centre)
+            </a>
+
+        </div>
+
+        <div class="column">
+            <h3 class="section-title">COMPETITIVE EXAMS COURSES</h3>
+            <ul>
+                <li>ADRE</li>
+                <li>ASSAM POLICE</li>
+                <li>ASSAM TET</li>
+                <li>DHS</li>
+                <li>OTHERS.</li>
+            </ul>
+            <div class="teacher-card" style="margin-top: 30px;">
+                <img src="teacher.png" alt="Mr. Nitu Sarkar" class="teacher-photo">
+                <div style="color:red; font-weight:bold; font-size:1.4rem; margin-top:5px; text-transform:uppercase;">MR. NITU SARKAR</div>
+                <div style="font-weight:bold; color: red; font-size: 0.95rem;">B.TECH, NIT RAIPUR</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-red">
+            <span class="welcome-bubble">WELCOME / স্বাগতম</span>
+        </div>
+        
+        <div class="contact-box">
+            📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
+        </div>
+        <div class="loc-box">
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
+    </footer>
+
+    <script>
+        // On Load: Show Modal, Hide Bubble
+        window.onload = function() {
+            document.getElementById('announcementModal').style.display = 'flex';
+            document.getElementById('bubble-announce').style.display = 'none';
+        }
+
+        // Close Modal -> Show Bubble
+        function closeAnnouncement() {
+            document.getElementById('announcementModal').style.display = 'none';
+            document.getElementById('bubble-announce').style.display = 'block';
+        }
+
+        // Open Modal -> Hide Bubble
+        function openAnnouncement() {
+            document.getElementById('announcementModal').style.display = 'flex';
+            document.getElementById('bubble-announce').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
