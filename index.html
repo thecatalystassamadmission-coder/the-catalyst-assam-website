@@ -122,35 +122,9 @@
             animation: bounce 2s infinite;
         }
 
-        /* ANNOUNCEMENT BUBBLE (MOVED HIGHER) */
-        .announcement-bubble {
-            position: absolute;
-            top: -160px; /* Thoda aur upar kiya */
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ffff00; 
-            color: #1a0066;
-            font-weight: 900;
-            font-size: 18px;
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 3px solid red;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            text-align: center;
-            z-index: 11;
-            cursor: pointer;
-            display: none; /* Initially hidden */
-            animation: bounce-announce 2s infinite alternate;
-        }
-
         @keyframes bounce {
             0%, 100% { transform: translate(-50%, 0); }
             50% { transform: translate(-50%, -8px); }
-        }
-
-        @keyframes bounce-announce {
-            0% { transform: translate(-50%, 0); }
-            100% { transform: translate(-50%, -5px); }
         }
 
         @keyframes bounce-footer {
@@ -242,16 +216,16 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.85);
             z-index: 9999;
-            display: none; /* JS will handle display */
+            display: none; 
             justify-content: center;
             align-items: center;
         }
         .modal-box {
             position: relative;
-            width: 5in;  /* 5 Inch Width */
-            height: 7in; /* 7 Inch Height */
+            width: 5in;  
+            height: 7in; 
             background: white;
             border: 5px solid #ffcc00;
             border-radius: 15px;
@@ -259,7 +233,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            max-width: 95vw; /* Mobile safety */
+            max-width: 95vw; 
             max-height: 90vh;
         }
         .modal-close {
@@ -284,6 +258,39 @@
             height: 100%;
             object-fit: fill; 
         }
+
+        /* ====== NEW CAROUSEL CSS (1.6 inch height x 6.2 inch width) ====== */
+        .carousel-container {
+            width: 6.2in;
+            height: 1.6in;
+            max-width: 100%; /* Mobile responsive ke liye */
+            margin: 0 auto 20px auto;
+            border: 3px solid red;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none; /* Auto hides if no images */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            position: relative;
+            background: white;
+        }
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            flex: 0 0 100%; /* Take full width of container */
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Forces image to stretch full width but crop height */
+            object-position: top; /* ONLY shows top 3 color lines! */
+        }
         
         /* Mobile Responsive */
         @media (max-width: 600px) { 
@@ -307,11 +314,6 @@
                 white-space: normal; 
                 width: 90%;
             }
-            .announcement-bubble {
-                width: auto;
-                font-size: 16px;
-                top: -160px; /* Moved up here too */
-            }
         }
     </style>
 </head>
@@ -319,7 +321,7 @@
 
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-close" onclick="nextAnnouncement()">X</div>
+            <div class="modal-close" onclick="closeModal()">X</div>
             <img id="currentAnnouncementImg" src="" alt="Announcement" class="modal-img">
         </div>
     </div>
@@ -345,7 +347,11 @@
         <div class="column">
             <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
             <h3 class="section-title">HIGHLIGHTS</h3>
-            
+
+            <div id="announcement-carousel" class="carousel-container">
+                <div id="carousel-track" class="carousel-track">
+                    </div>
+            </div>
             <div style="text-align: center; margin-bottom: 15px;">
                 <img src="pulen.jpg" alt="Mr. Pulen Rahang" class="pulen-photo">
                 <div style="font-weight: bold; color: #1a0066; font-size: 1.1rem;">MR. PULEN RAHANG</div>
@@ -362,10 +368,6 @@
         <div class="column admission-wrapper">
             
             <div class="image-box-container">
-                
-                <div id="bubble-announce" class="announcement-bubble" onclick="openAnnouncement()">
-                    📢 ANNOUNCEMENTS
-                </div>
 
                 <div class="special-bubble">
                     ▶ Special classes for class 9th and 10th students
@@ -431,24 +433,26 @@
     </footer>
 
     <script>
-        // SMART QUEUE SYSTEM FOR ANNOUNCEMENTS
-        
-        // 1. Files ki list (Extension .png man ke chal rahe hain, agar .jpg ho toh change kar lena)
+        // SMART QUEUE SYSTEM FOR ANNOUNCEMENTS & CAROUSEL (4 Second Swipe)
         const possibleAnnouncements = [
             'announcements.png', 
             'announcements1.png', 
             'announcements2.png', 
-            'announcements3.png'
+            'announcements3.png',
+            'announcements4.png'
         ];
         
         let validAnnouncements = [];
-        let currentIndex = 0;
+        let slideIndex = 0;
+        let autoSlideInterval;
+        let startX = 0;
+        let endX = 0;
 
         window.onload = function() {
             checkAvailableImages();
         }
 
-        // 2. Background check karega ki kaunsi image server par sach me hai
+        // Check if images exist in folder
         function checkAvailableImages() {
             let loadedCount = 0;
             let tempArray = [];
@@ -460,7 +464,7 @@
                     checkIfDone();
                 };
                 img.onerror = function() {
-                    checkIfDone(); // Image nahi mili toh aage badho
+                    checkIfDone();
                 };
                 img.src = src;
             });
@@ -468,47 +472,98 @@
             function checkIfDone() {
                 loadedCount++;
                 if (loadedCount === possibleAnnouncements.length) {
-                    // Sort wapas ussi order me lagane ke liye (1, 2, 3, 4)
                     tempArray.sort((a, b) => a.originalIndex - b.originalIndex);
                     validAnnouncements = tempArray.map(item => item.src);
-                    
-                    if (validAnnouncements.length > 0) {
-                        // Agar image hai toh pehli wali dikhao
-                        currentIndex = 0;
-                        document.getElementById('currentAnnouncementImg').src = validAnnouncements[currentIndex];
-                        document.getElementById('announcementModal').style.display = 'flex';
-                        document.getElementById('bubble-announce').style.display = 'none';
-                    } else {
-                        // Agar file delete ho gayi hai toh sab hide kar do
-                        document.getElementById('announcementModal').style.display = 'none';
-                        document.getElementById('bubble-announce').style.display = 'none';
-                    }
+                    setupCarousel();
                 }
             }
         }
 
-        // 3. X dabane par kya hoga
-        function nextAnnouncement() {
-            currentIndex++; // Agli image pe jao
+        // Build the carousel dynamically
+        function setupCarousel() {
+            const container = document.getElementById('announcement-carousel');
+            const track = document.getElementById('carousel-track');
             
-            if (currentIndex < validAnnouncements.length) {
-                // Agar aur image bachi hai, toh usko modal me load kar do (Modal close nahi hoga)
-                document.getElementById('currentAnnouncementImg').src = validAnnouncements[currentIndex];
-            } else {
-                // Agar saari dekh li, tab jake Modal band karo aur button dikhao
-                document.getElementById('announcementModal').style.display = 'none';
-                document.getElementById('bubble-announce').style.display = 'block';
+            // 0 files -> Hide completely
+            if (validAnnouncements.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            // Show box
+            container.style.display = 'block';
+            
+            validAnnouncements.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.onclick = function() { openModal(index); }; // Click to view full
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = 'carousel-img';
+                
+                slide.appendChild(img);
+                track.appendChild(slide);
+            });
+            
+            // >1 files -> Enable auto & manual swipe
+            if (validAnnouncements.length > 1) {
+                startAutoSlide();
+                addSwipeListeners(track);
             }
         }
 
-        // 4. Button daba kar wapas dekhna ho toh
-        function openAnnouncement() {
-            if (validAnnouncements.length > 0) {
-                currentIndex = 0; // Wapas pehli image se shuru karo
-                document.getElementById('currentAnnouncementImg').src = validAnnouncements[currentIndex];
-                document.getElementById('announcementModal').style.display = 'flex';
-                document.getElementById('bubble-announce').style.display = 'none';
+        function updateSlidePosition() {
+            const track = document.getElementById('carousel-track');
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                slideIndex = (slideIndex + 1) % validAnnouncements.length;
+                updateSlidePosition();
+            }, 4000); // 4 seconds Auto swipe exactly as requested
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            if(validAnnouncements.length > 1) startAutoSlide();
+        }
+
+        // Manual Touch Swipe Logic
+        function addSwipeListeners(track) {
+            track.addEventListener('touchstart', e => {
+                startX = e.changedTouches[0].screenX;
+            });
+            track.addEventListener('touchend', e => {
+                endX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+        }
+
+        function handleSwipe() {
+            let threshold = 30; // 30px drag required
+            if (startX - endX > threshold) {
+                // Swipe Left
+                slideIndex = (slideIndex + 1) % validAnnouncements.length;
+                updateSlidePosition();
+                resetAutoSlide();
+            } else if (endX - startX > threshold) {
+                // Swipe Right
+                slideIndex = (slideIndex - 1 + validAnnouncements.length) % validAnnouncements.length;
+                updateSlidePosition();
+                resetAutoSlide();
             }
+        }
+
+        // Open full image modal on click
+        function openModal(index) {
+            document.getElementById('currentAnnouncementImg').src = validAnnouncements[index];
+            document.getElementById('announcementModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('announcementModal').style.display = 'none';
         }
     </script>
 
