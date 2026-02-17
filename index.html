@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Catalyst Assam - Home</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; overflow-x: hidden; }
         
         /* Header Section */
-        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; position: relative; }
+        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; position: relative; width: 100%; box-sizing: border-box; }
         
         /* APP DOWNLOAD BUTTON */
         .app-download-btn {
@@ -50,12 +50,12 @@
         header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
         header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
         
-        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
         .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
         .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
         
-        .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); }
-        .column { flex: 1; min-width: 320px; padding: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); width: 100%; box-sizing: border-box; }
+        .column { flex: 1; min-width: 320px; padding: 20px; box-sizing: border-box; }
         
         .img-fluid { 
             width: 100%; 
@@ -186,7 +186,7 @@
 
         .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; }
         
-        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; }
+        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; width: 100%; box-sizing: border-box; }
         
         .footer-red { 
             background: red; 
@@ -300,8 +300,8 @@
                 font-size: 0.8rem;
                 padding: 4px 8px;
             }
-            .container { flex-direction: column; } 
-            .column { min-width: 100%; padding: 10px; } 
+            .container { flex-direction: column; padding: 10px; } 
+            .column { min-width: 100%; padding: 10px 0; } 
             header h1 { font-size: 1.8rem; } 
             
             .image-box-container {
@@ -313,6 +313,11 @@
                 font-size: 16px; 
                 white-space: normal; 
                 width: 90%;
+            }
+            /* MOBILE PERFECT CROP FIX FOR CAROUSEL */
+            .carousel-container {
+                width: 100% !important;
+                height: 25vw !important; /* Forces perfect proportional height on phones to hide faces */
             }
         }
     </style>
