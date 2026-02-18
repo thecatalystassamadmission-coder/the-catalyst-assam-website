@@ -10,6 +10,31 @@
         /* Header Section */
         header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; position: relative; width: 100%; box-sizing: border-box; }
         
+        /* APP DOWNLOAD BUTTON */
+        .app-download-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: yellow;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 2px solid yellow;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.2s;
+        }
+        .app-download-btn:hover {
+            transform: scale(1.05);
+            background-color: #cc0000;
+        }
+
         /* LOGO STYLE */
         .logo-img { 
             width: 80px; 
@@ -29,8 +54,39 @@
         .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
         .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
         
-        .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 30px; background: linear-gradient(to bottom, #fffcf0, #fff); width: 100%; box-sizing: border-box; }
-        .column { flex: 1; min-width: 320px; padding: 20px; box-sizing: border-box; }
+        /* CONTAINER FIX: PC = Row (Side by Side), Mobile = Column */
+        .container { 
+            display: flex; 
+            flex-direction: row; /* PC Default: Side by Side */
+            flex-wrap: wrap; 
+            justify-content: space-around; 
+            align-items: flex-start;
+            padding: 30px; 
+            background: linear-gradient(to bottom, #fffcf0, #fff); 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+
+        /* FULL WIDTH ROW FOR TOP ELEMENTS */
+        .full-width-top {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        /* COLUMN */
+        .column { 
+            flex: 1; /* Equal width on PC */
+            min-width: 320px; 
+            padding: 10px 20px; 
+            box-sizing: border-box; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
         
         .img-fluid { 
             width: 100%; 
@@ -48,23 +104,21 @@
             width: 130px; height: auto; border-radius: 10px; border: 4px solid #1a0066; display: block; margin: 10px auto; background-color: #eee;
         }
 
-        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; }
-        ul { list-style: none; padding: 0; }
+        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; margin-top: 30px; }
+        
+        ul { list-style: none; padding: 0; text-align: left; display: inline-block; }
         ul li { font-size: 1.05rem; margin-bottom: 12px; font-weight: 500; }
         ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 5px; }
         
-        .admission-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        
-        /* --- IMAGE BOX GRID STYLES (2x2 Layout) --- */
+        /* IMAGE BOX GRID */
         .image-box-container {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 50% - 50% Split */
-            gap: 40px; /* Space between boxes */
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
             justify-items: center;
             align-items: start;
             margin-bottom: 30px;
-            margin-top: 140px; 
-            position: relative; /* Anchor for bubble */
+            margin-top: 20px; 
             width: 100%;
             max-width: 600px; 
         }
@@ -76,12 +130,10 @@
             width: 100%;
         }
 
-        /* SPECIAL CLASS BUBBLE STYLE */
+        /* SPECIAL CLASS BUBBLE */
         .special-bubble {
-            position: absolute;
-            top: -70px; 
-            left: 50%;
-            transform: translateX(-50%); 
+            position: relative; 
+            margin: 0 auto 20px auto;
             background: white;
             color: red;
             font-weight: 900; 
@@ -91,15 +143,15 @@
             border: 3px solid #1a0066; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             text-align: center;
-            z-index: 10;
             white-space: nowrap; 
             width: max-content;
-            animation: bounce 2s infinite;
+            animation: bounce-vertical 2s infinite; 
+            z-index: 10;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, -8px); }
+        @keyframes bounce-vertical {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         @keyframes bounce-footer {
@@ -144,7 +196,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 10px;
             text-decoration: none;
             background: white;
             padding: 10px 20px;
@@ -155,11 +207,13 @@
             transition: 0.3s;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             text-align: center;
+            width: 90%;
+            max-width: 400px;
         }
         .map-btn:hover { background-color: #e6e6ff; transform: scale(1.05); }
         .map-icon-small { width: 24px; height: 24px; margin-right: 8px; }
 
-        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; }
+        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; width: 100%; box-sizing: border-box; }
         
         footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; width: 100%; box-sizing: border-box; }
         
@@ -187,7 +241,7 @@
         .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
         .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
 
-        /* --- ANNOUNCEMENT MODAL CSS (5x7 Inch Updated) --- */
+        /* MODAL CSS */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -234,16 +288,16 @@
             object-fit: fill; 
         }
 
-        /* ====== NEW CAROUSEL CSS (1.6 inch height x 6.2 inch width) ====== */
+        /* CAROUSEL CSS */
         .carousel-container {
             width: 6.2in;
             height: 1.6in;
-            max-width: 100%; /* Mobile responsive ke liye */
+            max-width: 100%; 
             margin: 0 auto 20px auto;
             border: 3px solid red;
             border-radius: 8px;
             overflow: hidden;
-            display: none; /* Auto hides if no images */
+            display: none; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             position: relative;
             background: white;
@@ -255,7 +309,7 @@
             transition: transform 0.5s ease-in-out;
         }
         .carousel-slide {
-            flex: 0 0 100%; /* Take full width of container */
+            flex: 0 0 100%; 
             width: 100%;
             height: 100%;
             cursor: pointer;
@@ -263,30 +317,39 @@
         .carousel-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Forces image to stretch full width but crop height */
-            object-position: top; /* ONLY shows top 3 color lines! */
+            object-fit: cover; 
+            object-position: top; 
         }
         
         /* Mobile Responsive */
         @media (max-width: 600px) { 
-            .container { flex-direction: column; padding: 10px; } 
-            .column { min-width: 100%; padding: 10px 0; } 
+            /* Fix Container for Mobile to Stack Vertically */
+            .container { 
+                flex-direction: column; 
+                padding: 10px; 
+            } 
+            
+            .app-download-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
             header h1 { font-size: 1.8rem; } 
             
             .image-box-container {
-                grid-template-columns: 1fr; /* Single Column */
+                grid-template-columns: 1fr; /* Single Column on Mobile */
                 gap: 50px;
-                margin-top: 150px; 
+                margin-top: 30px; 
             }
             .special-bubble {
                 font-size: 16px; 
                 white-space: normal; 
                 width: 90%;
             }
-            /* MOBILE PERFECT CROP FIX FOR CAROUSEL */
             .carousel-container {
                 width: 100% !important;
-                height: 25vw !important; /* Forces perfect proportional height on phones to hide faces */
+                height: 25vw !important; 
             }
         }
     </style>
@@ -301,6 +364,7 @@
     </div>
 
     <header>
+        <a href="https://drive.google.com/uc?export=download&id=13-1SYIAoiXurs21gS32jkhd7t-P9J8z7" class="app-download-btn">App ⬇</a>
         <img src="logo.png" alt="Logo" class="logo-img">
         <h1>THE CATALYST ASSAM</h1>
         <p>SHAPING TALENT</p>
@@ -316,55 +380,38 @@
     </div>
 
     <div class="container">
-        <div class="column">
-            <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
-            <h3 class="section-title">HIGHLIGHTS</h3>
-
+        
+        <div class="full-width-top">
+            <div class="special-bubble">
+                ▶ Special classes for class 9th and 10th students
+            </div>
             <div id="announcement-carousel" class="carousel-container">
-                <div id="carousel-track" class="carousel-track">
-                    </div>
+                <div id="carousel-track" class="carousel-track"></div>
             </div>
-            <div style="text-align: center; margin-bottom: 15px;">
-                <img src="pulen.jpg" alt="Mr. Pulen Rahang" class="pulen-photo">
-                <div style="font-weight: bold; color: #1a0066; font-size: 1.1rem;">MR. PULEN RAHANG</div>
-            </div>
+        </div>
 
-            <ul>
-                <li>Special Teaching Quality by Well Qualified Teachers.</li>
-                <li>Individual Attention.</li>
-                <li>Regular Class Test.</li>
-                <li>Doubt Clearing Session.</li>
-            </ul>
+        <div class="column" style="padding-top: 0;">
+            <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
         </div>
 
         <div class="column admission-wrapper">
-            
             <div class="image-box-container">
-
-                <div class="special-bubble">
-                    ▶ Special classes for class 9th and 10th students
-                </div>
-
-                <div class="img-card">
-                    <img src="the_catalyst_book_source.jpg" alt="Book Source" class="custom-img">
-                    <a href="the_catalyst_assam_book_source.html" class="action-btn">BOOK SOURCE</a>
-                </div>
-
                 <div class="img-card">
                     <img src="—Pngtree—admission open banner abstract shape_8531507.png" alt="Admission Open" class="custom-img">
                     <a href="admission_menu.html" class="action-btn">ADMISSION</a>
                 </div>
-
+                <div class="img-card">
+                    <img src="the_catalyst_book_source.jpg" alt="Book Source" class="custom-img">
+                    <a href="the_catalyst_assam_book_source.html" class="action-btn">BOOK SOURCE</a>
+                </div>
                 <div class="img-card">
                     <img src="—Pngtree—open book logo_15366757.png" alt="Class Routine" class="custom-img">
                     <a href="routine.html" class="action-btn">MONTHLY CLASS ROUTINE</a>
                 </div>
-
                 <div class="img-card">
                     <img src="the_catalyst_assam_social_handle.png" alt="Social Handle" class="custom-img">
                     <a href="the_catalyst_assam_social_handle.html" class="action-btn">SOCIAL HANDLE</a>
                 </div>
-
             </div>
             
             <a href="https://maps.app.goo.gl/QzmL5sCzsZ2knXGL9?g_st=aw" target="_blank" class="map-btn">
@@ -372,6 +419,17 @@
                 Locate on Google Map (The Catalyst Assam coaching centre)
             </a>
 
+            <h3 class="section-title">HIGHLIGHTS</h3>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img src="pulen.jpg" alt="Mr. Pulen Rahang" class="pulen-photo">
+                <div style="font-weight: bold; color: #1a0066; font-size: 1.1rem;">MR. PULEN RAHANG</div>
+            </div>
+            <ul>
+                <li>Special Teaching Quality by Well Qualified Teachers.</li>
+                <li>Individual Attention.</li>
+                <li>Regular Class Test.</li>
+                <li>Doubt Clearing Session.</li>
+            </ul>
         </div>
 
         <div class="column">
@@ -389,6 +447,7 @@
                 <div style="font-weight:bold; color: red; font-size: 0.95rem;">B.TECH, NIT RAIPUR</div>
             </div>
         </div>
+
     </div>
 
     <footer>
