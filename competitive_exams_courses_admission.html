@@ -83,7 +83,7 @@
                     <div id="package-display" class="package-info-box">
                         <div class="package-title" id="disp-course">LOADING...</div>
                         <div style="font-weight:bold; font-size:1.1rem; color:red; margin-top:10px;">Total Course Fee: ₹ <span id="disp-fee">0</span></div>
-                        <div style="font-weight:bold; color:#008080;">(Full Course Payment)</div>
+                        <div id="disp-payment-type" style="font-weight:bold; color:#008080;">(Full Course Payment)</div>
                     </div>
                 </div>
 
@@ -128,14 +128,21 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
         
         let urlCourse = "", urlFee = "";
+        let paymentTypeText = "(Full Course Payment)"; // Default
 
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             urlCourse = params.get('course') || "Not Selected";
             urlFee = params.get('fee') || "0";
 
+            // SMART LOGIC: Check if it's a Monthly course
+            if (urlCourse.toLowerCase().includes("monthly")) {
+                paymentTypeText = "(Monthly Payment)";
+            }
+
             document.getElementById('disp-course').innerText = urlCourse;
             document.getElementById('disp-fee').innerText = urlFee;
+            document.getElementById('disp-payment-type').innerText = paymentTypeText;
         }
 
         let photoData = ""; let currentPos = 20;
@@ -164,7 +171,7 @@
             document.getElementById('r_phone').innerText = document.getElementById('phone').value;
             
             let pkgText = `${urlCourse}\n`;
-            pkgText += `Total Fee: ₹${urlFee} (Full Course Payment)`;
+            pkgText += `Total Fee: ₹${urlFee} ${paymentTypeText}`; // DYNAMIC PAYMENT TEXT
 
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
@@ -197,7 +204,7 @@
             document.getElementById('r_phone').innerText = document.getElementById('phone').value;
             
             let pkgText = `${urlCourse}\n`;
-            pkgText += `Total Fee: ₹${urlFee} (Full Course Payment)`;
+            pkgText += `Total Fee: ₹${urlFee} ${paymentTypeText}`; // DYNAMIC PAYMENT TEXT
 
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
