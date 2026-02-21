@@ -42,7 +42,7 @@
         .form-btn:hover { background: #ff0000; border-color: yellow; transform: translateY(-3px); }
 
         /* ==================================================== */
-        /* NEW STYLES FOR ADRE SINGLE SUBJECT SPLIT CARD */
+        /* NEW STYLES FOR DUAL CARDS (ADRE & POLICE) */
         /* ==================================================== */
         .adre-card {
             grid-column: 1 / -1; /* Spans full width of the grid */
@@ -184,67 +184,84 @@
                         
                         <div class="subject-list">
                             <label class="subject-item">
-                                <div>
-                                    <input type="checkbox" id="sub_gk" onchange="calculateAdreFee()">
-                                    <span>General Knowledge</span>
-                                </div>
+                                <div><input type="checkbox" id="sub_gk" onchange="calculateAdreFee()"> <span>General Knowledge</span></div>
                                 <span class="subject-price">₹499 / Month</span>
                             </label>
-
                             <label class="subject-item">
-                                <div>
-                                    <input type="checkbox" id="sub_math" onchange="calculateAdreFee()">
-                                    <span>General Mathematics</span>
-                                </div>
-                                <span class="subject-price">₹699 / Month</span>
-                            </label>
-
-                            <label class="subject-item">
-                                <div>
-                                    <input type="checkbox" id="sub_eng" onchange="calculateAdreFee()">
-                                    <span>General English</span>
-                                </div>
+                                <div><input type="checkbox" id="sub_math" onchange="calculateAdreFee()"> <span>General Mathematics</span></div>
                                 <span class="subject-price">₹599 / Month</span>
                             </label>
-
                             <label class="subject-item">
-                                <div>
-                                    <input type="checkbox" id="sub_reasoning" onchange="calculateAdreFee()">
-                                    <span>Logical Reasoning & Mental Ability</span>
-                                </div>
+                                <div><input type="checkbox" id="sub_eng" onchange="calculateAdreFee()"> <span>General English</span></div>
+                                <span class="subject-price">₹499 / Month</span>
+                            </label>
+                            <label class="subject-item">
+                                <div><input type="checkbox" id="sub_reasoning" onchange="calculateAdreFee()"> <span>Logical Reasoning & Mental Ability</span></div>
                                 <span class="subject-price">₹599 / Month</span>
                             </label>
                         </div>
 
-                        <div class="calc-total-box">
-                            Calculated Fee: <span id="display_total_fee">₹ 0 / Month</span>
-                        </div>
-
+                        <div class="calc-total-box">Calculated Fee: <span id="display_total_fee">₹ 0 / Month</span></div>
                         <a href="#" id="btn_single_subject" class="form-btn btn-locked">Admission Now (Monthly) ➡</a>
                     </div>
 
                 </div>
             </div>
 
-            <div class="package-card">
+            <div class="package-card adre-card">
                 <div class="card-header">2. ASSAM POLICE</div>
-                <div class="card-body">
-                    <div class="desc-box">
-                        This is the recruitment for the law and order force of the state.
-                        <br><b>What do you become?</b> Depending on your qualification, you can become a Constable (AB/UB) or a Sub-Inspector (SI).
-                        <br><b>Benefits:</b> You get a Uniform, respect in society, housing allowances, and a good salary. It is a job of power and responsibility.
-                        <br><b>Qualification:</b> Class 10/12 for Constable; Graduation for SI. You must also be physically fit.
-                        <span class="assamese-text">
-                        ৰাজ্যৰ আইন-শৃংখলা ৰক্ষা কৰা আৰক্ষী বাহিনীত যোগদান কৰাৰ বাবে এই নিযুক্তি অনুষ্ঠিত হয়।
-                        <br><b>কি হ'ব পাৰি?</b> আপুনি কনিষ্টবল (Constable) বা উপ-পৰিদৰ্শক (Sub-Inspector/SI) হ'ব পাৰিব।
-                        <br><b>লাভসমূহ:</b> সমাজত সন্মান, চৰকাৰী ইউনিফৰ্ম (Uniform), আৰু থকা-খোৱাৰ সুবিধা (Allowances) পোৱা যায়। দেশ সেৱা কৰাৰ এইটো এটা ভাল সুযোগ।
-                        </span>
+                <div class="card-body adre-body-split">
+                    
+                    <div class="adre-left">
+                        <div class="desc-box">
+                            <h3 style="color:#008080; margin-top:0;">📚 COMPLETE COURSE</h3>
+                            This is the recruitment for the law and order force of the state.
+                            <br><b>What do you become?</b> Depending on your qualification, you can become a Constable (AB/UB) or a Sub-Inspector (SI).
+                            <br><b>Benefits:</b> You get a Uniform, respect in society, housing allowances, and a good salary. It is a job of power and responsibility.
+                            <br><b>Qualification:</b> Class 10/12 for Constable; Graduation for SI. You must also be physically fit.
+                            <span class="assamese-text">
+                            ৰাজ্যৰ আইন-শৃংখলা ৰক্ষা কৰা আৰক্ষী বাহিনীত যোগদান কৰাৰ বাবে এই নিযুক্তি অনুষ্ঠিত হয়।
+                            <br><b>কি হ'ব পাৰি?</b> আপুনি কনিষ্টবল (Constable) বা উপ-পৰিদৰ্শক (Sub-Inspector/SI) হ'ব পাৰিব।
+                            <br><b>লাভসমূহ:</b> সমাজত সন্মান, চৰকাৰী ইউনিফৰ্ম (Uniform), আৰু থকা-খোৱাৰ সুবিধা (Allowances) পোৱা যায়। দেশ সেৱা কৰাৰ এইটো এটা ভাল সুযোগ।
+                            </span>
+                        </div>
+                        <div class="price-box">
+                            <div class="price-title">Complete Course Fee</div>
+                            <div class="price-amount">₹ 3999 <span style="font-size: 1rem; color: #333;">(One Time)</span></div>
+                        </div>
+                        <a href="competitive_exams_courses_admission.html?course=ASSAM POLICE&fee=3999" id="btn_complete_course_police" class="form-btn">Admission Now (Complete Course) ➡</a>
                     </div>
-                    <div class="price-box">
-                        <div class="price-title">Complete Course Fee</div>
-                        <div class="price-amount">₹ 3999</div>
+
+                    <div class="adre-right">
+                        <h3 style="color:#ff0000; margin-top:0;">🎯 SINGLE SUBJECT COURSE (MONTHLY)</h3>
+                        <p style="margin-top:0; font-size:0.95rem; font-weight:bold; color:#1a0066;">
+                            Choose any single or multiple subjects below on a monthly basis. <br>
+                            <span style="color:red; font-size:0.85rem;">(Selecting a subject will lock the Complete Course option)</span>
+                        </p>
+                        
+                        <div class="subject-list">
+                            <label class="subject-item">
+                                <div><input type="checkbox" id="pol_sub_gk" onchange="calculatePoliceFee()"> <span>General Knowledge</span></div>
+                                <span class="subject-price">₹499 / Month</span>
+                            </label>
+                            <label class="subject-item">
+                                <div><input type="checkbox" id="pol_sub_math" onchange="calculatePoliceFee()"> <span>General Mathematics</span></div>
+                                <span class="subject-price">₹599 / Month</span>
+                            </label>
+                            <label class="subject-item">
+                                <div><input type="checkbox" id="pol_sub_eng" onchange="calculatePoliceFee()"> <span>General English</span></div>
+                                <span class="subject-price">₹499 / Month</span>
+                            </label>
+                            <label class="subject-item">
+                                <div><input type="checkbox" id="pol_sub_reasoning" onchange="calculatePoliceFee()"> <span>Logical Reasoning & Mental Ability</span></div>
+                                <span class="subject-price">₹599 / Month</span>
+                            </label>
+                        </div>
+
+                        <div class="calc-total-box">Calculated Fee: <span id="display_total_fee_police">₹ 0 / Month</span></div>
+                        <a href="#" id="btn_single_subject_police" class="form-btn btn-locked">Admission Now (Monthly) ➡</a>
                     </div>
-                    <a href="competitive_exams_courses_admission.html?course=ASSAM POLICE&fee=3999" class="form-btn">Admission Now ➡</a>
+
                 </div>
             </div>
 
@@ -348,55 +365,83 @@
     </footer>
 
     <script>
+        // ADRE LOGIC
         function calculateAdreFee() {
-            // Get Checkboxes
             const chkGk = document.getElementById('sub_gk').checked;
             const chkMath = document.getElementById('sub_math').checked;
             const chkEng = document.getElementById('sub_eng').checked;
             const chkReasoning = document.getElementById('sub_reasoning').checked;
 
-            // Get Buttons and Texts
             const btnComplete = document.getElementById('btn_complete_course');
             const btnSingle = document.getElementById('btn_single_subject');
             const displayTotal = document.getElementById('display_total_fee');
 
-            // Calculate Total
             let totalFee = 0;
             let selectedSubjects = [];
 
             if(chkGk) { totalFee += 499; selectedSubjects.push("GK"); }
-            if(chkMath) { totalFee += 699; selectedSubjects.push("Maths"); }
-            if(chkEng) { totalFee += 599; selectedSubjects.push("English"); }
+            if(chkMath) { totalFee += 599; selectedSubjects.push("Maths"); }
+            if(chkEng) { totalFee += 499; selectedSubjects.push("English"); }
             if(chkReasoning) { totalFee += 599; selectedSubjects.push("Reasoning"); }
 
-            // Update Price Display with Monthly text
             if (totalFee > 0) {
                 displayTotal.innerText = '₹ ' + totalFee + ' / Month';
-            } else {
-                displayTotal.innerText = '₹ 0 / Month';
-            }
-
-            // Lock / Unlock Logic
-            if (totalFee > 0) {
-                // If any subject is selected -> Lock Complete Course Button
+                
                 btnComplete.classList.add('btn-locked');
                 btnComplete.innerText = "🔒 LOCKED (Single Subject Selected)";
                 btnComplete.href = "#";
 
-                // Unlock Single Subject Admission Button
                 btnSingle.classList.remove('btn-locked');
-                
-                // Build dynamic URL for admission page
                 let courseName = "ADRE Monthly Subjects: " + selectedSubjects.join(" + ");
                 btnSingle.href = "competitive_exams_courses_admission.html?course=" + encodeURIComponent(courseName) + "&fee=" + totalFee;
-
             } else {
-                // If NO subject is selected -> Unlock Complete Course Button
+                displayTotal.innerText = '₹ 0 / Month';
+                
                 btnComplete.classList.remove('btn-locked');
                 btnComplete.innerText = "Admission Now (Complete Course) ➡";
                 btnComplete.href = "competitive_exams_courses_admission.html?course=ADRE (Assam Direct Recruitment)&fee=4999";
 
-                // Lock Single Subject Admission Button
+                btnSingle.classList.add('btn-locked');
+                btnSingle.href = "#";
+            }
+        }
+
+        // ASSAM POLICE LOGIC
+        function calculatePoliceFee() {
+            const chkGk = document.getElementById('pol_sub_gk').checked;
+            const chkMath = document.getElementById('pol_sub_math').checked;
+            const chkEng = document.getElementById('pol_sub_eng').checked;
+            const chkReasoning = document.getElementById('pol_sub_reasoning').checked;
+
+            const btnComplete = document.getElementById('btn_complete_course_police');
+            const btnSingle = document.getElementById('btn_single_subject_police');
+            const displayTotal = document.getElementById('display_total_fee_police');
+
+            let totalFee = 0;
+            let selectedSubjects = [];
+
+            if(chkGk) { totalFee += 499; selectedSubjects.push("GK"); }
+            if(chkMath) { totalFee += 599; selectedSubjects.push("Maths"); }
+            if(chkEng) { totalFee += 499; selectedSubjects.push("English"); }
+            if(chkReasoning) { totalFee += 599; selectedSubjects.push("Reasoning"); }
+
+            if (totalFee > 0) {
+                displayTotal.innerText = '₹ ' + totalFee + ' / Month';
+                
+                btnComplete.classList.add('btn-locked');
+                btnComplete.innerText = "🔒 LOCKED (Single Subject Selected)";
+                btnComplete.href = "#";
+
+                btnSingle.classList.remove('btn-locked');
+                let courseName = "ASSAM POLICE Monthly Subjects: " + selectedSubjects.join(" + ");
+                btnSingle.href = "competitive_exams_courses_admission.html?course=" + encodeURIComponent(courseName) + "&fee=" + totalFee;
+            } else {
+                displayTotal.innerText = '₹ 0 / Month';
+                
+                btnComplete.classList.remove('btn-locked');
+                btnComplete.innerText = "Admission Now (Complete Course) ➡";
+                btnComplete.href = "competitive_exams_courses_admission.html?course=ASSAM POLICE&fee=3999";
+
                 btnSingle.classList.add('btn-locked');
                 btnSingle.href = "#";
             }
