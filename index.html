@@ -74,7 +74,7 @@
 
         /* FLEX WRAPPERS FOR MOBILE DEFAULT FLOW */
         .lists-row { display: flex; flex-direction: column; width: 100%; align-items: center; }
-        .list-col { display: flex; flex-direction: column; align-items: center; text-align: left; margin-bottom: 20px; width: 100%; max-width: 400px; }
+        .list-col { display: flex; flex-direction: column; align-items: center; text-align: left; margin-bottom: 20px; width: 100%; }
         .teachers-row { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 30px; margin-bottom: 20px; }
         
         /* ======================================================== */
@@ -90,7 +90,7 @@
         }
 
         /* ======================================================== */
-        /* KHATARNAK CHALLENGE: PC/LAPTOP SPECIFIC + 250% ZOOM      */
+        /* PC/LAPTOP SPECIFIC (NO ZOOM NOW)                         */
         /* ======================================================== */
         @media (min-width: 601px) {
             
@@ -100,10 +100,6 @@
             }
             
             body { 
-                zoom: 2.5; /* Pure 250% Zoom logic */
-                -moz-transform: scale(2.5); /* Firefox Backup */
-                -moz-transform-origin: top center; 
-                
                 /* 🔥 MAGIC FIX FOR "ADHA ADHA" CUT SCREEN 🔥 */
                 min-width: 100%;
                 width: fit-content; /* Ye background ko poora failne dega, screen katega nahi! */
