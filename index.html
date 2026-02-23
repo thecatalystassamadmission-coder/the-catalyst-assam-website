@@ -5,19 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Catalyst Assam - Home</title>
     <style>
-        /* ======================================================== */
-        /* BASE & MOBILE STYLES (100% UNTOUCHED LOGIC)              */
-        /* ======================================================== */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; overflow-x: hidden; }
         
-        /* FIX: Removed global overflow-x: hidden so it doesn't cut in Desktop Mode */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
-        
+        /* Header Section */
         header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; position: relative; width: 100%; box-sizing: border-box; }
         
-        .app-download-btn { position: absolute; top: 20px; right: 20px; background-color: red; color: yellow; text-decoration: none; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; border: 2px solid yellow; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); z-index: 1000; display: flex; align-items: center; gap: 5px; transition: transform 0.2s; }
-        .app-download-btn:hover { transform: scale(1.05); background-color: #cc0000; }
+        /* APP DOWNLOAD BUTTON */
+        .app-download-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: yellow;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 2px solid yellow;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: transform 0.2s;
+        }
+        .app-download-btn:hover {
+            transform: scale(1.05);
+            background-color: #cc0000;
+        }
 
-        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; }
+        /* LOGO STYLE */
+        .logo-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            border: 3px solid white; 
+            vertical-align: middle; 
+            margin-right: 15px; 
+            object-fit: cover; 
+            background-color: white; 
+        }
         
         header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
         header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
@@ -26,146 +54,277 @@
         .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
         .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
         
-        .container { display: flex; flex-direction: column; align-items: center; padding: 30px 10px; background: linear-gradient(to bottom, #fffcf0, #fff); width: 100%; box-sizing: border-box; }
-        
-        .img-fluid { width: 100%; max-width: 400px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: block; margin-bottom: 15px; object-fit: cover; }
-        
-        .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin-left: auto; margin-right: auto; display: block; }
-        .pulen-photo { width: 130px; height: auto; border-radius: 10px; border: 4px solid #1a0066; display: block; margin: 10px auto; background-color: #eee; }
+        /* NEW PC CONTAINER (Top to Bottom Flow) */
+        .container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            padding: 40px 5%; 
+            background: linear-gradient(to bottom, #fffcf0, #fff); 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
 
-        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; margin-top: 30px; }
-        ul { list-style: none; padding: 0; text-align: left; display: inline-block; }
-        ul li { font-size: 1.05rem; margin-bottom: 12px; font-weight: 500; }
-        ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 5px; }
-        
-        .image-box-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; justify-items: center; align-items: start; margin-bottom: 30px; margin-top: 20px; width: 100%; max-width: 600px; }
-        .img-card { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        /* SPECIAL CLASS BUBBLE */
+        .special-bubble {
+            position: relative; 
+            margin: 0 auto 20px auto;
+            background: white;
+            color: red;
+            font-weight: 900; 
+            font-size: 20px;  
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 3px solid #1a0066; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-align: center;
+            white-space: nowrap; 
+            width: max-content;
+            animation: bounce-vertical 2s infinite; 
+            z-index: 10;
+        }
 
-        .special-bubble { position: relative; margin: 0 auto 20px auto; background: white; color: red; font-weight: 900; font-size: 20px; padding: 12px 25px; border-radius: 50px; border: 3px solid #1a0066; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; white-space: nowrap; width: max-content; animation: bounce-vertical 2s infinite; z-index: 10; }
-        @keyframes bounce-vertical { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes bounce-footer { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes bounce-vertical {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
 
-        .custom-img { width: 150px; height: 150px; object-fit: contain; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: white; padding: 10px; transition: transform 0.2s; }
+        @keyframes bounce-footer {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* CAROUSEL CSS */
+        .carousel-container {
+            width: 6.2in; /* AS REQUESTED */
+            height: 1.6in;
+            margin: 0 auto 20px auto; 
+            border: 3px solid red;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            position: relative;
+            background: white;
+        }
+        .carousel-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            flex: 0 0 100%; 
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            object-position: top; 
+        }
+
+        /* STUDENT PHOTO: Same Width as Announcement Box (6.2in) */
+        .img-fluid { 
+            width: 6.2in; 
+            max-width: 6.2in; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            display: block; 
+            margin-bottom: 30px; 
+            object-fit: cover; 
+        }
+
+        /* IMAGE BOX GRID (4 boxes in 1 horizontal line) */
+        .image-box-container {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px; /* Spacing between 4 boxes */
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1000px; 
+        }
+
+        .img-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+        }
+
+        /* 0.5 x 0.5 INCH IMAGES AS REQUESTED */
+        .custom-img {
+            width: 0.5in; 
+            height: 0.5in;
+            object-fit: contain; 
+            border-radius: 8px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: white;
+            padding: 5px;
+            transition: transform 0.2s;
+        }
         .custom-img:hover { transform: scale(1.05); }
 
-        .action-btn { background-color: red; color: yellow; padding: 12px 10px; border-radius: 30px; font-weight: bold; margin-top: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); text-decoration: none; display: inline-block; border: 2px solid yellow; transition: transform 0.2s; text-transform: uppercase; font-size: 0.9rem; text-align: center; width: 100%; max-width: 180px; }
+        .action-btn {
+            background-color: red; 
+            color: yellow; 
+            padding: 8px 5px; 
+            border-radius: 30px; 
+            font-weight: bold; 
+            margin-top: 10px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+            text-decoration: none; 
+            display: inline-block; 
+            border: 2px solid yellow; 
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            text-align: center;
+            width: 100%; 
+        }
         .action-btn:hover { transform: scale(1.05); background-color: #cc0000; }
 
-        .map-btn { display: flex; align-items: center; justify-content: center; margin-top: 10px; text-decoration: none; background: white; padding: 10px 20px; border-radius: 20px; border: 2px solid #1a0066; color: #1a0066; font-weight: bold; transition: 0.3s; box-shadow: 0 3px 6px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; margin-bottom: 20px; }
+        /* GOOGLE MAP BUTTON: Same Width as Announcement Box (6.2in) */
+        .map-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            text-decoration: none;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 3px solid #1a0066;
+            color: #1a0066;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 6.2in; 
+            max-width: 6.2in;
+            box-sizing: border-box;
+        }
         .map-btn:hover { background-color: #e6e6ff; transform: scale(1.05); }
-        .map-icon-small { width: 24px; height: 24px; margin-right: 8px; }
+        .map-icon-small { width: 28px; height: 28px; margin-right: 10px; }
 
-        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; width: 100%; box-sizing: border-box; }
+        /* LISTS ROW (Horizontal Line & Chota Text) */
+        .lists-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 100px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .list-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 10px; text-transform: uppercase; font-size: 1.1rem; font-weight: 900;}
         
+        ul { list-style: none; padding: 0; text-align: left; }
+        /* Font size small (Chuta korke) */
+        ul li { font-size: 0.85rem; margin-bottom: 10px; font-weight: 500; }
+        ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 8px; }
+
+        /* TEACHERS ROW (Horizontal Line) */
+        .teachers-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 80px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .teacher-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border: 4px solid red; width: 250px; display: flex; flex-direction: column; align-items: center; }
+        
+        .teacher-photo { width: 130px; height: 130px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        .pulen-photo { width: 130px; height: auto; border-radius: 10px; border: 4px solid #1a0066; display: block; margin-bottom: 10px; background-color: #eee; }
+
         footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; width: 100%; box-sizing: border-box; }
-        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .welcome-bubble { background-color: yellow; color: #1a0066; padding: 5px 25px; border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3); animation: bounce-footer 2s infinite; }
+        
+        .footer-red { 
+            background: red; 
+            padding: 15px; 
+            font-weight: bold; 
+            font-size: 1.5rem; 
+            text-transform: uppercase; 
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .welcome-bubble {
+            background-color: yellow;
+            color: #1a0066; 
+            padding: 5px 25px;
+            border-radius: 30px;
+            display: inline-block;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            animation: bounce-footer 2s infinite; 
+        }
+
         .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
         .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; }
-        .modal-box { position: relative; width: 5in; height: 7in; background: white; border: 5px solid #ffcc00; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; max-width: 95vw; max-height: 90vh; }
-        .modal-close { position: absolute; top: 5px; right: 5px; background: red; color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 20px; font-weight: bold; cursor: pointer; z-index: 100; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .modal-img { width: 100%; height: 100%; object-fit: fill; }
-
-        .carousel-container { width: 6.2in; height: 1.6in; max-width: 100%; margin: 0 auto 20px auto; border: 3px solid red; border-radius: 8px; overflow: hidden; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.4); position: relative; background: white; }
-        .carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
-        .carousel-slide { flex: 0 0 100%; width: 100%; height: 100%; cursor: pointer; }
-        .carousel-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-
-        /* FLEX WRAPPERS FOR MOBILE DEFAULT FLOW */
-        .lists-row { display: flex; flex-direction: column; width: 100%; align-items: center; }
-        .list-col { display: flex; flex-direction: column; align-items: center; text-align: left; margin-bottom: 20px; width: 100%; }
-        .teachers-row { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 30px; margin-bottom: 20px; }
-        
-        /* ======================================================== */
-        /* Mobile Responsive - 100% UNTOUCHED EXACTLY AS REQUESTED  */
-        /* ======================================================== */
-        @media (max-width: 600px) { 
-            html, body { overflow-x: hidden !important; max-width: 100vw; } /* Keeps normal mobile view completely locked and clean */
-            .container { flex-direction: column; padding: 10px; } 
-            .app-download-btn { top: 10px; right: 10px; font-size: 0.8rem; padding: 4px 8px; }
-            header h1 { font-size: 1.8rem; } 
-            .image-box-container { grid-template-columns: 1fr; gap: 50px; margin-top: 30px; }
-            .special-bubble { font-size: 16px; white-space: normal; width: 90%; }
-            .carousel-container { width: 100% !important; height: 25vw !important; }
+        /* MODAL CSS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            display: none; 
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            position: relative;
+            width: 5in;  
+            height: 7in; 
+            background: white;
+            border: 5px solid #ffcc00;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-close {
+            position: absolute;
+            top: 5px; right: 5px;
+            background: red;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 35px; height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; 
         }
 
-        /* ======================================================== */
-        /* KHATARNAK CHALLENGE: PC/LAPTOP SPECIFIC + 250% ZOOM      */
-        /* ======================================================== */
-        @media (min-width: 601px) {
-            
-            html, body { overflow-x: visible !important; width: auto !important; } /* FIX: Allows full width on Desktop mode in mobile without cutting */
-            
-            body { 
-                zoom: 2.5; /* Pure 250% Zoom logic */
-                -moz-transform: scale(2.5); /* Firefox Backup */
-                -moz-transform-origin: top center; 
-            }
-            
-            /* Center the entire layout */
-            .container { flex-direction: column; align-items: center; }
-            
-            /* 1. Student photo width = announcement box width (6.2in) */
-            .img-fluid { width: 6.2in !important; max-width: 6.2in !important; margin-bottom: 20px; }
-            
-            /* 2. 4 Boxes in ONE horizontal line */
-            .image-box-container { 
-                display: flex !important; 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                max-width: 6.2in !important; 
-                gap: 10px;
-                margin-top: 10px;
-            }
-            .img-card { width: 23%; }
-            
-            /* Box image size exactly 0.5x0.5 inch */
-            .custom-img { 
-                width: 0.5in !important; 
-                height: 0.5in !important; 
-                padding: 5px;
-                border-radius: 8px;
-            }
-            /* Adjust button text size to fit under 0.5in image */
-            .action-btn { font-size: 0.55rem !important; padding: 5px 3px !important; margin-top: 8px; border-width: 1px;}
-            
-            /* 3. Locate on Google Map = announcement box width */
-            .map-btn { 
-                width: 6.2in !important; 
-                max-width: 6.2in !important; 
-                box-sizing: border-box; 
-                margin-bottom: 30px;
-                font-size: 0.85rem !important; /* Adjusted to ensure the full name fits nicely */
-            }
-            
-            /* 4. Horizontal line for Lists (cuta/small font) */
-            .lists-row { 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                align-items: flex-start;
-                margin-top: 10px;
-            }
-            .list-col { align-items: flex-start; text-align: left; width: 48%; }
-            h3.section-title { font-size: 0.85rem !important; margin-bottom: 5px !important; }
-            ul li { font-size: 0.7rem !important; margin-bottom: 5px !important; }
-            ul li::before { font-size: 0.7rem !important; margin-right: 3px; }
-
-            /* 5. Teachers horizontal line */
-            .teachers-row { 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                align-items: stretch;
-                margin-top: 10px;
-            }
-            .teacher-card { width: 48% !important; padding: 10px !important; }
-            .teacher-photo, .pulen-photo { width: 80px !important; height: 80px !important; margin-bottom: 5px !important; }
-            .teacher-card div { font-size: 0.75rem !important; }
-        }
     </style>
 </head>
 <body>
@@ -195,13 +354,12 @@
 
     <div class="container">
         
-        <div class="full-width-top">
-            <div class="special-bubble">
-                ▶ Special classes for class 9th and 10th students
-            </div>
-            <div id="announcement-carousel" class="carousel-container">
-                <div id="carousel-track" class="carousel-track"></div>
-            </div>
+        <div class="special-bubble">
+            ▶ Special classes for class 9th and 10th students
+        </div>
+
+        <div id="announcement-carousel" class="carousel-container">
+            <div id="carousel-track" class="carousel-track"></div>
         </div>
 
         <img src="student.jpg" alt="Student Holding Books" class="img-fluid">
@@ -384,12 +542,10 @@
         function handleSwipe() {
             let threshold = 30; 
             if (startX - endX > threshold) {
-                // Swipe Left
                 slideIndex = (slideIndex + 1) % validAnnouncements.length;
                 updateSlidePosition();
                 resetAutoSlide();
             } else if (endX - startX > threshold) {
-                // Swipe Right
                 slideIndex = (slideIndex - 1 + validAnnouncements.length) % validAnnouncements.length;
                 updateSlidePosition();
                 resetAutoSlide();
