@@ -5,74 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>6th to 8th Single Subject - The Catalyst Assam</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; padding: 0; 
-            background: url('world-map-png-30718.png') no-repeat center center fixed; 
-            background-size: cover; 
-            color: #333; 
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME - EXACT MATCH WITH INDEX.HTML         */
+        /* ======================================================== */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
         }
         
-        /* Header Match 9-10 Theme (Blue for 6-8) */
-        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
-        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; }
-        header h1 { display: inline-block; margin: 0; font-size: 2.5rem; vertical-align: middle; text-transform: uppercase; }
-        header p { letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0; text-transform: uppercase; font-size: 0.9rem; }
+        /* 100% SAME BACKGROUND AS INDEX.HTML */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff; 
+        }
         
-        .page-title-box { background-color: #ff0000; color: yellow; text-align: center; padding: 15px; font-size: 1.8rem; font-weight: bold; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 20px; border-bottom: 3px solid #1a0066; }
+        /* HEADER EXACT MATCH WITH INDEX.HTML */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); 
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; 
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            position: relative; 
+            width: 100%; 
+        }
         
-        .container { display: flex; flex-direction: column; align-items: center; padding: 20px; background: rgba(255, 255, 255, 0.9); min-height: 100vh; }
+        .logo-img { 
+            width: 70px; height: 70px; border-radius: 50%; 
+            border: 3px solid #D8FF00; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; 
+            background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); 
+        }
+        
+        .title-wrapper { display: inline-block; vertical-align: middle; text-align: center; }
+        header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.5); white-space: nowrap; }
+        .subtitle { display: flex; justify-content: space-between; width: 100%; margin: 5px 0 0 0; color: #D8FF00; font-weight: 900; font-size: 0.9rem; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        
+        /* PAGE TITLE BANNER */
+        .page-title-box { 
+            background: rgba(140, 0, 255, 0.4); 
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid rgba(216,255,0,0.4);
+            color: #D8FF00; text-align: center; padding: 20px; 
+            font-size: 2rem; font-weight: 900; text-transform: uppercase; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 30px; 
+            text-shadow: 0 0 15px rgba(216, 255, 0, 0.5);
+        }
+
+        .container { display: flex; flex-direction: column; align-items: center; padding: 20px 15px; min-height: 80vh; }
         
         /* Grid Layout */
-        .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; width: 100%; max-width: 1000px; justify-items: center; margin-top: 20px; }
+        .package-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 50px; width: 100%; max-width: 900px; justify-items: center; margin-top: 10px; margin-bottom: 40px; }
         
-        /* Card Style from 9-10 Package */
-        .package-card { background: white; border: 3px solid #1a0066; border-radius: 20px; width: 100%; max-width: 400px; overflow: hidden; box-shadow: 0 8px 16px rgba(0,0,0,0.3); transition: all 0.3s; text-align: center; }
-        .package-card:hover { transform: scale(1.03); }
+        /* PACKAGE CARDS WITH GLASSMORPHISM & NEON GLOW */
+        .package-card { 
+            background: rgba(28, 9, 54, 0.6); 
+            border: 3px solid #D8FF00; 
+            border-radius: 20px; width: 100%; max-width: 400px; overflow: hidden; 
+            box-shadow: 0 0 30px rgba(216,255,0,0.2); 
+            transition: all 0.3s; text-align: center; 
+            backdrop-filter: blur(10px);
+        }
+        .package-card:hover { transform: scale(1.03); box-shadow: 0 0 40px rgba(216,255,0,0.5); }
         
-        .card-header { background: #1a0066; color: white; padding: 15px; font-size: 1.4rem; font-weight: bold; text-transform: uppercase; border-bottom: 4px solid yellow; }
-        .card-body { padding: 20px; }
-        
-        /* Price Box Style */
-        .price-box { background-color: #f0f8ff; border: 2px dashed #1a0066; padding: 15px; border-radius: 10px; margin-bottom: 15px; min-height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .price-title { font-size: 1.1rem; font-weight: bold; color: #333; }
-        .price-amount { font-size: 1.5rem; font-weight: bold; color: #1a0066; margin: 5px 0; }
-        
-        .free-offer { background: yellow; color: #1a0066; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 0.9rem; display: inline-block; animation: blink 1.5s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .card-header { 
+            background: #D8FF00; color: #000; padding: 18px; 
+            font-size: 1.5rem; font-weight: 900; text-transform: uppercase; 
+            box-shadow: 0 5px 15px rgba(216,255,0,0.4);
+        }
+        .card-body { padding: 25px; }
         
         /* Subject Checkbox Styles */
-        .subject-box { text-align: left; margin: 20px 0; padding-left: 10px; }
-        .checkbox-label { display: flex; align-items: center; font-size: 1.1rem; margin-bottom: 10px; font-weight: 600; color: #1a0066; cursor: pointer; transition: 0.2s; }
-        .checkbox-label:hover { color: red; }
-        input[type="checkbox"] { width: 20px; height: 20px; margin-right: 15px; accent-color: #1a0066; cursor: pointer; }
+        .subject-box { text-align: left; margin: 20px 0 30px 0; padding-left: 20px; }
+        .checkbox-label { display: flex; align-items: center; font-size: 1.2rem; margin-bottom: 12px; font-weight: 900; color: #ffffff; cursor: pointer; transition: 0.2s; }
+        .checkbox-label:hover { color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; accent-color: #D8FF00; cursor: pointer; }
         
-        .form-btn { background: linear-gradient(to right, #1a0066, #0000cc); color: white; text-decoration: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; display: inline-block; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid white; font-size: 1rem; transition: 0.3s; text-transform: uppercase; cursor: pointer; }
-        .form-btn:hover { background: #ff0000; border-color: yellow; transform: translateY(-3px); }
-        .form-btn.disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; pointer-events: none; }
+        /* Price Box Style */
+        .price-box { 
+            background: rgba(255,255,255,0.05); border: 2px dashed #D8FF00; 
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; 
+            min-height: 140px; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+        }
+        .fee-msg { font-weight: 900; color: #fff; text-transform: uppercase; font-size: 1.1rem; }
+        .price-title { font-size: 1.1rem; font-weight: 900; color: #ffffff; text-transform: uppercase; }
+        .price-amount { font-size: 2.2rem; font-weight: 900; color: #D8FF00; margin: 10px 0; text-shadow: 0 0 15px rgba(216,255,0,0.6); }
+        
+        .free-offer { 
+            background: #D8FF00; color: #000; padding: 5px 15px; 
+            border-radius: 10px; font-weight: 900; font-size: 0.95rem; 
+            display: inline-block; animation: blink 1.5s infinite; text-transform: uppercase;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .monthly-fee { font-weight: 900; font-size: 1.2rem; margin-top: 15px; color: #ffffff; }
+        .monthly-fee span { color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
 
-        .back-btn { display: block; margin-top: 40px; font-weight: bold; color: red; text-decoration: none; font-size: 1.1rem; border: 2px solid red; padding: 10px 20px; border-radius: 30px; background: white; }
+        /* ADMISSION BUTTON */
+        .form-btn { 
+            background-color: #D8FF00; color: #000; padding: 15px 30px; 
+            border-radius: 35px; font-weight: 900; display: inline-block; 
+            box-shadow: 0 0 20px rgba(216,255,0,0.5); 
+            border: none; font-size: 1.1rem; transition: 0.3s; 
+            text-transform: uppercase; text-decoration: none; width: 100%; cursor: pointer;
+        }
+        .form-btn:hover { background: #ffffff; box-shadow: 0 0 35px rgba(255,255,255,0.8); transform: scale(1.05); }
         
-        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 0; }
-        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.3rem; text-transform: uppercase; }
+        .form-btn.disabled { background-color: #555; color: #aaa; border: 2px solid #777; box-shadow: none; cursor: not-allowed; pointer-events: none; transform: none; }
+
+        /* BACK BUTTON */
+        .back-btn {
+            display: inline-flex; align-items: center; justify-content: center; 
+            background: rgba(153, 41, 234, 0.4); 
+            padding: 15px 35px; margin-top: 20px; margin-bottom: 20px;
+            border-radius: 40px; border: 2px solid #D8FF00; color: #D8FF00; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            backdrop-filter: blur(5px);
+        }
+        .back-btn:hover { 
+            background-color: #D8FF00; color: #000; 
+            box-shadow: 0 0 35px rgba(216,255,0,0.7); transform: scale(1.05); 
+        }
         
-        /* Welcome Bubble */
-        .welcome-bubble { background-color: yellow; color: #1a0066; padding: 5px 25px; border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3); animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        /* FOOTER EXACT MATCH WITH INDEX.HTML */
+        footer { 
+            text-align: center; background-color: #7132CA; 
+            color: white; margin-top: auto; width: 100%; 
+            border-top: 2px solid rgba(216,255,0,0.4); 
+            box-shadow: 0 -10px 30px rgba(216,255,0,0.1);
+        }
+        .footer-red { 
+            background: rgba(140, 0, 255, 0.5); 
+            padding: 20px; font-weight: bold; font-size: 1.5rem; 
+            text-transform: uppercase; display: flex; 
+            justify-content: center; align-items: center; 
+            border-bottom: 1px solid rgba(216,255,0,0.2); 
+        }
         
-        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
-        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+        .welcome-bubble {
+            background-color: #D8FF00; color: #000; padding: 8px 35px; border-radius: 30px; 
+            display: inline-block; box-shadow: 0 0 20px rgba(216,255,0,0.6); font-weight: 900;
+            animation: bounce-vertical 2s infinite ease-in-out;
+        }
+        @keyframes bounce-vertical { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        
+        .contact-box { padding: 25px; font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .loc-box { 
+            background: rgba(140, 0, 255, 0.5); padding: 20px; 
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase; 
+            color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5);
+        }
         
         /* Faded Class for Logic */
         .faded { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
+
+        @media (max-width: 600px) { 
+            header h1 { font-size: 1.6rem; } 
+            .subtitle { font-size: 0.7rem; }
+            .page-title-box { font-size: 1.5rem; padding: 15px; }
+            .package-grid { gap: 30px; grid-template-columns: 1fr; }
+            .card-header { font-size: 1.3rem; }
+            .price-amount { font-size: 1.8rem; }
+            .form-btn { font-size: 1rem; padding: 12px 20px; }
+        }
     </style>
 </head>
 <body>
+
     <header>
         <img src="logo.png" alt="Logo" class="logo-img">
-        <h1>THE CATALYST ASSAM</h1>
-        <p>SHAPING TALENT</p>
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
     </header>
+
     <div class="page-title-box">6TH TO 8TH SINGLE SUBJECT</div>
     
     <div class="container">
@@ -81,7 +205,7 @@
             <div class="package-card" id="card-assamese">
                 <div class="card-header">ASSAMESE MEDIUM</div>
                 <div class="card-body">
-                    <p style="font-weight:bold; color:red; margin-bottom:15px; font-size:1.1rem;">Select Subjects:</p>
+                    <p style="font-weight:900; color:#D8FF00; margin-bottom:15px; font-size:1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">SELECT SUBJECTS:</p>
                     
                     <div class="subject-box">
                         <label class="checkbox-label"><input type="checkbox" class="sub-assamese" value="MATHS" onclick="calcFees('Assamese')"> MATHS</label>
@@ -91,12 +215,12 @@
                     </div>
 
                     <div class="price-box">
-                        <div id="fee-msg-assamese" style="font-weight:bold; color:#555;">Select subjects to see fees</div>
-                        <div id="fee-details-assamese" style="display:none;">
+                        <div id="fee-msg-assamese" class="fee-msg">Select subjects to see fees</div>
+                        <div id="fee-details-assamese" style="display:none; width: 100%;">
                             <div class="price-title">Admission Fee</div>
                             <div class="price-amount" id="adm-assamese">₹ 0</div>
                             <div class="free-offer">★ 1st Month Free ★</div>
-                            <div style="margin-top:10px; font-weight:bold;">Monthly: <span id="mon-assamese" style="color:#1a0066;">₹ 0</span></div>
+                            <div class="monthly-fee">Monthly: <span id="mon-assamese">₹ 0</span></div>
                         </div>
                     </div>
                     
@@ -105,9 +229,9 @@
             </div>
 
             <div class="package-card" id="card-english">
-                <div class="card-header" style="background: #006600; border-bottom: 4px solid orange;">ENGLISH MEDIUM</div>
+                <div class="card-header">ENGLISH MEDIUM</div>
                 <div class="card-body">
-                    <p style="font-weight:bold; color:red; margin-bottom:15px; font-size:1.1rem;">Select Subjects:</p>
+                    <p style="font-weight:900; color:#D8FF00; margin-bottom:15px; font-size:1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">SELECT SUBJECTS:</p>
                     
                     <div class="subject-box">
                         <label class="checkbox-label"><input type="checkbox" class="sub-english" value="MATHS" onclick="calcFees('English')"> MATHS</label>
@@ -116,17 +240,17 @@
                         <label class="checkbox-label"><input type="checkbox" class="sub-english" value="SOCIAL SCIENCE" onclick="calcFees('English')"> SOCIAL SCIENCE</label>
                     </div>
 
-                    <div class="price-box" style="border-color: #006600; background-color: #f0fff0;">
-                        <div id="fee-msg-english" style="font-weight:bold; color:#555;">Select subjects to see fees</div>
-                        <div id="fee-details-english" style="display:none;">
+                    <div class="price-box">
+                        <div id="fee-msg-english" class="fee-msg">Select subjects to see fees</div>
+                        <div id="fee-details-english" style="display:none; width: 100%;">
                             <div class="price-title">Admission Fee</div>
-                            <div class="price-amount" id="adm-english" style="color:#006600;">₹ 0</div>
-                            <div class="free-offer" style="background:yellow; color:#006600;">★ 1st Month Free ★</div>
-                            <div style="margin-top:10px; font-weight:bold;">Monthly: <span id="mon-english" style="color:#006600;">₹ 0</span></div>
+                            <div class="price-amount" id="adm-english">₹ 0</div>
+                            <div class="free-offer">★ 1st Month Free ★</div>
+                            <div class="monthly-fee">Monthly: <span id="mon-english">₹ 0</span></div>
                         </div>
                     </div>
                     
-                    <a href="#" id="btn-english" class="form-btn disabled" style="background: linear-gradient(to right, #006600, #004400);">APPLY NOW ➡</a>
+                    <a href="#" id="btn-english" class="form-btn disabled">APPLY NOW ➡</a>
                 </div>
             </div>
 
@@ -138,7 +262,7 @@
         <div class="footer-red">
             <span class="welcome-bubble">WELCOME / স্বাগতম</span>
         </div>
-        <div class="contact-box">📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com</div>
+        <div class="contact-box">📞 7578911831, 9399409013 <span style="margin: 0 10px; color: #D8FF00;">|</span> Email - thecatalystassam@gmail.com</div>
         <div class="loc-box">📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411</div>
     </footer>
 
