@@ -5,40 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Source - The Catalyst Assam</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
-        header { background-color: #1a0066; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; position: sticky; top: 0; z-index: 100; }
-        header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
-        .container { padding: 30px; max-width: 900px; margin: auto; text-align: center; }
-        h2.main-title { color:#1a0066; text-decoration:underline; margin-bottom:20px; text-transform: uppercase; font-size: 1.5rem; }
-        .accordion { background-color: #1a0066; color: yellow; cursor: pointer; padding: 15px 20px; width: 100%; border: 2px solid yellow; text-align: left; outline: none; font-size: 1.2rem; font-weight: bold; transition: 0.4s; border-radius: 10px; margin-bottom: 10px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .accordion:hover, .active { background-color: #0000cc; }
-        .accordion::after { content: '\002B'; color: white; font-size: 1.8rem; font-weight: bold; }
-        .active::after { content: "\2212"; color: red; }
-        .panel { padding: 0 15px; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 0 0 10px 10px; margin-top: -15px; margin-bottom: 20px; border: 2px solid #1a0066; border-top: none; }
-        .medium-title { color: red; border-bottom: 2px dashed #1a0066; padding-bottom: 5px; margin-top: 20px; font-size: 1.1rem; text-transform: uppercase; text-align: left; }
-        .pdf-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 20px 0; }
-        .pdf-card { background: white; border: 2px solid #1a0066; border-radius: 10px; width: 100px; height: 100px; padding: 5px; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.2); cursor: pointer; color: #333; transition: transform 0.3s, background 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-        .pdf-card:hover { transform: scale(1.1); background-color: #e6e6ff; border-color: red; }
-        .pdf-icon { width: 35px; height: 35px; margin-bottom: 5px; }
-        .pdf-title { font-size: 0.7rem; font-weight: bold; color: #1a0066; text-transform: uppercase; line-height: 1.1; }
-        .click-text { color: red; font-size: 0.5rem; margin-top: 2px; font-weight: bold; }
-        .upcoming-text { color: #ff8c00; font-size: 0.55rem; margin-top: 2px; font-weight: bold; }
-        .back-btn { display: inline-block; margin-top: 20px; font-weight: bold; color: red; text-decoration: none; font-size: 1.1rem; border: 2px solid red; padding: 10px 20px; border-radius: 30px; background: white; transition: 0.3s; }
-        .back-btn:hover { background: red; color: white; }
-        footer { text-align: center; background-color: #0000cc; color: white; padding: 20px; margin-top: 20px; }
-        .pdf-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; }
-        .modal-header { background-color: #1a0066; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid yellow; }
-        .modal-title { color: white; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; margin: 0; flex: 1; text-align: left; }
-        .close-btn { background-color: red; color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; }
-        .close-btn:hover { background-color: darkred; }
-        .pdf-iframe { width: 100%; height: calc(100vh - 70px); border: none; background: white; }
-        @media (max-width: 600px) { .modal-title { font-size: 0.9rem; } }
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME - EXACT MATCH WITH INDEX.HTML         */
+        /* ======================================================== */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
+        }
+        
+        /* Matching the Super Premium Deep Light Purple Background */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff; 
+        }
+        
+        /* HEADER EXACT MATCH WITH INDEX.HTML */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); /* #7132CA */
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; /* Neon Lime Border */
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            position: sticky; top: 0; z-index: 100;
+            width: 100%; 
+        }
+        
+        .logo-img { 
+            width: 70px; height: 70px; border-radius: 50%; 
+            border: 3px solid #D8FF00; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; 
+            background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); 
+        }
+        
+        .title-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        header h1 { 
+            margin: 0; 
+            font-size: 2.2rem; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+            white-space: nowrap; 
+        }
+        
+        .subtitle { 
+            display: flex; justify-content: space-between; width: 100%;
+            margin: 5px 0 0 0; color: #D8FF00; font-weight: 900; font-size: 0.9rem;
+            text-shadow: 0 0 10px rgba(216,255,0,0.5); 
+        }
+
+        .header-subtext {
+            letter-spacing: 5px; font-weight: bold; margin-top: 15px; 
+            color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            text-transform: uppercase;
+        }
+
+        /* Container & Titles */
+        .container { padding: 40px 15px; max-width: 1000px; margin: auto; text-align: center; min-height: 100vh; }
+        
+        h2.main-title { 
+            color: #D8FF00; text-decoration: none; margin-bottom: 30px; 
+            text-transform: uppercase; font-size: 2rem; 
+            text-shadow: 0 0 15px rgba(216,255,0,0.6); 
+            border-bottom: 2px dashed #D8FF00; display: inline-block; padding-bottom: 10px;
+        }
+
+        /* ACCORDIONS (MATCHING INDEX THEME) */
+        .accordion { 
+            background: rgba(113, 50, 202, 0.7); /* #7132CA */
+            color: #D8FF00; cursor: pointer; padding: 18px 25px; width: 100%; 
+            border: 2px solid #D8FF00; text-align: left; outline: none; 
+            font-size: 1.3rem; font-weight: 900; transition: 0.4s; 
+            border-radius: 15px; margin-bottom: 15px; text-transform: uppercase; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 0 20px rgba(216,255,0,0.2); 
+            backdrop-filter: blur(5px);
+        }
+        .accordion:hover, .active { 
+            background-color: #D8FF00; color: #000; box-shadow: 0 0 25px rgba(216,255,0,0.6);
+        }
+        
+        .accordion::after { content: '\002B'; font-size: 2rem; font-weight: bold; transition: 0.3s; }
+        .active::after { content: "\2212"; transform: rotate(180deg); }
+
+        /* PANELS */
+        .panel { 
+            padding: 0 20px; background: rgba(28, 9, 54, 0.4); 
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; 
+            border-radius: 0 0 15px 15px; margin-top: -20px; margin-bottom: 25px; 
+            border: 2px solid #D8FF00; border-top: none; backdrop-filter: blur(10px);
+        }
+
+        .medium-title { 
+            color: #ffffff; border-bottom: 2px dashed #D8FF00; padding-bottom: 8px; 
+            margin-top: 25px; font-size: 1.2rem; text-transform: uppercase; 
+            text-align: left; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            font-weight: 900;
+        }
+
+        /* PDF GRID & CARDS (Glowing White Box Style) */
+        .pdf-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 25px 0; }
+        
+        .pdf-card { 
+            background: #ffffff; border: 3px solid #D8FF00; border-radius: 15px; 
+            width: 120px; min-height: 125px; padding: 10px; text-align: center; 
+            box-shadow: 0 0 20px rgba(216,255,0,0.4); cursor: pointer; color: #000; 
+            transition: 0.3s; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; overflow: hidden; 
+        }
+        .pdf-card:hover { transform: scale(1.1); box-shadow: 0 0 35px rgba(216,255,0,0.8); }
+        
+        .pdf-icon { width: 40px; height: 40px; margin-bottom: 8px; }
+        .pdf-title { font-size: 0.65rem; font-weight: 900; color: #1c0936; text-transform: uppercase; line-height: 1.2; }
+        .click-text { color: #8C00FF; font-size: 0.55rem; margin-top: 5px; font-weight: 900; text-transform: uppercase; }
+        .upcoming-text { color: red; font-size: 0.6rem; margin-top: 5px; font-weight: 900; text-transform: uppercase;}
+
+        /* BACK BUTTON */
+        .back-btn {
+            display: inline-flex; align-items: center; justify-content: center; 
+            background: rgba(153, 41, 234, 0.4); 
+            padding: 15px 35px; margin-top: 20px; margin-bottom: 20px;
+            border-radius: 40px; border: 2px solid #D8FF00; color: #D8FF00; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            backdrop-filter: blur(5px);
+        }
+        .back-btn:hover { 
+            background-color: #D8FF00; color: #000; 
+            box-shadow: 0 0 35px rgba(216,255,0,0.7); transform: scale(1.05); 
+        }
+
+        /* FOOTER */
+        footer { 
+            text-align: center; background-color: #7132CA; 
+            color: white; margin-top: 40px; width: 100%; 
+            border-top: 2px solid rgba(216,255,0,0.4); 
+            box-shadow: 0 -10px 30px rgba(216,255,0,0.1);
+        }
+        .loc-box { 
+            background: rgba(140, 0, 255, 0.5); padding: 20px; 
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase; 
+            color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5);
+        }
+
+        /* PDF VIEWER MODAL */
+        .pdf-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; flex-direction: column; backdrop-filter: blur(5px); }
+        .modal-header { background-color: #7132CA; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D8FF00; box-shadow: 0 5px 20px rgba(216,255,0,0.3); }
+        .modal-title { color: #D8FF00; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; margin: 0; flex: 1; text-align: left; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .close-btn { background-color: #D8FF00; color: #000; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(216,255,0,0.6); transition: 0.3s; }
+        .close-btn:hover { background-color: white; transform: scale(1.1); }
+        .pdf-iframe { width: 100%; height: calc(100vh - 75px); border: none; background: white; }
+
+        @media (max-width: 600px) { 
+            header h1 { font-size: 1.6rem; } 
+            .subtitle { font-size: 0.7rem; }
+            .accordion { font-size: 1.1rem; padding: 15px; }
+            .pdf-card { width: 100px; min-height: 115px; }
+            .pdf-title { font-size: 0.6rem; }
+            h2.main-title { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
-    <header><h1>THE CATALYST ASSAM</h1><p style="letter-spacing: 3px; margin:5px 0;">E-LIBRARY & BOOK SOURCE</p></header>
+
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
+        <div class="header-subtext">E-LIBRARY & BOOK SOURCE</div>
+    </header>
+
     <div class="container">
         <h2 class="main-title">SYLLABUS & BOOKS</h2>
+        
         <button class="accordion">📘 Class 6th Books</button>
         <div class="panel">
             <h3 class="medium-title">Assamese Medium</h3>
@@ -56,6 +212,7 @@
                 <div class="pdf-card" onclick="openPdf('english_social_science_6.pdf', 'Class 6 Social Sci')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Sci</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📘 Class 7th Books</button>
         <div class="panel">
             <h3 class="medium-title">Assamese Medium</h3>
@@ -73,6 +230,7 @@
                 <div class="pdf-card" onclick="openPdf('english_social_science_7.pdf', 'Class 7 Social Sci')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Sci</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📘 Class 8th Books</button>
         <div class="panel">
             <h3 class="medium-title">Assamese Medium</h3>
@@ -90,6 +248,7 @@
                 <div class="pdf-card" onclick="openPdf('english_social_science_8.pdf', 'Class 8 Social Sci')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Sci</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📙 Class 9th Books</button>
         <div class="panel">
             <h3 class="medium-title">Assamese Medium</h3>
@@ -107,6 +266,7 @@
                 <div class="pdf-card" onclick="openPdf('english_social_science_9.pdf', 'Class 9 Social Sci')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Sci</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📙 Class 10th Books</button>
         <div class="panel">
             <h3 class="medium-title">Assamese Medium</h3>
@@ -124,6 +284,7 @@
                 <div class="pdf-card" onclick="openPdf('english_social_science_10.pdf', 'Class 10 Social Sci')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Sci</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📕 Class 11th Books</button>
         <div class="panel">
             <h3 class="medium-title">Arts Stream</h3>
@@ -141,6 +302,7 @@
                 <div class="pdf-card" onclick="openPdf('english_commerce_11.pdf', 'Class 11 English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">ENGLISH</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">📕 Class 12th Books</button>
         <div class="panel">
             <h3 class="medium-title">Arts Stream</h3>
@@ -158,6 +320,7 @@
                 <div class="pdf-card" onclick="openPdf('english_commerce_12.pdf', 'Class 12 English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">ENGLISH</div><div class="click-text">Click Open</div></div>
             </div>
         </div>
+
         <button class="accordion">🎓 Degree Courses (FYUGP)</button>
         <div class="panel">
             <h3 class="medium-title">Arts Stream (B.A)</h3>
@@ -169,19 +332,65 @@
                 <div class="pdf-card"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">B.COM SUBJECTS</div><div class="upcoming-text">Upcoming...</div></div>
             </div>
         </div>
+
         <button class="accordion">🎯 Competitive Exams</button>
         <div class="panel">
-            <h3 class="medium-title">Study Materials</h3>
+            
+            <h3 class="medium-title">ADRE</h3>
             <div class="pdf-grid">
-                <div class="pdf-card" onclick="openPdf('ADRE.pdf', 'ADRE Notes')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">ADRE</div><div class="click-text">Click Open</div></div>
-                <div class="pdf-card" onclick="openPdf('Assam_Police.pdf', 'Assam Police Notes')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">POLICE</div><div class="click-text">Click Open</div></div>
-                <div class="pdf-card" onclick="openPdf('Assam_TET.pdf', 'Assam TET Notes')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">TET</div><div class="click-text">Click Open</div></div>
-                <div class="pdf-card" onclick="openPdf('DHS.pdf', 'DHS Notes')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">DHS</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Social Studies_Science.pdf', 'Social Studies/Science')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Social Studies / Science</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General Knowledge & Current Affairs.pdf', 'GK & Current Affairs')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">GK & Current Affairs</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Logical Reasoning_Mental Ability.pdf', 'Logical Reasoning')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Logical Reasoning</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General Mathematics.pdf', 'General Mathematics')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">General Math</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General English.pdf', 'General English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">General English</div><div class="click-text">Click Open</div></div>
             </div>
+
+            <h3 class="medium-title">Assam Police</h3>
+            <div class="pdf-grid">
+                <div class="pdf-card" onclick="openPdf('Elementary Arithmetic.pdf', 'Elementary Arithmetic')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Elementary Arithmetic</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General English.pdf', 'General English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">General English</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Logical Reasoning_Mental Ability.pdf', 'Logical Reasoning')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Logical Reasoning</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Assam History_Geography_Polity_Economy.pdf', 'Assam Hist/Geo/Polity')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Assam History & Polity</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General Knowledge_Current Affairs.pdf', 'GK/Current Affairs')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">GK & Current Affairs</div><div class="click-text">Click Open</div></div>
+            </div>
+
+            <h3 class="medium-title">Assam TET (Paper I - Lower Primary)</h3>
+            <div class="pdf-grid">
+                <div class="pdf-card" onclick="openPdf('Child Development & Pedagogy.pdf', 'Child Development')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Child Dev. & Pedagogy</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Language I Regional.pdf', 'Language I Regional')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Language I Regional</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Language II English .pdf', 'Language II English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Language II English</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Mathematics.pdf', 'Mathematics')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Mathematics</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('EVS.pdf', 'EVS')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">EVS</div><div class="click-text">Click Open</div></div>
+            </div>
+
+            <h3 class="medium-title">Assam TET (Paper II - Upper Primary)</h3>
+            <div class="pdf-grid">
+                <div class="pdf-card" onclick="openPdf('Child Development & Pedagogy.pdf', 'Child Development')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Child Dev. & Pedagogy</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Language I.pdf', 'Language I')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Language I</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Language II English.pdf', 'Language II English')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Language II English</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Science & Mathematics or Social Studies.pdf', 'Science/Maths or Social Studies')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Sci/Maths or Social Studies</div><div class="click-text">Click Open</div></div>
+            </div>
+
+            <h3 class="medium-title">Assam DHS</h3>
+            <div class="pdf-grid">
+                <div class="pdf-card" onclick="openPdf('English Language.pdf', 'English Language')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">English Language</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('General Knowledge.pdf', 'General Knowledge (Assam)')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Gen. Knowledge (Assam)</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Numerical Aptitude_Mathematics.pdf', 'Numerical Aptitude/Maths')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Numerical Aptitude</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Logical Reasoning.pdf', 'Logical Reasoning')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Logical Reasoning</div><div class="click-text">Click Open</div></div>
+                <div class="pdf-card" onclick="openPdf('Computer Awareness.pdf', 'Computer Awareness')"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="pdf-icon"><div class="pdf-title">Computer Awareness</div><div class="click-text">Click Open</div></div>
+            </div>
+
         </div>
+
         <br><a href="index.html" class="back-btn">⬅ BACK TO HOME</a>
     </div>
-    <footer><div>📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON</div></footer>
+
+    <footer>
+        <div class="loc-box">
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
+    </footer>
+
     <div id="pdfViewerModal" class="pdf-modal">
         <div class="modal-header">
             <div class="modal-title" id="pdfTitle">Viewer</div>
@@ -189,22 +398,31 @@
         </div>
         <iframe id="pdfIframe" class="pdf-iframe" src=""></iframe>
     </div>
+
     <script>
         var acc = document.getElementsByClassName("accordion");
         for (var i = 0; i < acc.length; i++) {
             acc[i].addEventListener("click", function() {
                 this.classList.toggle("active");
                 var panel = this.nextElementSibling;
-                if (panel.style.maxHeight) { panel.style.maxHeight = null; } else { panel.style.maxHeight = panel.scrollHeight + "px"; } 
+                if (panel.style.maxHeight) { 
+                    panel.style.maxHeight = null; 
+                } else { 
+                    panel.style.maxHeight = panel.scrollHeight + "px"; 
+                } 
             });
         }
+        
         function openPdf(pdfUrl, pdfName) {
             document.getElementById('pdfTitle').innerText = pdfName;
-            // Phone default viewer direct use (Auto-detect & Zoom enabled)
             document.getElementById('pdfIframe').src = pdfUrl;
             document.getElementById('pdfViewerModal').style.display = 'flex';
         }
-        function closePdf() { document.getElementById('pdfViewerModal').style.display = 'none'; document.getElementById('pdfIframe').src = ''; }
+        
+        function closePdf() { 
+            document.getElementById('pdfViewerModal').style.display = 'none'; 
+            document.getElementById('pdfIframe').src = ''; 
+        }
     </script>
 </body>
 </html>
