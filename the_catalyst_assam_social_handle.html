@@ -5,61 +5,194 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Handles - The Catalyst Assam</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f0f8ff; color: #333; }
-        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
-        header h1 { margin: 0; font-size: 2.5rem; text-transform: uppercase; }
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME - EXACT MATCH WITH INDEX.HTML         */
+        /* ======================================================== */
         
-        .container { display: flex; flex-direction: column; align-items: center; padding: 30px; min-height: 80vh; }
-        .grid-social { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; width: 100%; max-width: 800px; margin-top: 30px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
+        }
+        
+        /* 100% SAME BACKGROUND AS INDEX.HTML */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff; 
+        }
+        
+        /* HEADER EXACT MATCH WITH INDEX.HTML */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); /* #7132CA */
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; /* Neon Lime Border */
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            position: relative; 
+            width: 100%; 
+        }
+        
+        .logo-img { 
+            width: 70px; height: 70px; border-radius: 50%; 
+            border: 3px solid #D8FF00; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; 
+            background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); 
+        }
+        
+        .title-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        header h1 { 
+            margin: 0; 
+            font-size: 2.2rem; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+            white-space: nowrap; 
+        }
+        
+        .subtitle { 
+            display: flex; justify-content: space-between; width: 100%;
+            margin: 5px 0 0 0; color: #D8FF00; font-weight: 900; font-size: 0.9rem;
+            text-shadow: 0 0 10px rgba(216,255,0,0.5); 
+        }
+
+        .header-subtext {
+            letter-spacing: 5px; font-weight: bold; margin-top: 15px; 
+            color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            text-transform: uppercase;
+        }
+
+        /* Container & Titles */
+        .container { 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 40px 15px; min-height: 80vh; 
+        }
+
+        .banner-img { 
+            width: 180px; margin-bottom: 20px; 
+            border-radius: 20px; border: 3px solid #D8FF00; 
+            box-shadow: 0 0 25px rgba(216,255,0,0.5);
+            background: white; padding: 10px;
+        }
+
+        h2.main-title { 
+            color: #D8FF00; text-decoration: none; margin-bottom: 40px; 
+            text-transform: uppercase; font-size: 2rem; 
+            text-shadow: 0 0 15px rgba(216,255,0,0.6); 
+            border-bottom: 2px dashed #D8FF00; display: inline-block; padding-bottom: 10px;
+        }
+
+        /* SOCIAL MEDIA GRID & CARDS */
+        .grid-social { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 35px; width: 100%; max-width: 900px; 
+        }
         
         .social-card {
-            background: white;
+            background: #ffffff;
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border: 3px solid transparent;
+            transition: 0.3s;
             text-decoration: none;
-            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
+            transform: scale(1);
         }
-        .social-card:hover { transform: translateY(-5px); }
+        .social-card:hover { transform: scale(1.08); }
         
-        .social-icon { width: 80px; height: 80px; margin-bottom: 15px; object-fit: contain; }
-        .social-name { font-size: 1.5rem; font-weight: bold; text-transform: uppercase; }
+        .social-icon { width: 90px; height: 90px; margin-bottom: 15px; object-fit: contain; }
+        .social-name { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; }
         
-        /* Individual Colors */
-        .yt { border-color: red; }
-        .fb { border-color: #1877F2; }
-        .wa { border-color: #25D366; }
-        .ig { border-color: #C13584; }
+        /* Individual Brand Colors with GLOW */
+        .yt { border: 4px solid #ff0000; box-shadow: 0 0 25px rgba(255,0,0,0.5); }
+        .yt:hover { box-shadow: 0 0 40px rgba(255,0,0,0.8); }
 
-        .banner-img { width: 150px; margin-bottom: 10px; }
+        .fb { border: 4px solid #1877F2; box-shadow: 0 0 25px rgba(24,119,242,0.5); }
+        .fb:hover { box-shadow: 0 0 40px rgba(24,119,242,0.8); }
 
-        .back-btn { display: inline-block; margin-top: 40px; font-weight: bold; color: red; text-decoration: none; font-size: 1.1rem; border: 2px solid red; padding: 10px 20px; border-radius: 30px; background: white; }
-        
-        footer { text-align: center; background-color: #0000cc; color: white; padding: 20px; margin-top: auto; }
+        .wa { border: 4px solid #25D366; box-shadow: 0 0 25px rgba(37,211,102,0.5); }
+        .wa:hover { box-shadow: 0 0 40px rgba(37,211,102,0.8); }
+
+        .ig { border: 4px solid #C13584; box-shadow: 0 0 25px rgba(193,53,132,0.5); }
+        .ig:hover { box-shadow: 0 0 40px rgba(193,53,132,0.8); }
+
+        /* BACK BUTTON */
+        .back-btn {
+            display: inline-flex; align-items: center; justify-content: center; 
+            background: rgba(153, 41, 234, 0.4); 
+            padding: 15px 35px; margin-top: 50px; margin-bottom: 20px;
+            border-radius: 40px; border: 2px solid #D8FF00; color: #D8FF00; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            backdrop-filter: blur(5px);
+        }
+        .back-btn:hover { 
+            background-color: #D8FF00; color: #000; 
+            box-shadow: 0 0 35px rgba(216,255,0,0.7); transform: scale(1.05); 
+        }
+
+        /* FOOTER EXACT MATCH WITH INDEX.HTML */
+        footer { 
+            text-align: center; background-color: #7132CA; 
+            color: white; margin-top: auto; width: 100%; 
+            border-top: 2px solid rgba(216,255,0,0.4); 
+            box-shadow: 0 -10px 30px rgba(216,255,0,0.1);
+        }
+        .loc-box { 
+            background: rgba(140, 0, 255, 0.5); padding: 20px; 
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase; 
+            color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5);
+        }
+
+        /* MOBILE VIEW */
+        @media (max-width: 600px) { 
+            header h1 { font-size: 1.6rem; } 
+            .subtitle { font-size: 0.7rem; }
+            h2.main-title { font-size: 1.5rem; }
+            .grid-social { gap: 25px; grid-template-columns: repeat(2, 1fr); }
+            .social-card { padding: 15px; }
+            .social-icon { width: 60px; height: 60px; margin-bottom: 10px; }
+            .social-name { font-size: 1rem; }
+            .banner-img { width: 140px; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>THE CATALYST ASSAM</h1>
-        <p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">CONNECT WITH US</p>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
+        <div class="header-subtext">CONNECT WITH US</div>
     </header>
 
     <div class="container">
+        
         <img src="the_catalyst_assam_social_handle.png" alt="Social Banner" class="banner-img">
-        <h2 style="color:#1a0066; border-bottom:3px solid red; display:inline-block;">OUR SOCIAL HANDLES</h2>
+        <h2 class="main-title">OUR SOCIAL HANDLES</h2>
 
         <div class="grid-social">
             
             <a href="https://youtube.com/@thecatalystassam?feature=shared" target="_blank" class="social-card yt">
                 <img src="youtube.png" alt="YouTube" class="social-icon">
-                <div class="social-name" style="color:red;">YOUTUBE</div>
+                <div class="social-name" style="color:#ff0000;">YOUTUBE</div>
             </a>
 
             <a href="https://www.facebook.com/share/17xLXBAiQC/" target="_blank" class="social-card fb">
@@ -83,7 +216,9 @@
     </div>
 
     <footer>
-        <div>📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON</div>
+        <div class="loc-box">
+            📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
+        </div>
     </footer>
 
 </body>
