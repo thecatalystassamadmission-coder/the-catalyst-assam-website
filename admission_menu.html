@@ -5,156 +5,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admission Menu - The Catalyst Assam</title>
     <style>
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME - EXACT MATCH WITH INDEX.HTML         */
+        /* ======================================================== */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
+        }
+        
+        /* 100% SAME BACKGROUND AS INDEX.HTML */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; padding: 0; 
-            background: url('world-map-png-30718.png') no-repeat center center fixed; 
-            background-size: cover; /* Map pure background par */
-            color: #333; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff; 
         }
         
-        /* Header Section */
-        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; }
+        /* HEADER EXACT MATCH WITH INDEX.HTML */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); /* #7132CA */
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; /* Neon Lime Border */
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); /* Yellow Glow */
+            position: relative; 
+            width: 100%; 
+        }
         
         .logo-img { 
-            width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; 
-            vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; 
+            width: 80px; height: 80px; border-radius: 50%; 
+            border: 3px solid #D8FF00; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; 
+            background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); 
         }
         
-        header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
-        header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
+        /* SHAPING TALENT EXACT WIDTH FIX FROM INDEX.HTML */
+        .title-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        header h1 { 
+            margin: 0; 
+            font-size: 2.5rem; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+            white-space: nowrap; 
+        }
         
-        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
-        .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        .subtitle { 
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 5px 0 0 0; 
+            color: #D8FF00; 
+            font-weight: 900; 
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(216,255,0,0.5); 
+        }
         
+        /* BANNER MATCHING INDEX.HTML */
+        .premium-banner { 
+            background: rgba(140, 0, 255, 0.4); 
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(216,255,0,0.3);
+            border-bottom: 1px solid rgba(216,255,0,0.3);
+            text-align: center; padding: 20px; 
+            width: 100%; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .premium-banner h2 { 
+            font-size: 2.2rem; margin: 0; text-transform: uppercase; 
+            color: #D8FF00; text-shadow: 0 0 15px rgba(216, 255, 0, 0.4); 
+        }
+        .premium-banner .sub-text {
+            font-size: 1.1rem; color: #D8FF00; font-weight:bold; 
+            margin-bottom: 5px; text-shadow: 0 0 8px rgba(216,255,0,0.6);
+        }
+        .subjects { color: #f0f0f0; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        
+        /* Main Container */
         .container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 30px; 
-            /* Transparent white overlay taaki text dikhe */
-            background: rgba(255, 255, 255, 0.85); 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 40px 15px; width: 100%; max-width: 1200px; margin: 0 auto; 
             min-height: 100vh;
         }
 
-        /* --- MENU GRID STYLES --- */
+        /* SPECIAL BUBBLE MATCHING INDEX.HTML */
+        .special-bubble-top {
+            background: rgba(216, 255, 0, 0.15); 
+            color: #D8FF00; font-weight: 900; font-size: 22px; 
+            padding: 15px 35px; border-radius: 50px; 
+            border: 2px solid #D8FF00; 
+            box-shadow: 0 0 25px rgba(216, 255, 0, 0.5); 
+            text-align: center; width: auto; max-width: 90%; 
+            margin-bottom: 40px;
+            animation: bounce-vertical 1.5s infinite ease-in-out;
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes bounce-vertical { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-15px); } 
+        }
+
+        /* --- MENU GRID STYLES (UPDATED COLORS) --- */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 Columns */
-            gap: 40px;
-            width: 100%;
-            max-width: 900px;
-            justify-items: center;
-            margin-top: 20px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 40px; width: 100%; max-width: 900px;
+            justify-items: center; margin-top: 10px;
         }
 
-        /* Each Menu Item Container */
         .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            transition: transform 0.2s;
-            animation: bounce 2s infinite; /* BLINK/BOUNCE EFFECT */
+            display: flex; align-items: center; gap: 15px;
+            text-decoration: none; transition: 0.3s;
         }
-        .menu-item:hover { transform: scale(1.05); }
+        .menu-item:hover { transform: scale(1.08) !important; }
 
-        /* --- ALAG ALAG TIME PAR BLINK KARNE KE LIYE DELAY --- */
-        .menu-grid a:nth-child(1) { animation-delay: 0s; }
-        .menu-grid a:nth-child(2) { animation-delay: 0.3s; }
-        .menu-grid a:nth-child(3) { animation-delay: 0.6s; }
-        .menu-grid a:nth-child(4) { animation-delay: 0.9s; }
-        .menu-grid a:nth-child(5) { animation-delay: 1.2s; }
-        .menu-grid a:nth-child(6) { animation-delay: 1.5s; }
-        .menu-grid a:nth-child(7) { animation-delay: 1.8s; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* IMAGE BUBBLE (Left) */
+        /* IMAGE BUBBLE (Same as Action Cards in index) */
         .menu-img-bubble {
-            width: 100px;
-            height: 100px;
-            background: white;
-            border-radius: 20px; /* 2x2 Round Corner */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #1a0066;
-            padding: 5px;
+            width: 110px; height: 110px;
+            background: #ffffff; 
+            border-radius: 15px; 
+            box-shadow: 0 0 20px rgba(216,255,0,0.4); 
+            display: flex; align-items: center; justify-content: center;
+            border: 3px solid #D8FF00; padding: 15px;
+            transition: 0.3s;
         }
-        .menu-img-bubble img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+        .menu-item:hover .menu-img-bubble { box-shadow: 0 0 35px rgba(216,255,0,0.8); }
+        .menu-img-bubble img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* TEXT BUBBLE (Right) */
+        /* TEXT BUBBLE (Same as Action Button in index) */
         .menu-text-bubble {
-            background: radial-gradient(circle, #0033cc, #002288); /* Default Blue */
-            color: white;
-            padding: 15px;
-            border-radius: 20px;
-            text-align: center;
-            font-weight: bold;
-            text-transform: uppercase;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            border: 2px solid white;
-            width: 180px;
+            background-color: #D8FF00; color: #000; padding: 15px; border-radius: 30px;
+            text-align: center; font-weight: 900; text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(216,255,0,0.4);
+            border: none; width: 180px; font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .menu-item:hover .menu-text-bubble {
+            background-color: #ffffff; box-shadow: 0 0 25px rgba(255,255,255,0.8);
         }
 
-        /* Distinct Colors for Text Bubbles */
-        .c1 { background: radial-gradient(circle, #0033cc, #002288); } /* Blue */
-        .c2 { background: radial-gradient(circle, #28a745, #1e7e34); } /* Green */
-        .c3 { background: radial-gradient(circle, #5a2d9c, #3e1b75); } /* Purple */
-        .c4 { background: radial-gradient(circle, #cc5500, #a04000); } /* Orange */
-        .c5 { background: radial-gradient(circle, #118c8e, #0b6668); } /* Teal */
-        .c6 { background: radial-gradient(circle, #b0156d, #800e4e); } /* Pink */
-        .c7 { background: radial-gradient(circle, #0a5f56, #063d38); } /* Dark Cyan */
-
-        /* SPECIAL CLASS BUBBLE (Top) */
-        .special-bubble-top {
-            background: white;
-            color: red;
-            font-weight: bold;
-            font-size: 20px;
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: 2px solid #1a0066;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            text-align: center;
-            margin-bottom: 30px;
-            animation: bounce 2s infinite;
+        /* BACK BUTTON (Same as Map Button in index) */
+        .back-btn {
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(153, 41, 234, 0.4); 
+            padding: 18px 40px; margin-top: 50px;
+            border-radius: 40px; border: 2px solid #D8FF00; color: #D8FF00; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            text-decoration: none; text-transform: uppercase;
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            backdrop-filter: blur(5px);
+        }
+        .back-btn:hover { 
+            background-color: #D8FF00; color: #000; 
+            box-shadow: 0 0 35px rgba(216,255,0,0.7); transform: scale(1.03); 
         }
 
-        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 0; }
-        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; }
-        .welcome-bubble {
-            background-color: yellow; color: #1a0066; padding: 5px 25px;
-            border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-            animation: bounce 2s infinite;
+        /* FOOTER EXACT MATCH WITH INDEX.HTML */
+        footer { 
+            text-align: center; background-color: #7132CA; 
+            color: white; margin-top: 40px; width: 100%; 
+            border-top: 2px solid rgba(216,255,0,0.4); 
+            box-shadow: 0 -10px 30px rgba(216,255,0,0.1);
         }
-        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
-        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+        .footer-red { 
+            background: rgba(140, 0, 255, 0.5); 
+            padding: 20px; font-weight: bold; font-size: 1.5rem; 
+            text-transform: uppercase; display: flex; 
+            justify-content: center; align-items: center; 
+            border-bottom: 1px solid rgba(216,255,0,0.2); 
+        }
         
-        @media (max-width: 800px) { .menu-grid { grid-template-columns: 1fr; } header h1 { font-size: 1.8rem; } }
+        .welcome-bubble {
+            background-color: #D8FF00; color: #000; padding: 8px 35px; border-radius: 30px; 
+            display: inline-block; box-shadow: 0 0 20px rgba(216,255,0,0.6); font-weight: 900;
+            animation: bounce-vertical 2s infinite ease-in-out;
+        }
+        
+        .contact-box { padding: 25px; font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .loc-box { 
+            background: rgba(196, 123, 228, 0.2); padding: 15px; 
+            font-size: 1.1rem; font-weight: bold; text-transform: uppercase; 
+            color: #D8FF00; border-top: 1px solid rgba(216,255,0,0.2); 
+        }
+
+        /* MOBILE VIEW */
+        @media (max-width: 800px) { 
+            .menu-grid { grid-template-columns: 1fr; } 
+            header h1 { font-size: 1.8rem; } 
+            .subtitle { font-size: 0.75rem; }
+            .special-bubble-top { font-size: 16px; padding: 10px 20px; white-space: normal; }
+            .premium-banner h2 { font-size: 1.5rem; }
+            .menu-img-bubble { width: 90px; height: 90px; padding: 10px; }
+            .menu-text-bubble { width: 160px; font-size: 0.85rem; padding: 12px; }
+        }
+
+        /* PC/LAPTOP VIEW - Ensuring Bright Purple Stays */
+        @media (min-width: 601px) {
+            html, body { 
+                background-color: #7132CA !important; 
+            }
+            .footer-red { background: #9929EA !important; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <img src="logo.png" alt="Logo" class="logo-img">
-        <h1>THE CATALYST ASSAM</h1>
-        <p>SHAPING TALENT</p>
+        
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
     </header>
 
-    <div class="red-banner">
+    <div class="premium-banner">
         <h2>SEBA & CBSE</h2>
-        <div style="font-size: 1.1rem; color: yellow; font-weight:bold; margin-bottom: 5px;">(ASSAMESE & ENGLISH MEDIUM)</div>
+        <div class="sub-text">(ASSAMESE & ENGLISH MEDIUM)</div>
         <div class="subjects">
             | MATHS | SCIENCE | ENGLISH | SOCIAL SCIENCE | ECONOMICS | COMMERCE |<br>
             Classes – | 6th | 7th | 8th | 9th | 10th | 11th | 12th |
@@ -171,42 +252,42 @@
             
             <a href="package_6_to_8_final.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="6 to 8 package.png" alt="6-8"></div>
-                <div class="menu-text-bubble c1">6th to 8th<br>Package</div>
+                <div class="menu-text-bubble">6th to 8th<br>Package</div>
             </a>
 
             <a href="package_9_to_10_final.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="9 to 10.png" alt="9-10"></div>
-                <div class="menu-text-bubble c2">9th to 10th<br>Package</div>
+                <div class="menu-text-bubble">9th to 10th<br>Package</div>
             </a>
 
             <a href="11th_to_12th_single_Subject.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="11 to 12.png" alt="11-12"></div>
-                <div class="menu-text-bubble c3">11th to 12th<br>Courses</div>
+                <div class="menu-text-bubble">11th to 12th<br>Courses</div>
             </a>
 
             <a href="6th_to_8th_single_Subject.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="6  to 8 single subject.png" alt="Single 6-8"></div>
-                <div class="menu-text-bubble c4">6th to 8th<br>Single Subject</div>
+                <div class="menu-text-bubble">6th to 8th<br>Single Subject</div>
             </a>
 
             <a href="9th_to_10th_single_Subject.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="9 to 10 single subject.png" alt="Single 9-10"></div>
-                <div class="menu-text-bubble c5">9th to 10th<br>Single Subject</div>
+                <div class="menu-text-bubble">9th to 10th<br>Single Subject</div>
             </a>
 
             <a href="degree_Courses.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="degree.png" alt="Degree"></div>
-                <div class="menu-text-bubble c6">Degree<br>Courses</div>
+                <div class="menu-text-bubble">Degree<br>Courses</div>
             </a>
 
             <a href="competitive_exams_courses.html" class="menu-item">
                 <div class="menu-img-bubble"><img src="competitive exams courrser 1.png" alt="Competitive"></div>
-                <div class="menu-text-bubble c7">COMPETITIVE<br>EXAMS COURSES</div>
+                <div class="menu-text-bubble">COMPETITIVE<br>EXAMS COURSES</div>
             </a>
 
         </div>
 
-        <a href="index.html" style="display:block; margin-top:40px; font-weight:bold; color:red; text-decoration:none; font-size:1.1rem; border:2px solid red; padding:10px 20px; border-radius:30px; background:white;">⬅ BACK TO HOME</a>
+        <a href="index.html" class="back-btn">⬅ BACK TO HOME</a>
 
     </div>
 
@@ -215,7 +296,7 @@
             <span class="welcome-bubble">WELCOME / স্বাগতম</span>
         </div>
         <div class="contact-box">
-            📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
+            📞 7578911831, 9399409013 <span style="margin: 0 10px; color: #D8FF00;">|</span> Email - thecatalystassam@gmail.com
         </div>
         <div class="loc-box">
             📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
