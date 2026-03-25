@@ -10,62 +10,160 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; }
-        header { background-color: #006600; color: white; text-align: center; padding: 20px; border-bottom: 5px solid yellow; }
-        header h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
-        .container { padding: 30px; max-width: 650px; margin: auto; }
-        .form-box { background: white; padding: 30px; border-radius: 15px; border: 3px solid #006600; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2.form-title { color: #006600; text-align: center; text-transform: uppercase; text-decoration: underline; margin-bottom: 25px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #006600; font-size: 1.05rem; }
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
-        input:focus, select:focus, textarea:focus { border-color: #006600; outline: none; }
-        .photo-upload-box { text-align: center; margin-bottom: 20px; padding: 15px; border: 2px dashed #006600; border-radius: 10px; background: #f0fff0; }
-        .photo-frame { width: 140px; height: 180px; border: 3px solid #006600; background: #ddd; overflow: hidden; border-radius: 5px; margin: 0 auto 10px auto; position: relative; }
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME - EXACT MATCH WITH INDEX.HTML         */
+        /* ======================================================== */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
+        }
+        
+        /* 100% SAME BACKGROUND AS INDEX.HTML */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+            background-attachment: fixed !important;
+            color: #ffffff; 
+        }
+        
+        /* HEADER EXACT MATCH WITH INDEX.HTML */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); 
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; 
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            position: relative; 
+            width: 100%; 
+        }
+        
+        .logo-img { 
+            width: 70px; height: 70px; border-radius: 50%; 
+            border: 3px solid #D8FF00; 
+            vertical-align: middle; margin-right: 15px; object-fit: cover; 
+            background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); 
+        }
+        
+        .title-wrapper { display: inline-block; vertical-align: middle; text-align: center; }
+        header h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.5); white-space: nowrap; }
+        .subtitle { display: flex; justify-content: space-between; width: 100%; margin: 5px 0 0 0; color: #D8FF00; font-weight: 900; font-size: 0.9rem; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .header-subtext { letter-spacing: 5px; font-weight: bold; margin-top: 15px; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5); text-transform: uppercase; }
+
+        .container { padding: 40px 15px; max-width: 750px; margin: auto; }
+        
+        /* GLASSMORPHISM FORM BOX */
+        .form-box { 
+            background: rgba(28, 9, 54, 0.6); 
+            padding: 30px; border-radius: 20px; 
+            border: 2px solid #D8FF00; 
+            box-shadow: 0 0 30px rgba(216, 255, 0, 0.2); 
+            backdrop-filter: blur(12px);
+        }
+        
+        h2.form-title { color: #D8FF00; text-align: center; text-transform: uppercase; margin-bottom: 25px; text-shadow: 0 0 15px rgba(216, 255, 0, 0.5); border-bottom: 2px dashed #D8FF00; padding-bottom: 10px; display: inline-block; width: 100%; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 900; color: #D8FF00; font-size: 1.05rem; text-shadow: 0 0 5px rgba(216,255,0,0.3); text-transform: uppercase;}
+        
+        /* PREMIUM INPUTS */
+        input, select, textarea { 
+            width: 100%; padding: 12px; 
+            border: 2px solid #C47BE4; border-radius: 8px; 
+            box-sizing: border-box; font-size: 1.05rem; 
+            background: rgba(255, 255, 255, 0.95); color: #000; font-weight: bold;
+            transition: 0.3s; 
+        }
+        input:focus, select:focus, textarea:focus { border-color: #D8FF00; outline: none; box-shadow: 0 0 15px rgba(216,255,0,0.5); background: #ffffff; }
+        
+        .photo-upload-box { text-align: center; margin-bottom: 25px; padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; background: rgba(255,255,255,0.05); }
+        .photo-frame { width: 140px; height: 180px; border: 3px solid #D8FF00; background: #ddd; overflow: hidden; border-radius: 10px; margin: 0 auto 15px auto; position: relative; box-shadow: 0 0 15px rgba(216,255,0,0.5);}
         .photo-preview { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: object-position 0.2s ease; }
-        .adjust-btn { background: #006600; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin: 0 5px; }
-        .radio-container { display: flex; gap: 20px; margin-top: 5px; flex-wrap: wrap; }
-        .radio-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
-        input[type="radio"], input[type="checkbox"] { width: 20px; height: 20px; accent-color: #006600; cursor: pointer; }
-        .submit-btn { background-color: #ccc; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; cursor: not-allowed; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; margin-top: 20px; }
-        .submit-btn.active { background-color: #006600; cursor: pointer; }
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; text-align: center; color: white; padding-top: 200px; }
-        #success-message { display: none; text-align: center; background: #e6ffe6; padding: 30px; border-radius: 15px; border: 3px solid green; }
+        
+        .adjust-btn { background: #9929EA; color: white; border: 2px solid #D8FF00; padding: 8px 15px; border-radius: 30px; cursor: pointer; font-size: 0.9rem; margin: 0 5px; font-weight: bold; transition: 0.3s; }
+        .adjust-btn:hover { background: #D8FF00; color: #000; }
+        
+        .radio-container { display: flex; gap: 20px; margin-top: 5px; flex-wrap: wrap; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; border: 1px solid rgba(216,255,0,0.3); }
+        .radio-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; color: #fff;}
+        input[type="radio"], input[type="checkbox"] { width: 20px; height: 20px; accent-color: #D8FF00; cursor: pointer; }
+        
+        .submit-btn { background-color: #555; color: #aaa; border: 2px solid #777; padding: 15px; width: 100%; border-radius: 40px; cursor: not-allowed; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; margin-top: 25px; transition: 0.3s; }
+        .submit-btn.active { background-color: #D8FF00; color: #000; border-color: #D8FF00; box-shadow: 0 0 25px rgba(216,255,0,0.6); cursor: pointer; }
+        .submit-btn.active:hover { background-color: #ffffff; box-shadow: 0 0 35px rgba(255,255,255,0.8); }
+
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; text-align: center; color: #D8FF00; padding-top: 30vh; backdrop-filter: blur(10px); }
+        
+        /* SUCCESS BOX */
+        #success-message { display: none; text-align: center; background: rgba(28, 9, 54, 0.9); padding: 40px; border-radius: 20px; border: 3px solid #D8FF00; box-shadow: 0 0 40px rgba(216,255,0,0.4); backdrop-filter: blur(10px); }
+        
         .dob-container { display: flex; gap: 15px; }
         .dob-box { flex: 1; }
         .age-box { flex: 1; }
-        input[readonly] { background-color: #e9ecef; }
-        .magic-box { background: #f0fff0; padding: 15px; border: 2px dashed #006600; border-radius: 10px; margin-bottom: 15px; }
+        input[readonly] { background-color: #e9ecef; color: #555; }
         
-        /* Auto Display Box */
-        .package-info-box { display: block; background: #fff8dc; border: 2px solid #ffcc00; padding: 15px; border-radius: 8px; margin-top: 10px; color: #333; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-        .package-title { color: #006600; font-weight: bold; text-decoration: underline; font-size: 1.2rem; margin-bottom: 8px; text-transform: uppercase; }
-        .free-tag { background: yellow; padding: 2px 8px; font-weight: bold; color: #006600; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .magic-box { background: rgba(140, 0, 255, 0.3); padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; margin-bottom: 20px; }
         
-        #receipt-template { display: none; padding: 30px; background: white; border: 5px solid #006600; margin-top: 20px; color: black; }
-        .rec-header { text-align: center; border-bottom: 3px solid #006600; padding-bottom: 15px; margin-bottom: 20px; }
-        .rec-row { display: flex; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        .rec-label { font-weight: bold; width: 40%; color: #006600; }
+        /* Auto Display Box for Packages */
+        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
+        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.3rem; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .free-tag { background: #D8FF00; padding: 3px 10px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 5px 0; }
+
+        /* RECEIPT TEMPLATE (Kept Light for PDF generation) */
+        #receipt-template { display: none; padding: 30px; background: #ffffff; border: 5px solid #7132CA; margin-top: 20px; color: #000000; font-family: Arial, sans-serif;}
+        .rec-header { text-align: center; border-bottom: 3px solid #7132CA; padding-bottom: 15px; margin-bottom: 20px; }
+        .rec-row { display: flex; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .rec-label { font-weight: bold; width: 40%; color: #7132CA; }
         .rec-val { width: 60%; font-weight: bold; }
+
+        @media (max-width: 600px) { 
+            header h1 { font-size: 1.6rem; } 
+            .subtitle { font-size: 0.7rem; }
+            .dob-container { flex-direction: column; }
+            .form-box { padding: 20px 15px; }
+        }
     </style>
 </head>
 <body>
-    <div id="loading-overlay"><div style="font-size: 3rem;">🚀</div><h2>Submitting Form...</h2><p>Saving Data & Generating Receipt...</p></div>
-    <header><h1>The Catalyst Assam</h1><p style="letter-spacing: 5px; font-weight: bold; margin: 5px 0 0 0;">9TH TO 10TH SINGLE SUBJECT</p></header>
+    <div id="loading-overlay"><div style="font-size: 4rem; margin-bottom: 10px;">🚀</div><h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Submitting Form...</h2><p style="font-weight:bold;">Saving Data & Generating Receipt...</p></div>
+    
+    <header>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
+        <div class="header-subtext">9TH TO 10TH SINGLE SUBJECT ADMISSION</div>
+    </header>
+
     <div class="container">
         <div id="form-section" class="form-box">
-            <h2 class="form-title">SINGLE SUBJECT ADMISSION FORM</h2>
+            <h2 class="form-title">NEW STUDENT ADMISSION FORM (9th-10th)</h2>
             <form id="my-form" oninput="checkFormValidity()">
+                
                 <div class="photo-upload-box">
-                    <label style="margin-bottom:10px; display:block; font-weight:bold;">Upload Student Photo (Passport Size):</label>
+                    <label style="margin-bottom:15px; display:block;">Upload Student Photo (Passport Size):</label>
                     <div class="photo-frame"><img id="preview-img" src="https://via.placeholder.com/140x180?text=Photo" class="photo-preview" alt="Student Photo"></div>
-                    <div style="margin-bottom: 10px;"><button type="button" class="adjust-btn" onclick="movePhoto(-10)">⬆ Up</button><button type="button" class="adjust-btn" onclick="movePhoto(10)">⬇ Down</button></div>
-                    <input type="file" id="photo-input" accept="image/*" onchange="previewImage(event)" required>
+                    <div style="margin-bottom: 15px;">
+                        <button type="button" class="adjust-btn" onclick="movePhoto(-10)">⬆ Up</button>
+                        <button type="button" class="adjust-btn" onclick="movePhoto(10)">⬇ Down</button>
+                    </div>
+                    <input type="file" id="photo-input" accept="image/*" onchange="previewImage(event)" required style="background: rgba(255,255,255,0.8);">
                 </div>
+
                 <div class="input-group"><label>1. Student Name (ছাত্র/ছাত্রীৰ নাম):</label><input type="text" name="student_name" id="s_name" required></div>
+                
                 <div class="input-group"><label>2. Father's / Mother's Name (পিতৃ বা মাতৃৰ নাম):</label><input type="text" name="parent_name" id="p_name" required></div>
+                
                 <div class="input-group"><label>3. School / College Name (বিদ্যালয় / মহাবিদ্যালয়ৰ নাম):</label><input type="text" name="school_college_name" id="s_name_school" required></div>
+                
                 <div class="input-group"><label>(I) Select Gender (লিংগ):</label>
                     <div class="radio-container">
                         <label class="radio-label"><input type="radio" name="gender" value="Male" required onclick="checkFormValidity()"> (a) Male</label>
@@ -73,50 +171,62 @@
                         <label class="radio-label"><input type="radio" name="gender" value="Others" onclick="checkFormValidity()"> (c) Others</label>
                     </div>
                 </div>
+
                 <div class="input-group dob-container">
                     <div class="dob-box"><label>(II) (b) Date of Birth (জন্ম তাৰিখ):</label><input type="date" name="dob" id="dob_input" required onchange="calculateAge()"></div>
                     <div class="age-box"><label>(a) Age (বয়স):</label><input type="text" name="age" id="age_display" readonly></div>
                 </div>
+
                 <div class="input-group"><label>4. Your Personal Address (নিজৰ ঠিকনা):</label><textarea name="personal_address" id="per_address" rows="2" required></textarea></div>
-                
+
                 <div class="input-group magic-box" id="medium-section">
-                    <label>5. Selected Medium & Subjects (নিৰ্বাচিত বিষয়):</label>
-                    <div id="package-display" class="package-info-box">
+                    <label>5. Selected Package Details (নিৰ্বাচিত বিষয়):</label>
+                    
+                    <div id="auto-display" class="auto-info-box">
                         <div class="package-title" id="disp-medium">LOADING...</div>
-                        <div style="font-weight:bold; color:blue; margin-bottom:10px;">Subjects: <span id="disp-subjects" style="color:black;"></span></div>
-                        <div style="font-weight:bold; font-size:1.1rem; color:red;">Admission Fees: ₹ <span id="disp-adm">0</span></div>
-                        <div style="margin-bottom:5px;"><span class="free-tag">★ 1st Month Free ★</span></div>
-                        <div style="font-weight:bold;">Monthly Fee: ₹ <span id="disp-mon">0</span></div>
+                        <div style="font-weight:900; color:#ffffff; margin-bottom:10px; font-size:1.1rem;">Subjects: <span id="disp-subjects" style="color:#D8FF00; text-shadow: 0 0 8px rgba(216,255,0,0.4);"></span></div>
+                        <div style="font-weight:900; font-size:1.15rem; color:#ffffff;">Admission Fees: ₹ <span id="disp-adm" style="color:#D8FF00;">0</span></div>
+                        <div style="margin-bottom:8px; margin-top:8px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:900; font-size: 1.15rem;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
                     </div>
                 </div>
 
-                <div class="input-group" style="background:#ffffcc; padding:15px; border-radius:10px;">
-                    <label style="color:red; font-size:1.1rem; font-weight:bold;">6. Select Class (শ্ৰেণী বাছনি কৰক):</label>
+                <div class="input-group" style="background:rgba(216,255,0,0.1); padding:20px; border-radius:15px; border: 1px solid rgba(216,255,0,0.5);">
+                    <label style="color:#D8FF00; font-size:1.15rem;">6. Select Class (শ্ৰেণী বাছনি কৰক):</label>
                     <select name="class_selected" id="class_select" required onchange="checkFormValidity()">
                         <option value="">-- Select Class --</option>
                         <option value="Class 9">Class 9th</option>
                         <option value="Class 10">Class 10th</option>
                     </select>
                 </div>
+
                 <div class="input-group"><label>7. Mobile Number (মবাইল নম্বৰ):</label><input type="tel" name="phone" id="phone" required pattern="[0-9]{10}" placeholder="10 Digit Number"></div>
+                
                 <div class="input-group"><label>8. Email Address (ই-মেইল) - Optional:</label><input type="email" name="email" id="email" placeholder="Required for Email Receipt"></div>
+                
                 <button type="submit" id="submit-btn" class="submit-btn" disabled>🔒 Fill All Fields to Unlock</button>
             </form>
         </div>
+
         <div id="success-message">
-            <div style="font-size:4rem; color:green;">✔</div>
-            <h2 style="color:green;">SUBMITTED SUCCESSFULLY!</h2>
-            <p>Email Sent & Data Saved.</p>
-            <hr>
-            <div style="color:red; font-weight:bold; font-size:1rem; border:3px solid red; padding:15px; background:#fff0f0; line-height:1.6; text-align:center; max-width: 500px; margin: 0 auto;">
-                Downloading is mandatory, and you must bring that PDF file to The Catalyst Assam Head Office.<br>-------------------------------------<br>ডাউনলোড কৰাটো বাধ্যতামূলক আৰু সেই PDF ফাইলটো 'The Catalyst Assam'ৰ মুখ্য কাৰ্যালয়লৈ (Head Office) লৈ আহিব লাগিব।
+            <div style="font-size:4rem; color:#D8FF00; text-shadow:0 0 20px rgba(216,255,0,0.8);">✔</div>
+            <h2 style="color:#D8FF00; text-transform:uppercase; text-shadow:0 0 10px rgba(216,255,0,0.5);">SUBMITTED SUCCESSFULLY!</h2>
+            <p style="color:#fff; font-weight:bold; font-size:1.1rem;">Email Sent & Data Saved.</p>
+            <hr style="border-color: rgba(216,255,0,0.3); margin: 20px 0;">
+            <div style="color:#fff; font-weight:bold; font-size:1rem; border:2px dashed #ff4444; padding:15px; background:rgba(255,0,0,0.2); line-height:1.6; text-align:center; max-width: 500px; margin: 0 auto; border-radius: 10px;">
+                Downloading is mandatory, and you must bring that PDF file to The Catalyst Assam Head Office.<br><span style="color:#D8FF00;">-------------------------------------</span><br>ডাউনলোড কৰাটো বাধ্যতামূলক আৰু সেই PDF ফাইলটো 'The Catalyst Assam'ৰ মুখ্য কাৰ্যালয়লৈ (Head Office) লৈ আহিব লাগিব।
             </div>
-            <hr>
-            <button onclick="downloadReceipt()" style="background:#0044ff; color:white; padding:15px 30px; border:none; border-radius:30px; cursor:pointer; font-weight:bold; margin-top:20px; font-size:1.1rem; box-shadow: 0 5px 15px rgba(0,68,255,0.4);">📥 DOWNLOAD RECEIPT (PDF)</button>
-            <br><br><button onclick="location.reload()" style="padding:10px 20px; cursor:pointer;">Fill New Form</button>
+            <hr style="border-color: rgba(216,255,0,0.3); margin: 20px 0;">
+            <button onclick="downloadReceipt()" style="background:#D8FF00; color:#000; padding:15px 30px; border:none; border-radius:35px; cursor:pointer; font-weight:900; margin-top:10px; font-size:1.1rem; box-shadow: 0 0 25px rgba(216,255,0,0.6); transition:0.3s;">📥 DOWNLOAD RECEIPT (PDF)</button>
+            <br><br><button onclick="location.reload()" style="background:transparent; border:2px solid #D8FF00; color:#D8FF00; padding:10px 25px; border-radius:30px; cursor:pointer; font-weight:bold; transition:0.3s;">Fill New Form</button>
         </div>
+
         <div id="receipt-template">
-            <div class="rec-header"><h1 style="margin:0; color:#006600; font-size:24px;">THE CATALYST ASSAM</h1><p style="margin:5px 0;">ADMISSION ACKNOWLEDGEMENT RECEIPT (Single Subject)</p><p style="margin:0; font-size:12px;">Mayong Bazar, Rajamayong, Morigaon</p></div>
+            <div class="rec-header">
+                <h1 style="margin:0; color:#7132CA; font-size:26px; font-weight:900;">THE CATALYST ASSAM</h1>
+                <p style="margin:5px 0; font-weight:bold;">ADMISSION ACKNOWLEDGEMENT RECEIPT (Single Subject)</p>
+                <p style="margin:0; font-size:12px; color:#555;">Mayong Bazar, Rajamayong, Morigaon</p>
+            </div>
             <div style="display:flex; justify-content:space-between; align-items: flex-start;">
                 <div style="width:65%;">
                     <div class="rec-row"><div class="rec-label">Student Name:</div><div class="rec-val" id="r_name"></div></div>
@@ -127,17 +237,24 @@
                     <div class="rec-row"><div class="rec-label">Age:</div><div class="rec-val" id="r_age"></div></div>
                     <div class="rec-row"><div class="rec-label">Mobile:</div><div class="rec-val" id="r_phone"></div></div>
                     <div class="rec-row"><div class="rec-label">Class:</div><div class="rec-val" id="r_class"></div></div>
-                    <div class="rec-row"><div class="rec-label">Medium:</div><div class="rec-val" id="r_medium"></div></div>
-                    <div class="rec-row" style="background:#ffffcc; padding:5px; border:1px solid #ddd;">
-                        <div class="rec-label" style="width:100%;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.9rem; color:black;"></span></div>
+                    
+                    <div class="rec-row" style="background:#f9f9f9; padding:10px; border:1px solid #ddd; border-radius:5px; margin-top:10px;">
+                        <div class="rec-label" style="width:100%; color:#000;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.95rem; color:#333; display:block; margin-top:5px; line-height:1.4;"></span></div>
                     </div>
-                    <div class="rec-row"><div class="rec-label">Date:</div><div class="rec-val" id="r_date"></div></div>
+                    <div class="rec-row" style="margin-top:10px;"><div class="rec-label">Date:</div><div class="rec-val" id="r_date"></div></div>
                 </div>
-                <div style="width:30%; text-align:center;"><img id="r_photo" src="" style="width:120px; height:150px; object-fit:cover; border:2px solid #000;"><p style="font-size:12px; margin-top:5px;">Student Photo</p></div>
+                <div style="width:30%; text-align:center;">
+                    <img id="r_photo" src="" style="width:120px; height:150px; object-fit:cover; border:3px solid #7132CA; border-radius:5px;">
+                    <p style="font-size:12px; margin-top:5px; font-weight:bold;">Student Photo</p>
+                </div>
             </div>
-            <div style="margin-top:40px; display:flex; justify-content:space-between;"><div><p>___________________</p><p>Student Signature</p></div><div><p>___________________</p><p>Office Seal & Sign</p></div></div>
+            <div style="margin-top:50px; display:flex; justify-content:space-between;">
+                <div style="text-align:center;"><p style="margin:0;">___________________</p><p style="margin-top:5px; font-weight:bold;">Student Signature</p></div>
+                <div style="text-align:center;"><p style="margin:0;">___________________</p><p style="margin-top:5px; font-weight:bold;">Office Seal & Sign</p></div>
+            </div>
         </div>
     </div>
+    
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
         
@@ -171,6 +288,7 @@
             if(!photoData) isValid = false;
             if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
             if(document.getElementById('class_select').value === "") isValid = false;
+            // Medium is already selected from previous page, so it's valid
             if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } else { btn.disabled = true; btn.classList.remove("active"); }
         }
 
