@@ -3,175 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Catalyst Assam - Home</title>
+    <title>The Catalyst Assam - Premium Home</title>
     <style>
         /* ======================================================== */
-        /* BASE & MOBILE STYLES (100% UNTOUCHED LOGIC)              */
+        /* PREMIUM "THE FUNDED ROOM" GLOW THEME (NO OVERLAP)        */
         /* ======================================================== */
-        html { background-color: #fffcf0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fffcf0; color: #333; overflow-x: hidden; }
         
-        header { background-color: #1a0066; color: white; text-align: center; padding: 25px; border-bottom: 5px solid yellow; position: relative; width: 100%; box-sizing: border-box; }
+        /* 1. Global Reset to prevent any overlap */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        .app-download-btn { position: absolute; top: 20px; right: 20px; background-color: red; color: yellow; text-decoration: none; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; border: 2px solid yellow; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); z-index: 1000; display: flex; align-items: center; gap: 5px; transition: transform 0.2s; }
-        .app-download-btn:hover { transform: scale(1.05); background-color: #cc0000; }
-
-        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid white; vertical-align: middle; margin-right: 15px; object-fit: cover; background-color: white; }
+        html, body { 
+            width: 100%; 
+            max-width: 100vw; 
+            overflow-x: hidden !important; 
+        }
         
-        header h1 { display: inline-block; margin: 0; font-size: 2.8rem; vertical-align: middle; text-transform: uppercase; }
-        header p { letter-spacing: 8px; font-weight: bold; margin: 10px 0 0 0; text-transform: uppercase; }
+        /* 2. Super Premium Deep Light Purple Background */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%);
+            background-attachment: fixed;
+            color: #ffffff; 
+        }
         
-        .red-banner { background-color: #ff0000; color: #ffff00; text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
-        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; }
-        .subjects { color: white; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
+        /* 3. Header with Neon Glow */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); /* #7132CA */
+            backdrop-filter: blur(12px);
+            text-align: center; 
+            padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; /* Neon Lime Border */
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); /* Har Object Pe Glow */
+            position: relative; 
+            width: 100%; 
+        }
         
-        .container { display: flex; flex-direction: column; align-items: center; padding: 30px 10px; background: linear-gradient(to bottom, #fffcf0, #fff); width: 100%; box-sizing: border-box; }
+        .app-download-btn { 
+            position: absolute; top: 20px; right: 20px; 
+            background-color: #D8FF00; color: #000; 
+            text-decoration: none; padding: 6px 15px; border-radius: 20px; 
+            font-weight: 900; font-size: 0.9rem; border: none; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.6); /* Glow Effect */
+            z-index: 1000; display: flex; align-items: center; gap: 5px; 
+            transition: 0.3s; 
+        }
+        .app-download-btn:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(216, 255, 0, 0.9); }
+
+        .logo-img { 
+            width: 80px; height: 80px; border-radius: 50%; 
+            border: 3px solid #D8FF00; vertical-align: middle; margin-right: 15px; 
+            object-fit: cover; background-color: white; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.5); /* Glow Effect */
+        }
         
-        .img-fluid { width: 100%; max-width: 400px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: block; margin-bottom: 15px; object-fit: cover; }
+        /* 🔥 SHAPING TALENT EXACT WIDTH FIX 🔥 */
+        .title-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        header h1 { 
+            margin: 0; 
+            font-size: 2.5rem; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+            white-space: nowrap; /* Prevents text from breaking */
+        }
         
-        .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid red; object-fit: cover; background: #eee; margin-bottom: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin-left: auto; margin-right: auto; display: block; }
-        .pulen-photo { width: 130px; height: auto; border-radius: 10px; border: 4px solid #1a0066; display: block; margin: 10px auto; background-color: #eee; }
-
-        h3.section-title { color: #1a0066; border-bottom: 3px solid #1a0066; display: inline-block; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; margin-top: 30px; }
-        ul { list-style: none; padding: 0; text-align: left; display: inline-block; }
-        ul li { font-size: 1.05rem; margin-bottom: 12px; font-weight: 500; }
-        ul li::before { content: "➤ "; color: red; font-weight: bold; margin-right: 5px; }
+        /* Spreads the letters exactly to the width of the h1 above it */
+        .subtitle { 
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 5px 0 0 0; 
+            color: #D8FF00; 
+            font-weight: 900; 
+            font-size: 1rem;
+            text-shadow: 0 0 10px rgba(216,255,0,0.5); 
+        }
         
-        .image-box-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; justify-items: center; align-items: start; margin-bottom: 30px; margin-top: 20px; width: 100%; max-width: 600px; }
-        .img-card { display: flex; flex-direction: column; align-items: center; width: 100%; }
-
-        .special-bubble { position: relative; margin: 0 auto 20px auto; background: white; color: red; font-weight: 900; font-size: 20px; padding: 12px 25px; border-radius: 50px; border: 3px solid #1a0066; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; white-space: nowrap; width: max-content; animation: bounce-vertical 2s infinite; z-index: 10; }
-        @keyframes bounce-vertical { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes bounce-footer { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-        .custom-img { width: 150px; height: 150px; object-fit: contain; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); background: white; padding: 10px; transition: transform 0.2s; }
-        .custom-img:hover { transform: scale(1.05); }
-
-        .action-btn { background-color: red; color: yellow; padding: 12px 10px; border-radius: 30px; font-weight: bold; margin-top: 15px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); text-decoration: none; display: inline-block; border: 2px solid yellow; transition: transform 0.2s; text-transform: uppercase; font-size: 0.9rem; text-align: center; width: 100%; max-width: 180px; }
-        .action-btn:hover { transform: scale(1.05); background-color: #cc0000; }
-
-        .map-btn { display: flex; align-items: center; justify-content: center; margin-top: 10px; text-decoration: none; background: white; padding: 10px 20px; border-radius: 20px; border: 2px solid #1a0066; color: #1a0066; font-weight: bold; transition: 0.3s; box-shadow: 0 3px 6px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; margin-bottom: 20px; }
-        .map-btn:hover { background-color: #e6e6ff; transform: scale(1.05); }
-        .map-icon-small { width: 24px; height: 24px; margin-right: 8px; }
-
-        .teacher-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid red; width: 100%; box-sizing: border-box; }
+        /* Banner matching theme */
+        .red-banner { 
+            background: rgba(140, 0, 255, 0.4); /* #8C00FF */
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(216,255,0,0.3);
+            border-bottom: 1px solid rgba(216,255,0,0.3);
+            text-align: center; padding: 20px; 
+            width: 100%; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .red-banner h2 { font-size: 2.2rem; margin: 0; text-transform: uppercase; color: #D8FF00; text-shadow: 0 0 15px rgba(216, 255, 0, 0.4); }
+        .subjects { color: #f0f0f0; margin-top: 10px; font-size: 1.1rem; line-height: 1.6; font-weight: bold; text-transform: uppercase; }
         
-        footer { text-align: center; background-color: #0000cc; color: white; margin-top: 30px; width: 100%; box-sizing: border-box; }
-        .footer-red { background: red; padding: 15px; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .welcome-bubble { background-color: yellow; color: #1a0066; padding: 5px 25px; border-radius: 30px; display: inline-block; box-shadow: 0 3px 6px rgba(0,0,0,0.3); animation: bounce-footer 2s infinite; }
-        .contact-box { padding: 20px; font-size: 1.1rem; font-weight: bold; }
-        .loc-box { background: #1a0066; padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; }
+        /* Main Container - Full Screen Covers base */
+        .container { 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 40px 15px; width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; }
-        .modal-box { position: relative; width: 5in; height: 7in; background: white; border: 5px solid #ffcc00; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; max-width: 95vw; max-height: 90vh; }
-        .modal-close { position: absolute; top: 5px; right: 5px; background: red; color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 20px; font-weight: bold; cursor: pointer; z-index: 100; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .modal-img { width: 100%; height: 100%; object-fit: fill; }
+        /* BOUNCING BUBBLE */
+        .special-bubble { 
+            background: rgba(216, 255, 0, 0.15); 
+            color: #D8FF00; font-weight: 900; font-size: 22px; 
+            padding: 15px 35px; border-radius: 50px; 
+            border: 2px solid #D8FF00; 
+            box-shadow: 0 0 25px rgba(216, 255, 0, 0.5); 
+            text-align: center; width: auto; max-width: 90%; 
+            animation: bounce-vertical 1.5s infinite ease-in-out; z-index: 10; 
+            margin-bottom: 30px; 
+        }
+        @keyframes bounce-vertical { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-15px); } 
+        }
 
-        .carousel-container { width: 6.2in; height: 1.6in; max-width: 100%; margin: 0 auto 20px auto; border: 3px solid red; border-radius: 8px; overflow: hidden; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.4); position: relative; background: white; }
+        /* Carousel & Student Photo - Glowing */
+        .carousel-container { 
+            width: 100%; max-width: 1000px; aspect-ratio: 6.2/1.6; height: auto; 
+            margin: 0 auto 30px auto; border: 3px solid #D8FF00; border-radius: 15px; 
+            overflow: hidden; display: none; 
+            box-shadow: 0 0 30px rgba(216,255,0,0.4); 
+            background: #7132CA; /* #7132CA */
+        }
         .carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
         .carousel-slide { flex: 0 0 100%; width: 100%; height: 100%; cursor: pointer; }
         .carousel-img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
-        /* FLEX WRAPPERS FOR MOBILE DEFAULT FLOW */
-        .lists-row { display: flex; flex-direction: column; width: 100%; align-items: center; }
-        .list-col { display: flex; flex-direction: column; align-items: center; text-align: left; margin-bottom: 20px; width: 100%; }
-        .teachers-row { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 30px; margin-bottom: 20px; }
+        .img-fluid { 
+            width: 100%; max-width: 1000px; border-radius: 15px; 
+            box-shadow: 0 0 30px rgba(216,255,0,0.4); 
+            display: block; margin-bottom: 40px; object-fit: cover; 
+            border: 2px solid rgba(216,255,0,0.2);
+        }
+
+        /* 4 BOXES GRID - 100% NO OVERLAP */
+        .image-box-container { 
+            display: flex; flex-direction: row; flex-wrap: wrap; 
+            justify-content: center; align-items: flex-end; gap: 25px; 
+            width: 100%; max-width: 1200px; margin-bottom: 40px; 
+        }
+        .img-card { 
+            display: flex; flex-direction: column; align-items: center; 
+            flex: 1 1 120px; max-width: 250px;
+        }
+
+        .custom-img { 
+            width: 100px; height: 100px; 
+            object-fit: contain; border-radius: 15px; 
+            box-shadow: 0 0 20px rgba(216,255,0,0.4); 
+            background: #ffffff; padding: 15px; transition: transform 0.3s; 
+            border: 3px solid #D8FF00; 
+        }
+        .custom-img:hover { transform: scale(1.1); box-shadow: 0 0 35px rgba(216,255,0,0.8); }
+
+        .action-btn { 
+            background-color: #D8FF00; color: #000; padding: 10px 5px; 
+            border-radius: 30px; font-weight: 900; margin-top: 15px; cursor: pointer; 
+            text-decoration: none; text-transform: uppercase; font-size: 0.8rem; 
+            text-align: center; width: 100%; border: none; 
+            box-shadow: 0 0 15px rgba(216,255,0,0.4); 
+            transition: 0.3s;
+        }
+        .action-btn:hover { background-color: #ffffff; box-shadow: 0 0 25px rgba(255,255,255,0.8); }
+
+        /* GOOGLE MAP BUTTON - GLOWING */
+        .map-btn { 
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(153, 41, 234, 0.4); /* #9929EA */
+            padding: 18px 20px; 
+            border-radius: 40px; border: 2px solid #D8FF00; color: #D8FF00; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            text-align: center; width: 100%; max-width: 1000px; margin-bottom: 40px; 
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            backdrop-filter: blur(5px);
+        }
+        .map-btn:hover { background-color: #D8FF00; color: #000; box-shadow: 0 0 35px rgba(216,255,0,0.7); transform: scale(1.03); }
+        .map-icon-small { width: 28px; height: 28px; margin-right: 12px; }
+
+        /* LISTS ROW - 100% NO OVERLAP */
+        .lists-row { 
+            display: flex; flex-direction: row; flex-wrap: wrap; 
+            justify-content: space-around; gap: 30px; 
+            width: 100%; max-width: 1200px; margin-bottom: 40px; 
+        }
+        .list-col { 
+            display: flex; flex-direction: column; align-items: flex-start; text-align: left; 
+            flex: 1 1 300px; 
+            background: rgba(113, 50, 202, 0.5); /* #7132CA */
+            padding: 30px; 
+            border-radius: 20px; border: 1px solid rgba(216,255,0,0.4);
+            box-shadow: 0 0 20px rgba(216,255,0,0.2); 
+            backdrop-filter: blur(8px);
+        }
+
+        h3.section-title { color: #D8FF00; border-bottom: 2px solid #D8FF00; display: inline-block; margin-top: 0; margin-bottom: 20px; text-transform: uppercase; font-size: 1.4rem; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        ul { list-style: none; padding: 0; margin: 0; text-align: left; width: 100%; }
+        ul li { font-size: 1.1rem; margin-bottom: 12px; font-weight: 500; color: #fff; }
+        ul li::before { content: "➤ "; color: #D8FF00; font-weight: bold; margin-right: 10px; text-shadow: 0 0 8px rgba(216,255,0,0.6); }
+
+        /* TEACHERS ROW - NO OVERLAP */
+        .teachers-row { 
+            display: flex; flex-direction: row; flex-wrap: wrap; 
+            justify-content: center; align-items: stretch; gap: 40px; 
+            width: 100%; max-width: 1200px; margin-top: 20px; 
+        }
+        .teacher-card { 
+            background: rgba(153, 41, 234, 0.4); /* #9929EA */
+            padding: 25px; border-radius: 20px; 
+            box-shadow: 0 0 25px rgba(216,255,0,0.3); 
+            text-align: center; border: 2px solid rgba(216, 255, 0, 0.5); 
+            flex: 1 1 280px; max-width: 450px; backdrop-filter: blur(10px); 
+            transition: 0.3s;
+        }
+        .teacher-card:hover { transform: translateY(-10px); box-shadow: 0 0 40px rgba(216,255,0,0.6); }
         
+        .teacher-photo { width: 150px; height: 150px; border-radius: 50%; border: 4px solid #D8FF00; object-fit: cover; background: #eee; margin-bottom: 15px; box-shadow: 0 0 20px rgba(216, 255, 0, 0.6); }
+        .pulen-photo { width: 150px; height: auto; border-radius: 15px; border: 4px solid #D8FF00; display: block; margin: 0 auto 15px auto; background-color: #eee; box-shadow: 0 0 20px rgba(216, 255, 0, 0.6); }
+
+        .teacher-card div[style*="color:red;"], .teacher-card div[style*="color: #1a0066;"] { color: #D8FF00 !important; text-shadow: 0 0 10px rgba(216,255,0,0.5) !important; font-size: 1.3rem !important;}
+        .teacher-card div[style*="color: red;"] { color: #ffffff !important; font-weight: normal !important; opacity: 0.9; text-shadow: none !important;}
+
+        /* FOOTER */
+        footer { text-align: center; background-color: #7132CA; color: white; margin-top: 40px; width: 100%; border-top: 2px solid rgba(216,255,0,0.4); box-shadow: 0 -10px 30px rgba(216,255,0,0.1);}
+        .footer-red { background: rgba(140, 0, 255, 0.5); /* #8C00FF */ padding: 20px; font-weight: bold; font-size: 1.5rem; text-transform: uppercase; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid rgba(216,255,0,0.2); }
+        
+        /* 🔥 WELCOME BUBBLE BOUNCE FIX 🔥 */
+        .welcome-bubble { 
+            background-color: #D8FF00; color: #000; padding: 8px 35px; border-radius: 30px; 
+            display: inline-block; box-shadow: 0 0 20px rgba(216,255,0,0.6); font-weight: 900;
+            animation: bounce-footer 2s infinite ease-in-out; 
+        }
+        @keyframes bounce-footer { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-10px); } 
+        }
+        
+        .contact-box { padding: 25px; font-size: 1.2rem; font-weight: bold; color: #fff; }
+        .loc-box { background: rgba(196, 123, 228, 0.2); /* #C47BE4 */ padding: 15px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; color: #D8FF00; border-top: 1px solid rgba(216,255,0,0.2); }
+
+        /* MODAL CSS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; display: none; justify-content: center; align-items: center; }
+        .modal-box { position: relative; width: 95vw; height: auto; background: #7132CA; border: 5px solid #D8FF00; border-radius: 15px; box-shadow: 0 0 40px rgba(216,255,0,0.6); display: flex; flex-direction: column; overflow: hidden; max-width: 500px; }
+        .modal-close { position: absolute; top: 5px; right: 5px; background: #D8FF00; color: #000; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 22px; font-weight: bold; cursor: pointer; z-index: 100; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(216,255,0,0.8); }
+        .modal-img { width: 100%; height: auto; object-fit: contain; border-radius: 12px; }
+
         /* ======================================================== */
-        /* Mobile Responsive - 100% UNTOUCHED EXACTLY AS REQUESTED  */
+        /* MOBILE VIEW (Cuta Cuta Objects)                          */
         /* ======================================================== */
         @media (max-width: 600px) { 
-            .container { flex-direction: column; padding: 10px; } 
-            .app-download-btn { top: 10px; right: 10px; font-size: 0.8rem; padding: 4px 8px; }
             header h1 { font-size: 1.8rem; } 
-            .image-box-container { grid-template-columns: 1fr; gap: 50px; margin-top: 30px; }
-            .special-bubble { font-size: 16px; white-space: normal; width: 90%; }
-            .carousel-container { width: 100% !important; height: 25vw !important; }
+            .subtitle { font-size: 0.75rem; } 
+            .app-download-btn { top: 15px; right: 15px; font-size: 0.8rem; padding: 5px 10px; }
+            .red-banner h2 { font-size: 1.5rem; }
+            .special-bubble { font-size: 16px; padding: 10px 20px; white-space: normal; }
+            .custom-img { width: 80px; height: 80px; padding: 10px; }
+            .action-btn { font-size: 0.75rem; padding: 8px 5px; }
+            .img-card { flex: 1 1 100px; max-width: 140px; }
+            .image-box-container { gap: 15px; }
+            .teacher-photo, .pulen-photo { width: 100px !important; height: 100px !important; }
+            .teacher-card { padding: 15px; }
+            .map-btn { font-size: 0.9rem; padding: 12px 15px; }
         }
 
         /* ======================================================== */
-        /* PC/LAPTOP SPECIFIC (NO ZOOM NOW)                         */
+        /* PC/LAPTOP VIEW (Bora Bora Objects - Full Screen Cover)   */
         /* ======================================================== */
         @media (min-width: 601px) {
-            
-            html { 
-                overflow-x: auto !important; 
-                background-color: #fffcf0; 
+            html, body { 
+                background-color: #7132CA !important; 
+                background: linear-gradient(135deg, #8C00FF 0%, #7132CA 33%, #9929EA 66%, #C47BE4 100%) !important;
+                background-attachment: fixed !important;
+                color: #ffffff !important;
             }
             
-            body { 
-                /* 🔥 MAGIC FIX FOR "ADHA ADHA" CUT SCREEN 🔥 */
-                min-width: 100%;
-                width: fit-content; /* Ye background ko poora failne dega, screen katega nahi! */
-                overflow-x: visible !important;
-            }
-            
-            /* Center the entire layout */
-            .container { flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; }
-            header, .red-banner, footer { min-width: 100%; width: 100%; }
-            
-            /* 1. Student photo width = announcement box width (6.2in) */
-            .carousel-container { width: 6.2in !important; max-width: 6.2in !important; height: 1.6in !important; }
-            .img-fluid { width: 6.2in !important; max-width: 6.2in !important; margin-bottom: 20px; }
-            
-            .special-bubble { white-space: nowrap !important; width: max-content !important; font-size: 20px !important; padding: 12px 25px !important; }
-            
-            /* 2. 4 Boxes in ONE horizontal line */
-            .image-box-container { 
-                display: flex !important; 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                max-width: 6.2in !important; 
-                gap: 10px;
-                margin-top: 10px;
-                padding: 0;
-            }
-            .img-card { width: auto; }
-            
-            /* Box image size exactly 0.5x0.5 inch */
-            .custom-img { 
-                width: 0.5in !important; 
-                height: 0.5in !important; 
-                padding: 5px;
-                border-radius: 8px;
-            }
-            /* Adjust button text size to fit under 0.5in image */
-            .action-btn { font-size: 0.55rem !important; padding: 5px 3px !important; margin-top: 8px; border-width: 1px; max-width: 100px !important;}
-            
-            /* 3. Locate on Google Map = announcement box width */
-            .map-btn { 
-                width: 6.2in !important; 
-                max-width: 6.2in !important; 
-                box-sizing: border-box; 
-                margin-bottom: 30px;
-                font-size: 0.85rem !important; 
-            }
-            
-            /* 4. Horizontal line for Lists (cuta/small font) */
-            .lists-row { 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                align-items: flex-start;
-                margin-top: 10px;
-            }
-            .list-col { align-items: flex-start; text-align: left; width: 48%; margin-bottom: 0; }
-            h3.section-title { font-size: 0.85rem !important; margin-bottom: 5px !important; }
-            ul li { font-size: 0.7rem !important; margin-bottom: 5px !important; }
-            ul li::before { font-size: 0.7rem !important; margin-right: 3px; }
+            header { background-color: rgba(113, 50, 202, 0.85) !important; }
+            .red-banner { background: rgba(140, 0, 255, 0.3) !important; }
+            .map-btn { background: rgba(153, 41, 234, 0.3) !important; }
+            .teacher-card { background: rgba(196, 123, 228, 0.2) !important; }
+            footer { background-color: #7132CA !important; }
+            .footer-red { background: #9929EA !important; }
 
-            /* 5. Teachers horizontal line */
-            .teachers-row { 
-                flex-direction: row !important; 
-                justify-content: space-between; 
-                width: 6.2in !important; 
-                align-items: stretch;
-                margin-top: 10px;
-            }
-            .teacher-card { width: 48% !important; padding: 10px !important; border-width: 2px !important;}
-            .teacher-photo, .pulen-photo { width: 80px !important; height: 80px !important; margin-bottom: 5px !important; }
-            .teacher-card div { font-size: 0.75rem !important; }
+            .custom-img { width: 130px; height: 130px; padding: 20px; }
+            .action-btn { font-size: 1rem; padding: 12px 10px; max-width: 180px;}
+            .img-card { flex: 1 1 200px; max-width: 250px; }
+            .image-box-container { gap: 40px; }
         }
     </style>
 </head>
@@ -179,21 +295,31 @@
 
     <div id="announcementModal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-close" onclick="closeModal()">X</div>
-            <img id="currentAnnouncementImg" src="" alt="Announcement" class="modal-img">
+            <button class="modal-close" onclick="closeModal()">X</button>
+            <div class="inner-content" style="background: #1c0936; overflow: hidden; display: flex; align-items: center; border-radius: 10px;">
+                <div id="modal-carousel-track" style="display: flex; width: 100%; transition: transform 0.3s ease-in-out;">
+                    </div>
+            </div>
         </div>
     </div>
 
     <header>
         <a href="https://drive.google.com/uc?export=download&id=13-1SYIAoiXurs21gS32jkhd7t-P9J8z7" class="app-download-btn">App ⬇</a>
         <img src="logo.png" alt="Logo" class="logo-img">
-        <h1>THE CATALYST ASSAM</h1>
-        <p>SHAPING TALENT</p>
+        
+        <div class="title-wrapper">
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="subtitle">
+                <span>S</span><span>H</span><span>A</span><span>P</span><span>I</span><span>N</span><span>G</span>
+                <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
+            </div>
+        </div>
+
     </header>
 
     <div class="red-banner">
         <h2>SEBA & CBSE</h2>
-        <div style="font-size: 1.1rem; color: yellow; font-weight:bold; margin-bottom: 5px;">(ASSAMESE & ENGLISH MEDIUM)</div>
+        <div style="font-size: 1.1rem; color: #D8FF00; font-weight:bold; margin-bottom: 5px; text-shadow: 0 0 8px rgba(216,255,0,0.6);">(ASSAMESE & ENGLISH MEDIUM)</div>
         <div class="subjects">
             | MATHS | SCIENCE | ENGLISH | SOCIAL SCIENCE | ECONOMICS | COMMERCE |<br>
             Classes – | 6th | 7th | 8th | 9th | 10th | 11th | 12th |
@@ -223,7 +349,7 @@
             </div>
             <div class="img-card">
                 <img src="—Pngtree—open book logo_15366757.png" alt="Class Routine" class="custom-img">
-                <a href="routine.html" class="action-btn">MONTHLY CLASS ROUTINE</a>
+                <a href="routine.html.html" class="action-btn">MONTHLY CLASS ROUTINE</a>
             </div>
             <div class="img-card">
                 <img src="the_catalyst_assam_social_handle.png" alt="Social Handle" class="custom-img">
@@ -278,7 +404,7 @@
         </div>
         
         <div class="contact-box">
-            📞 7578911831, 9399409013 <span style="margin: 0 10px;">|</span> Email - thecatalystassam@gmail.com
+            📞 7578911831, 9399409013 <span style="margin: 0 10px; color: #D8FF00;">|</span> Email - thecatalystassam@gmail.com
         </div>
         <div class="loc-box">
             📍 MAYONG BAZAR, RAJAMAYONG, MORIGAON (ASSAM) 782411
@@ -295,10 +421,18 @@
         ];
         
         let validAnnouncements = [];
+        
+        // Variables for Main Slider
         let slideIndex = 0;
         let autoSlideInterval;
         let startX = 0;
         let endX = 0;
+
+        // Variables for Inner Modal Slider
+        let modalSlideIndex = 0;
+        let modalAutoSlideInterval;
+        let modalStartX = 0;
+        let modalEndX = 0;
 
         window.onload = function() {
             checkAvailableImages();
@@ -332,7 +466,8 @@
 
         function setupCarousel() {
             const container = document.getElementById('announcement-carousel');
-            const track = document.getElementById('carousel-track');
+            const mainTrack = document.getElementById('carousel-track');
+            const modalTrack = document.getElementById('modal-carousel-track');
             
             if (validAnnouncements.length === 0) {
                 container.style.display = 'none';
@@ -342,24 +477,54 @@
             container.style.display = 'block';
             
             validAnnouncements.forEach((src, index) => {
+                // Setup Main Slider Images
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
-                slide.onclick = function() { openModal(index); };
+                
+                slide.addEventListener('click', function(e) {
+                    if (Math.abs(startX - endX) < 30) {
+                        openModal(index);
+                    }
+                });
                 
                 const img = document.createElement('img');
                 img.src = src;
                 img.className = 'carousel-img';
+                img.draggable = false; 
                 
                 slide.appendChild(img);
-                track.appendChild(slide);
+                mainTrack.appendChild(slide);
+
+                // Setup Inner Modal Slider Images
+                const modalSlide = document.createElement('div');
+                modalSlide.style.flex = '0 0 100%';
+                modalSlide.style.width = '100%';
+                modalSlide.style.display = 'flex';
+                modalSlide.style.justifyContent = 'center';
+                modalSlide.style.alignItems = 'center';
+                
+                const modalImg = document.createElement('img');
+                modalImg.src = src;
+                modalImg.className = 'modal-img';
+                modalImg.draggable = false; 
+                
+                modalSlide.appendChild(modalImg);
+                modalTrack.appendChild(modalSlide);
             });
             
             if (validAnnouncements.length > 1) {
+                // Main Slider functions
                 startAutoSlide();
-                addSwipeListeners(track);
+                addSwipeListeners(mainTrack);
+
+                // Modal Slider functions
+                addModalSwipeListeners(modalTrack);
             }
         }
 
+        // ==========================================
+        // MAIN CAROUSEL LOGIC
+        // ==========================================
         function updateSlidePosition() {
             const track = document.getElementById('carousel-track');
             track.style.transform = `translateX(-${slideIndex * 100}%)`;
@@ -369,7 +534,7 @@
             autoSlideInterval = setInterval(() => {
                 slideIndex = (slideIndex + 1) % validAnnouncements.length;
                 updateSlidePosition();
-            }, 4000); 
+            }, 5000); 
         }
 
         function resetAutoSlide() {
@@ -378,11 +543,35 @@
         }
 
         function addSwipeListeners(track) {
+            let isDragging = false;
+
             track.addEventListener('touchstart', e => {
                 startX = e.changedTouches[0].screenX;
-            });
+                endX = startX; 
+            }, {passive: true});
+            
             track.addEventListener('touchend', e => {
                 endX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+
+            track.addEventListener('mousedown', e => {
+                isDragging = true;
+                startX = e.screenX;
+                endX = startX;
+            });
+            
+            track.addEventListener('mouseup', e => {
+                if(!isDragging) return;
+                isDragging = false;
+                endX = e.screenX;
+                handleSwipe();
+            });
+            
+            track.addEventListener('mouseleave', e => {
+                if(!isDragging) return;
+                isDragging = false;
+                endX = e.screenX;
                 handleSwipe();
             });
         }
@@ -390,25 +579,101 @@
         function handleSwipe() {
             let threshold = 30; 
             if (startX - endX > threshold) {
-                // Swipe Left
                 slideIndex = (slideIndex + 1) % validAnnouncements.length;
                 updateSlidePosition();
                 resetAutoSlide();
+                startX = 0; endX = 0; 
             } else if (endX - startX > threshold) {
-                // Swipe Right
                 slideIndex = (slideIndex - 1 + validAnnouncements.length) % validAnnouncements.length;
                 updateSlidePosition();
                 resetAutoSlide();
+                startX = 0; endX = 0; 
+            }
+        }
+
+        // ==========================================
+        // MODAL CAROUSEL LOGIC (Inside Box Swipe)
+        // ==========================================
+        function updateModalSlidePosition() {
+            const track = document.getElementById('modal-carousel-track');
+            track.style.transform = `translateX(-${modalSlideIndex * 100}%)`;
+        }
+
+        function startModalAutoSlide() {
+            clearInterval(modalAutoSlideInterval);
+            modalAutoSlideInterval = setInterval(() => {
+                modalSlideIndex = (modalSlideIndex + 1) % validAnnouncements.length;
+                updateModalSlidePosition();
+            }, 10000); // 10 Sec auto scroll for Modal
+        }
+
+        function resetModalAutoSlide() {
+            if (document.getElementById('announcementModal').style.display === 'flex') {
+                startModalAutoSlide();
+            }
+        }
+
+        function addModalSwipeListeners(track) {
+            let isDraggingModal = false;
+
+            track.addEventListener('touchstart', e => {
+                modalStartX = e.changedTouches[0].screenX;
+                modalEndX = modalStartX; 
+            }, {passive: true});
+            
+            track.addEventListener('touchend', e => {
+                modalEndX = e.changedTouches[0].screenX;
+                handleModalSwipe();
+            });
+
+            track.addEventListener('mousedown', e => {
+                isDraggingModal = true;
+                modalStartX = e.screenX;
+                modalEndX = modalStartX;
+            });
+            
+            track.addEventListener('mouseup', e => {
+                if(!isDraggingModal) return;
+                isDraggingModal = false;
+                modalEndX = e.screenX;
+                handleModalSwipe();
+            });
+            
+            track.addEventListener('mouseleave', e => {
+                if(!isDraggingModal) return;
+                isDraggingModal = false;
+                modalEndX = e.screenX;
+                handleModalSwipe();
+            });
+        }
+
+        function handleModalSwipe() {
+            let threshold = 30; 
+            if (modalStartX - modalEndX > threshold) {
+                modalSlideIndex = (modalSlideIndex + 1) % validAnnouncements.length;
+                updateModalSlidePosition();
+                resetModalAutoSlide();
+                modalStartX = 0; modalEndX = 0; 
+            } else if (modalEndX - modalStartX > threshold) {
+                modalSlideIndex = (modalSlideIndex - 1 + validAnnouncements.length) % validAnnouncements.length;
+                updateModalSlidePosition();
+                resetModalAutoSlide();
+                modalStartX = 0; modalEndX = 0; 
             }
         }
 
         function openModal(index) {
-            document.getElementById('currentAnnouncementImg').src = validAnnouncements[index];
+            modalSlideIndex = index;
+            updateModalSlidePosition();
             document.getElementById('announcementModal').style.display = 'flex';
+            if(validAnnouncements.length > 1) {
+                startModalAutoSlide();
+            }
         }
 
         function closeModal() {
             document.getElementById('announcementModal').style.display = 'none';
+            clearInterval(modalAutoSlideInterval);
         }
     </script>
 
