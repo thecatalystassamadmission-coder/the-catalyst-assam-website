@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admission Form (Single Subject 9-10) - The Catalyst Assam</title>
+    <title>Admission Form (9-10) - The Catalyst Assam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -109,9 +109,12 @@
         .magic-box { background: rgba(140, 0, 255, 0.3); padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; margin-bottom: 20px; }
         
         /* Auto Display Box for Packages */
-        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
-        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.3rem; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
-        .free-tag { background: #D8FF00; padding: 3px 10px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 5px 0; }
+        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 25px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
+        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .package-list { margin: 15px 0 10px 0; padding-left: 10px; list-style: none; }
+        .package-list li { font-weight: 900; margin-bottom: 8px; font-size: 1.1rem; color: #fff; text-transform: uppercase; }
+        .package-list li::before { content: "✔ "; color: #D8FF00; font-weight: 900; margin-right: 10px; text-shadow: 0 0 10px rgba(216,255,0,0.6); }
+        .free-tag { background: #D8FF00; padding: 5px 12px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 10px 0; font-size: 0.95rem; text-transform: uppercase; }
 
         /* RECEIPT TEMPLATE (Kept Light for PDF generation) */
         #receipt-template { display: none; padding: 30px; background: #ffffff; border: 5px solid #7132CA; margin-top: 20px; color: #000000; font-family: Arial, sans-serif;}
@@ -140,7 +143,7 @@
                 <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
             </div>
         </div>
-        <div class="header-subtext">9TH TO 10TH SINGLE SUBJECT ADMISSION</div>
+        <div class="header-subtext">9TH TO 10TH ADMISSION PACKAGE</div>
     </header>
 
     <div class="container">
@@ -184,10 +187,15 @@
                     
                     <div id="auto-display" class="auto-info-box">
                         <div class="package-title" id="disp-medium">LOADING...</div>
-                        <div style="font-weight:900; color:#ffffff; margin-bottom:10px; font-size:1.1rem;">Subjects: <span id="disp-subjects" style="color:#D8FF00; text-shadow: 0 0 8px rgba(216,255,0,0.4);"></span></div>
+                        
                         <div style="font-weight:900; font-size:1.15rem; color:#ffffff;">Admission Fees: ₹ <span id="disp-adm" style="color:#D8FF00;">0</span></div>
-                        <div style="margin-bottom:8px; margin-top:8px;"><span class="free-tag">★ 1st Month Free ★</span></div>
-                        <div style="font-weight:900; font-size: 1.15rem;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
+                        <div style="margin-bottom:5px; margin-top:5px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:900; font-size: 1.15rem; color:#ffffff;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
+                        
+                        <div style="margin-top:20px; font-weight:900; color:#D8FF00; text-decoration:underline; font-size: 1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">SELECTED SUBJECTS:</div>
+                        <ul class="package-list" id="disp-sub-list">
+                            <!-- JS Will auto fill subjects here -->
+                        </ul>
                     </div>
                 </div>
 
@@ -224,7 +232,7 @@
         <div id="receipt-template">
             <div class="rec-header">
                 <h1 style="margin:0; color:#7132CA; font-size:26px; font-weight:900;">THE CATALYST ASSAM</h1>
-                <p style="margin:5px 0; font-weight:bold;">ADMISSION ACKNOWLEDGEMENT RECEIPT (Single Subject)</p>
+                <p style="margin:5px 0; font-weight:bold;">ADMISSION ACKNOWLEDGEMENT RECEIPT (9th-10th Package)</p>
                 <p style="margin:0; font-size:12px; color:#555;">Mayong Bazar, Rajamayong, Morigaon</p>
             </div>
             <div style="display:flex; justify-content:space-between; align-items: flex-start;">
@@ -237,6 +245,7 @@
                     <div class="rec-row"><div class="rec-label">Age:</div><div class="rec-val" id="r_age"></div></div>
                     <div class="rec-row"><div class="rec-label">Mobile:</div><div class="rec-val" id="r_phone"></div></div>
                     <div class="rec-row"><div class="rec-label">Class:</div><div class="rec-val" id="r_class"></div></div>
+                    <div class="rec-row"><div class="rec-label">Medium:</div><div class="rec-val" id="r_medium"></div></div>
                     
                     <div class="rec-row" style="background:#f9f9f9; padding:10px; border:1px solid #ddd; border-radius:5px; margin-top:10px;">
                         <div class="rec-label" style="width:100%; color:#000;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.95rem; color:#333; display:block; margin-top:5px; line-height:1.4;"></span></div>
@@ -256,10 +265,15 @@
     </div>
     
     <script>
+        // =======================================================
+        // ✅ YOUR SCRIPT URL
+        // =======================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
+        // =======================================================
         
         let urlMed = "", urlSub = "", urlAdm = "", urlMon = "";
 
+        // ✅ Auto Fetch From URL
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             urlMed = params.get('medium') || "Not Selected";
@@ -268,9 +282,22 @@
             urlMon = params.get('mon') || "0";
 
             document.getElementById('disp-medium').innerText = urlMed.toUpperCase() + " MEDIUM";
-            document.getElementById('disp-subjects').innerText = urlSub;
             document.getElementById('disp-adm').innerText = urlAdm;
             document.getElementById('disp-mon').innerText = urlMon;
+
+            // Subject list generating properly with Bullet point (✔)
+            let subArray = urlSub.split(",");
+            let subListHTML = "";
+            if (urlSub !== "None") {
+                subArray.forEach(sub => {
+                    if(sub.trim() !== "") {
+                        subListHTML += `<li>${sub.trim()}</li>`;
+                    }
+                });
+            } else {
+                subListHTML = "<li>No subjects selected</li>";
+            }
+            document.getElementById('disp-sub-list').innerHTML = subListHTML;
         }
 
         let photoData = ""; let currentPos = 20;
@@ -288,8 +315,9 @@
             if(!photoData) isValid = false;
             if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
             if(document.getElementById('class_select').value === "") isValid = false;
-            // Medium is already selected from previous page, so it's valid
-            if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } else { btn.disabled = true; btn.classList.remove("active"); }
+            
+            if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } 
+            else { btn.disabled = true; btn.classList.remove("active"); btn.innerHTML = "🔒 Fill All Fields to Unlock"; }
         }
 
         function downloadReceipt() {
@@ -303,10 +331,10 @@
             document.getElementById('r_class').innerText = document.getElementById('class_select').value;
             document.getElementById('r_medium').innerText = urlMed;
             
-            let pkgText = `${urlMed} MEDIUM\n`;
-            pkgText += `Subjects: ${urlSub}\n`;
-            pkgText += `Fees: ₹${urlAdm} (1st Month Free)\n`;
-            pkgText += `Monthly: ₹${urlMon}`;
+            let pkgText = `${urlMed.toUpperCase()} MEDIUM\n`;
+            pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly Fee: ₹${urlMon}\n`;
+            pkgText += `Subjects: ${urlSub}`;
 
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
@@ -327,9 +355,9 @@
             
             let formData = new FormData(this); let obj = {}; formData.forEach((value, key) => obj[key] = value); obj.photo = photoData; 
             
-            obj.course_type = "Single Subject (9-10)"; 
+            obj.course_type = "Package/Single Subject (9-10)"; 
             obj.medium = urlMed; 
-            obj.final_subjects = `${urlSub} [Adm:${urlAdm}, Mon:${urlMon}]`; 
+            obj.final_subjects = `${urlSub} [Adm: ₹${urlAdm}, Mon: ₹${urlMon}]`; 
 
             // Receipt ka data bharna
             document.getElementById('r_name').innerText = document.getElementById('s_name').value;
@@ -342,10 +370,10 @@
             document.getElementById('r_class').innerText = document.getElementById('class_select').value;
             document.getElementById('r_medium').innerText = urlMed;
             
-            let pkgText = `${urlMed} MEDIUM\n`;
-            pkgText += `Subjects: ${urlSub}\n`;
-            pkgText += `Fees: ₹${urlAdm} (1st Month Free)\n`;
-            pkgText += `Monthly: ₹${urlMon}`;
+            let pkgText = `${urlMed.toUpperCase()} MEDIUM\n`;
+            pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly Fee: ₹${urlMon}\n`;
+            pkgText += `Subjects: ${urlSub}`;
 
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
