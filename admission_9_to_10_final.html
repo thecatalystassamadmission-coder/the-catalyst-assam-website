@@ -107,13 +107,15 @@
         input[readonly] { background-color: #e9ecef; color: #555; }
         
         .magic-box { background: rgba(140, 0, 255, 0.3); padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; margin-bottom: 20px; }
-        .package-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
-        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.3rem; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
-        .package-list { margin: 10px 0; padding-left: 20px; list-style: none; }
-        .package-list li { font-weight: bold; margin-bottom: 5px; font-size: 1.1rem; }
-        .package-list li::before { content: "✔ "; color: #D8FF00; }
-        .free-tag { background: #D8FF00; padding: 3px 10px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 5px 0; }
         
+        /* Auto Display Box for Packages */
+        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 25px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
+        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .package-list { margin: 15px 0 10px 0; padding-left: 10px; list-style: none; }
+        .package-list li { font-weight: 900; margin-bottom: 8px; font-size: 1.1rem; color: #fff; text-transform: uppercase; }
+        .package-list li::before { content: "✔ "; color: #D8FF00; font-weight: 900; margin-right: 10px; text-shadow: 0 0 10px rgba(216,255,0,0.6); }
+        .free-tag { background: #D8FF00; padding: 5px 12px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 10px 0; font-size: 0.95rem; text-transform: uppercase; }
+
         /* RECEIPT TEMPLATE (Kept Light for PDF generation) */
         #receipt-template { display: none; padding: 30px; background: #ffffff; border: 5px solid #7132CA; margin-top: 20px; color: #000000; font-family: Arial, sans-serif;}
         .rec-header { text-align: center; border-bottom: 3px solid #7132CA; padding-bottom: 15px; margin-bottom: 20px; }
@@ -179,16 +181,20 @@
                 </div>
 
                 <div class="input-group"><label>4. Your Personal Address (নিজৰ ঠিকনা):</label><textarea name="personal_address" id="per_address" rows="2" required></textarea></div>
-                
+
                 <div class="input-group magic-box" id="medium-section">
-                    <label>5. Selected Course Details (নিৰ্বাচিত বিষয়):</label>
-                    <div id="package-display" class="package-info-box">
-                        <div class="package-title" id="disp-med">LOADING...</div>
-                        <div style="font-weight:900; font-size:1.15rem; color:#fff;">Admission Fees: ₹ <span id="disp-adm">0</span></div>
-                        <div style="margin-bottom:8px;"><span class="free-tag">★ 1st Month Free ★</span></div>
-                        <div style="font-weight:900; font-size:1.1rem; color:#D8FF00;">Monthly Fee: ₹ <span id="disp-mon">0</span></div>
-                        <div style="margin-top:15px; font-weight:bold; text-decoration:underline;">PACKAGE SUBJECTS:</div>
+                    <label>5. Selected Package Details (নিৰ্বাচিত বিষয়):</label>
+                    
+                    <div id="auto-display" class="auto-info-box">
+                        <div class="package-title" id="disp-medium">LOADING...</div>
+                        
+                        <div style="font-weight:900; font-size:1.15rem; color:#ffffff;">Admission Fees: ₹ <span id="disp-adm" style="color:#D8FF00;">0</span></div>
+                        <div style="margin-bottom:5px; margin-top:5px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:900; font-size: 1.15rem; color:#ffffff;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
+                        
+                        <div style="margin-top:20px; font-weight:900; color:#D8FF00; text-decoration:underline; font-size: 1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">SELECTED SUBJECTS:</div>
                         <ul class="package-list" id="disp-sub-list">
+                            <!-- JS Will auto fill subjects here -->
                         </ul>
                     </div>
                 </div>
@@ -240,6 +246,7 @@
                     <div class="rec-row"><div class="rec-label">Mobile:</div><div class="rec-val" id="r_phone"></div></div>
                     <div class="rec-row"><div class="rec-label">Class:</div><div class="rec-val" id="r_class"></div></div>
                     <div class="rec-row"><div class="rec-label">Medium:</div><div class="rec-val" id="r_medium"></div></div>
+                    
                     <div class="rec-row" style="background:#f9f9f9; padding:10px; border:1px solid #ddd; border-radius:5px; margin-top:10px;">
                         <div class="rec-label" style="width:100%; color:#000;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.95rem; color:#333; display:block; margin-top:5px; line-height:1.4;"></span></div>
                     </div>
@@ -256,7 +263,7 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         // =======================================================
         // ✅ YOUR SCRIPT URL
@@ -266,27 +273,33 @@
         
         let urlMedium = "", urlSubjects = "", urlAdm = "", urlMon = "";
 
+        // ✅ Auto Fetch From URL
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
-            urlMedium = params.get('medium'); 
-            urlSubjects = params.get('subjects'); 
-            urlAdm = params.get('adm'); 
-            urlMon = params.get('mon'); 
+            urlMedium = params.get('medium') || "Not Selected";
+            urlSubjects = params.get('subjects') || "None";
+            urlAdm = params.get('adm') || "0";
+            urlMon = params.get('mon') || "0";
 
-            if(urlMedium) {
-                document.getElementById('disp-med').innerText = urlMedium.toUpperCase() + " MEDIUM";
-                document.getElementById('disp-adm').innerText = urlAdm;
-                document.getElementById('disp-mon').innerText = urlMon;
+            document.getElementById('disp-medium').innerText = urlMedium.toUpperCase() + " MEDIUM";
+            document.getElementById('disp-adm').innerText = urlAdm;
+            document.getElementById('disp-mon').innerText = urlMon;
 
-                let subArray = urlSubjects.split(",");
-                let subListHTML = "";
+            // Subject list generating properly with Bullet point (✔)
+            let subArray = urlSubjects.split(",");
+            let subListHTML = "";
+            if (urlSubjects !== "None") {
                 subArray.forEach(sub => {
-                    subListHTML += `<li>${sub.trim()}</li>`;
+                    if(sub.trim() !== "") {
+                        subListHTML += `<li>${sub.trim()}</li>`;
+                    }
                 });
-                document.getElementById('disp-sub-list').innerHTML = subListHTML;
+            } else {
+                subListHTML = "<li>No subjects selected</li>";
             }
+            document.getElementById('disp-sub-list').innerHTML = subListHTML;
         }
-        
+
         let photoData = ""; let currentPos = 20;
         function movePhoto(amount) { let img = document.getElementById('preview-img'); currentPos += amount; if(currentPos < 0) currentPos = 0; if(currentPos > 100) currentPos = 100; img.style.objectPosition = `center ${currentPos}%`; }
         function previewImage(event) { let file = event.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = function(e) { document.getElementById('preview-img').src = e.target.result; photoData = e.target.result; }; reader.readAsDataURL(file); } checkFormValidity(); }
@@ -303,17 +316,10 @@
             if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
             if(document.getElementById('class_select').value === "") isValid = false;
             
-            if (isValid) { 
-                btn.disabled = false; 
-                btn.classList.add("active"); 
-                btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; 
-            } else { 
-                btn.disabled = true; 
-                btn.classList.remove("active"); 
-                btn.innerHTML = "🔒 Fill All Fields to Unlock";
-            }
+            if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } 
+            else { btn.disabled = true; btn.classList.remove("active"); btn.innerHTML = "🔒 Fill All Fields to Unlock"; }
         }
-        
+
         function downloadReceipt() {
             document.getElementById('r_name').innerText = document.getElementById('s_name').value;
             document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
@@ -329,7 +335,7 @@
             pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
             pkgText += `Monthly Fee: ₹${urlMon}\n`;
             pkgText += `Subjects: ${urlSubjects}`;
-            
+
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
             document.getElementById('r_photo').src = photoData;
@@ -337,20 +343,23 @@
             var opt = { margin: 5, filename: 'Catalyst_Receipt_' + document.getElementById('s_name').value + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; });
         }
-        
+
         // --- THE MASTER FIX FOR BLANK PDF ISSUE ---
         document.getElementById('my-form').addEventListener('submit', function(e) {
             e.preventDefault(); 
             document.getElementById('loading-overlay').style.display = 'block';
             
+            // 🔥 TRICK: Form ko gayab karke Receipt ko top par la rahe hain taaki blank capture na ho
             document.getElementById('form-section').style.display = 'none';
-            window.scrollTo(0, 0); 
+            window.scrollTo(0, 0); // Ekdum top par scroll kar diya
             
             let formData = new FormData(this); let obj = {}; formData.forEach((value, key) => obj[key] = value); obj.photo = photoData; 
-            obj.course_type = "School Package (9-10)"; 
-            obj.medium = urlMedium + " Medium"; 
-            obj.final_subjects = `Package: ${urlSubjects} [Adm: ₹${urlAdm}, Mon: ₹${urlMon}]`;
             
+            obj.course_type = "Package/Single Subject (9-10)"; 
+            obj.medium = urlMedium + " Medium"; 
+            obj.final_subjects = `${urlSubjects} [Adm: ₹${urlAdm}, Mon: ₹${urlMon}]`; 
+
+            // Receipt ka data bharna
             document.getElementById('r_name').innerText = document.getElementById('s_name').value;
             document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
             document.getElementById('r_school').innerText = document.getElementById('s_name_school').value;
@@ -365,7 +374,7 @@
             pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
             pkgText += `Monthly Fee: ₹${urlMon}\n`;
             pkgText += `Subjects: ${urlSubjects}`;
-            
+
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
             document.getElementById('r_photo').src = photoData;
@@ -373,11 +382,13 @@
             var element = document.getElementById('receipt-template'); 
             element.style.display = 'block'; 
             
+            // Ab form screen ke bilkul samne hai, isliye sirf 1.5 seconds ka wait kafi hai
             setTimeout(function() {
+                // scrollY: 0 lagaya hai taaki page offset zero par render ho
                 var opt = { margin: 5, filename: 'Receipt.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
                 
                 html2pdf().set(opt).from(element).toPdf().output('datauristring').then(function(pdfBase64) {
-                    element.style.display = 'none'; 
+                    element.style.display = 'none'; // Wapas PDF form ko chupa diya
                     obj.pdf_data = pdfBase64; 
                     
                     fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(obj), headers: { "Content-Type": "application/json" } })
@@ -392,7 +403,7 @@
                         alert("Submission Failed! Please check internet."); 
                     });
                 });
-            }, 1500); 
+            }, 1500); // <-- 1.5 Second Wait 
         });
     </script>
 </body>
