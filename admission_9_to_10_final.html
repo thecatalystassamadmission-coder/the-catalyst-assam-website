@@ -107,8 +107,7 @@
         input[readonly] { background-color: #e9ecef; color: #555; }
         
         .magic-box { background: rgba(140, 0, 255, 0.3); padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; margin-bottom: 20px; }
-        .package-info-box { display: none; background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; animation: fadeIn 0.5s; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+        .package-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
         .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.3rem; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
         .package-list { margin: 10px 0; padding-left: 20px; list-style: none; }
         .package-list li { font-weight: bold; margin-bottom: 5px; font-size: 1.1rem; }
@@ -182,12 +181,16 @@
                 <div class="input-group"><label>4. Your Personal Address (নিজৰ ঠিকনা):</label><textarea name="personal_address" id="per_address" rows="2" required></textarea></div>
                 
                 <div class="input-group magic-box" id="medium-section">
-                    <label>5. Select Medium (মাধ্যম বাছনি কৰক):</label>
-                    <div class="radio-container" id="medium-radios">
-                        <label class="radio-label"><input type="radio" name="medium" value="Assamese Medium" required onclick="showPackageDetails('Assamese')"> Assamese Medium</label>
-                        <label class="radio-label"><input type="radio" name="medium" value="English Medium" onclick="showPackageDetails('English')"> English Medium</label>
+                    <label>5. Selected Course Details (নিৰ্বাচিত বিষয়):</label>
+                    <div id="package-display" class="package-info-box">
+                        <div class="package-title" id="disp-med">LOADING...</div>
+                        <div style="font-weight:900; font-size:1.15rem; color:#fff;">Admission Fees: ₹ <span id="disp-adm">0</span></div>
+                        <div style="margin-bottom:8px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:900; font-size:1.1rem; color:#D8FF00;">Monthly Fee: ₹ <span id="disp-mon">0</span></div>
+                        <div style="margin-top:15px; font-weight:bold; text-decoration:underline;">PACKAGE SUBJECTS:</div>
+                        <ul class="package-list" id="disp-sub-list">
+                        </ul>
                     </div>
-                    <div id="package-display" class="package-info-box"></div>
                 </div>
 
                 <div class="input-group" style="background:rgba(216,255,0,0.1); padding:20px; border-radius:15px; border: 1px solid rgba(216,255,0,0.5);">
@@ -260,33 +263,34 @@
         // =======================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
         // =======================================================
+        
+        let urlMedium = "", urlSubjects = "", urlAdm = "", urlMon = "";
 
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const medium = urlParams.get('medium'); 
-            if(medium) {
-                document.getElementById('medium-radios').style.display = 'none';
-                let radios = document.getElementsByName('medium');
-                for(let r of radios) {
-                    if(r.value.includes(medium)) { r.checked = true; showPackageDetails(medium); }
-                }
+            const params = new URLSearchParams(window.location.search);
+            urlMedium = params.get('medium'); 
+            urlSubjects = params.get('subjects'); 
+            urlAdm = params.get('adm'); 
+            urlMon = params.get('mon'); 
+
+            if(urlMedium) {
+                document.getElementById('disp-med').innerText = urlMedium.toUpperCase() + " MEDIUM";
+                document.getElementById('disp-adm').innerText = urlAdm;
+                document.getElementById('disp-mon').innerText = urlMon;
+
+                let subArray = urlSubjects.split(",");
+                let subListHTML = "";
+                subArray.forEach(sub => {
+                    subListHTML += `<li>${sub.trim()}</li>`;
+                });
+                document.getElementById('disp-sub-list').innerHTML = subListHTML;
             }
         }
+        
         let photoData = ""; let currentPos = 20;
         function movePhoto(amount) { let img = document.getElementById('preview-img'); currentPos += amount; if(currentPos < 0) currentPos = 0; if(currentPos > 100) currentPos = 100; img.style.objectPosition = `center ${currentPos}%`; }
         function previewImage(event) { let file = event.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = function(e) { document.getElementById('preview-img').src = e.target.result; photoData = e.target.result; }; reader.readAsDataURL(file); } checkFormValidity(); }
         function calculateAge() { let dob = new Date(document.getElementById("dob_input").value); let diff = Date.now() - dob.getTime(); let age = new Date(diff).getUTCFullYear() - 1970; document.getElementById("age_display").value = age + " Years"; checkFormValidity(); }
-        
-        function showPackageDetails(medium) {
-            let box = document.getElementById('package-display'); let content = "";
-            
-            if (medium.includes('Assamese')) {
-                content = `<div class="package-title">ASSAMESE MEDIUM</div><div style="font-weight:900; font-size:1.15rem; color:#fff;">Admission Fees: ₹ 1500</div><div style="margin-bottom:8px;"><span class="free-tag">★ 1st Month Free ★</span></div><div style="font-weight:900; font-size:1.1rem; color:#D8FF00;">Monthly Fee: ₹ 1400</div><div style="margin-top:15px; font-weight:bold; text-decoration:underline;">PACKAGE SUBJECTS:</div><ul class="package-list"><li>MATHS</li><li>SCIENCE</li><li>ENGLISH</li><li>SOCIAL SCIENCE</li></ul>`;
-            } else if (medium.includes('English')) {
-                content = `<div class="package-title">ENGLISH MEDIUM</div><div style="font-weight:900; font-size:1.15rem; color:#fff;">Admission Fees: ₹ 1500</div><div style="margin-bottom:8px;"><span class="free-tag">★ 1st Month Free ★</span></div><div style="font-weight:900; font-size:1.1rem; color:#D8FF00;">Monthly Fee: ₹ 1400</div><div style="margin-top:15px; font-weight:bold; text-decoration:underline;">PACKAGE SUBJECTS:</div><ul class="package-list"><li>MATHS</li><li>SCIENCE</li><li>ENGLISH</li><li>SOCIAL SCIENCE</li></ul>`;
-            }
-            box.innerHTML = content; box.style.display = 'block'; checkFormValidity();
-        }
         
         function checkFormValidity() {
             let btn = document.getElementById("submit-btn"); let isValid = true;
@@ -297,7 +301,6 @@
             if(document.getElementById('dob_input').value === "") isValid = false;
             if(!photoData) isValid = false;
             if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
-            if(!document.querySelector('input[name="medium"]:checked')) isValid = false;
             if(document.getElementById('class_select').value === "") isValid = false;
             
             if (isValid) { 
@@ -320,12 +323,12 @@
             document.getElementById('r_age').innerText = document.getElementById('age_display').value;
             document.getElementById('r_phone').innerText = document.getElementById('phone').value;
             document.getElementById('r_class').innerText = document.getElementById('class_select').value;
-            let med = document.querySelector('input[name="medium"]:checked').value;
-            document.getElementById('r_medium').innerText = med;
+            document.getElementById('r_medium').innerText = urlMedium + " Medium";
             
-            let pkgText = "";
-            if(med.includes("Assamese")) { pkgText = "ASSAMESE MEDIUM\nFees: ₹1500 (1st Month Free)\nMonthly: ₹1400\nSubs: Maths, Science, English, Social Sci"; } 
-            else { pkgText = "ENGLISH MEDIUM\nFees: ₹1500 (1st Month Free)\nMonthly: ₹1400\nSubs: Maths, Science, English, Social Sci"; }
+            let pkgText = `${urlMedium.toUpperCase()} MEDIUM\n`;
+            pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly Fee: ₹${urlMon}\n`;
+            pkgText += `Subjects: ${urlSubjects}`;
             
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
@@ -345,7 +348,8 @@
             
             let formData = new FormData(this); let obj = {}; formData.forEach((value, key) => obj[key] = value); obj.photo = photoData; 
             obj.course_type = "School Package (9-10)"; 
-            let med = document.querySelector('input[name="medium"]:checked').value; obj.final_subjects = med + " Package (M,S,E,SS)";
+            obj.medium = urlMedium + " Medium"; 
+            obj.final_subjects = `Package: ${urlSubjects} [Adm: ₹${urlAdm}, Mon: ₹${urlMon}]`;
             
             document.getElementById('r_name').innerText = document.getElementById('s_name').value;
             document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
@@ -355,11 +359,12 @@
             document.getElementById('r_age').innerText = document.getElementById('age_display').value;
             document.getElementById('r_phone').innerText = document.getElementById('phone').value;
             document.getElementById('r_class').innerText = document.getElementById('class_select').value;
-            document.getElementById('r_medium').innerText = med;
+            document.getElementById('r_medium').innerText = urlMedium + " Medium";
             
-            let pkgText = "";
-            if(med.includes("Assamese")) { pkgText = "ASSAMESE MEDIUM\nFees: ₹1500 (1st Month Free)\nMonthly: ₹1400\nSubs: Maths, Science, English, Social Sci"; } 
-            else { pkgText = "ENGLISH MEDIUM\nFees: ₹1500 (1st Month Free)\nMonthly: ₹1400\nSubs: Maths, Science, English, Social Sci"; }
+            let pkgText = `${urlMedium.toUpperCase()} MEDIUM\n`;
+            pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly Fee: ₹${urlMon}\n`;
+            pkgText += `Subjects: ${urlSubjects}`;
             
             document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
