@@ -99,7 +99,7 @@
         /* Price Box Style (Fixed Layout) */
         .price-box { 
             background: rgba(255,255,255,0.05); border: 2px dashed #D8FF00; 
-            padding: 15px; border-radius: 15px; margin-bottom: 20px; margin-top: auto; /* auto margin pushes it down */
+            padding: 15px; border-radius: 15px; margin-bottom: 20px; margin-top: auto;
             min-height: 120px; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; width: 100%;
         }
@@ -203,32 +203,32 @@
                     <div class="subject-group">
                         <div class="subject-group-title">Select Subjects:</div>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="400" value="MATHS" onclick="calcFees('Assamese')"> MATHS</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-basic" value="MATHS" onclick="calcFees('Assamese')"> MATHS</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="400" value="SCIENCE" onclick="calcFees('Assamese')"> SCIENCE</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-basic" value="SCIENCE" onclick="calcFees('Assamese')"> SCIENCE</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="400" value="ENGLISH" onclick="calcFees('Assamese')"> ENGLISH</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-basic" value="ENGLISH" onclick="calcFees('Assamese')"> ENGLISH</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="250" value="SOCIAL SCIENCE" onclick="calcFees('Assamese')"> SOCIAL SCIENCE</div>
-                            <span class="sub-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-basic" value="SOCIAL SCIENCE" onclick="calcFees('Assamese')"> SOCIAL SCIENCE</div>
+                            <span class="sub-fee">+ ₹400</span>
                         </label>
                     </div>
 
                     <div class="subject-group">
                         <div class="subject-group-title">Add Elective Subject:</div>
                         <label class="checkbox-label" id="lbl-asm-am">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="400" value="ADV. MATHEMATICS" id="chk-asm-am" onclick="calcFees('Assamese')"> ADV. MATHEMATICS</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-elec" value="ADV. MATHEMATICS" id="chk-asm-am" onclick="calcFees('Assamese')"> ADV. MATHEMATICS</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label" id="lbl-asm-geo" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese" data-fee="250" value="GEOGRAPHY" id="chk-asm-geo" onclick="calcFees('Assamese')"> GEOGRAPHY</div>
-                            <span class="sub-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-elec" value="GEOGRAPHY" id="chk-asm-geo" onclick="calcFees('Assamese')"> GEOGRAPHY</div>
+                            <span class="sub-fee">+ ₹400</span>
                         </label>
                     </div>
 
@@ -260,32 +260,32 @@
                     <div class="subject-group">
                         <div class="subject-group-title">Select Subjects:</div>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="400" value="MATHS" onclick="calcFees('English')"> MATHS</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-basic" value="MATHS" onclick="calcFees('English')"> MATHS</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="400" value="SCIENCE" onclick="calcFees('English')"> SCIENCE</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-basic" value="SCIENCE" onclick="calcFees('English')"> SCIENCE</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="400" value="ENGLISH" onclick="calcFees('English')"> ENGLISH</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-basic" value="ENGLISH" onclick="calcFees('English')"> ENGLISH</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="250" value="SOCIAL SCIENCE" onclick="calcFees('English')"> SOCIAL SCIENCE</div>
-                            <span class="sub-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-basic" value="SOCIAL SCIENCE" onclick="calcFees('English')"> SOCIAL SCIENCE</div>
+                            <span class="sub-fee">+ ₹400</span>
                         </label>
                     </div>
 
                     <div class="subject-group">
                         <div class="subject-group-title">Add Elective Subject:</div>
                         <label class="checkbox-label" id="lbl-eng-am">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="400" value="ADV. MATHEMATICS" id="chk-eng-am" onclick="calcFees('English')"> ADV. MATHEMATICS</div>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-elec" value="ADV. MATHEMATICS" id="chk-eng-am" onclick="calcFees('English')"> ADV. MATHEMATICS</div>
                             <span class="sub-fee">+ ₹400</span>
                         </label>
                         <label class="checkbox-label" id="lbl-eng-geo" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english" data-fee="250" value="GEOGRAPHY" id="chk-eng-geo" onclick="calcFees('English')"> GEOGRAPHY</div>
-                            <span class="sub-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" class="sub-english-elec" value="GEOGRAPHY" id="chk-eng-geo" onclick="calcFees('English')"> GEOGRAPHY</div>
+                            <span class="sub-fee">+ ₹400</span>
                         </label>
                     </div>
 
@@ -354,32 +354,58 @@
             handleElectiveLocks(medium);
 
             let isAssamese = (medium === 'Assamese');
-            let checkboxes = document.querySelectorAll(isAssamese ? '.sub-assamese:checked' : '.sub-english:checked');
-            let count = checkboxes.length;
             
-            // Logic: Fade Out the unselected medium card
+            // Get checked basic and elective subjects
+            let basicCheckboxes = document.querySelectorAll(isAssamese ? '.sub-assamese-basic:checked' : '.sub-english-basic:checked');
+            let elecCheckboxes = document.querySelectorAll(isAssamese ? '.sub-assamese-elec:checked' : '.sub-english-elec:checked');
+            
+            let basicCount = basicCheckboxes.length;
+            let elecCount = elecCheckboxes.length;
+            let totalCount = basicCount + elecCount;
+
+            // Medium Locking Logic
             let cardAssamese = document.getElementById('card-assamese');
             let cardEnglish = document.getElementById('card-english');
 
             if (isAssamese) {
-                if (count > 0) { cardEnglish.classList.add('faded'); } 
+                if (totalCount > 0) { cardEnglish.classList.add('faded'); } 
                 else { cardEnglish.classList.remove('faded'); }
             } else {
-                if (count > 0) { cardAssamese.classList.add('faded'); } 
+                if (totalCount > 0) { cardAssamese.classList.add('faded'); } 
                 else { cardAssamese.classList.remove('faded'); }
             }
 
-            // Calculation (Exact Data + Base Admission Fee)
+            // Custom Fee Logic Based on Exact Rules
             let subjects = [];
-            let totalMonthly = 0;
-            const BASE_ADMISSION_FEE = 100;
+            basicCheckboxes.forEach(cb => subjects.push(cb.value));
+            elecCheckboxes.forEach(cb => subjects.push(cb.value));
 
-            checkboxes.forEach(cb => {
-                subjects.push(cb.value);
-                totalMonthly += parseInt(cb.getAttribute('data-fee'));
-            });
+            let admFee = 0, monFee = 0;
+            let isValidSelection = false;
 
-            let totalAdmission = totalMonthly + BASE_ADMISSION_FEE;
+            if (basicCount === 3 && elecCount === 0) {
+                admFee = 1200;
+                monFee = 1100;
+                isValidSelection = true;
+            } else if (basicCount === 4 && elecCount === 0) {
+                admFee = 1600;
+                monFee = 1500;
+                isValidSelection = true;
+            } else if (basicCount === 3 && elecCount === 1) {
+                admFee = 1500;
+                monFee = 1400;
+                isValidSelection = true;
+            } else if (basicCount === 4 && elecCount === 1) {
+                admFee = 2000;
+                monFee = 1900;
+                isValidSelection = true;
+            } else if (totalCount > 0 && totalCount < 3) {
+                // Standard single subject price (Fallback for 1 or 2 subjects)
+                let tempTotal = totalCount * 400;
+                monFee = tempTotal;
+                admFee = tempTotal + 100; // assuming +100 for admission
+                isValidSelection = true;
+            }
 
             // Update UI Elements
             let msgBox = document.getElementById(isAssamese ? 'fee-msg-assamese' : 'fee-msg-english');
@@ -388,14 +414,14 @@
             let monDisplay = document.getElementById(isAssamese ? 'mon-assamese' : 'mon-english');
             let btn = document.getElementById(isAssamese ? 'btn-assamese' : 'btn-english');
 
-            if (count > 0) {
+            if (isValidSelection) {
                 msgBox.style.display = 'none';
                 detailBox.style.display = 'flex';
-                admDisplay.innerText = "₹ " + totalAdmission;
-                monDisplay.innerText = "₹ " + totalMonthly; 
+                admDisplay.innerText = "₹ " + admFee;
+                monDisplay.innerText = "₹ " + monFee; 
                 
                 // Construct URL correctly
-                let url = `9th_to_10th_single_Subject_admission.html?medium=${medium}&subjects=${subjects.join(',')}&adm=${totalAdmission}&mon=${totalMonthly}`;
+                let url = `9th_to_10th_single_Subject_admission.html?medium=${medium}&subjects=${subjects.join(',')}&adm=${admFee}&mon=${monFee}`;
                 btn.href = url;
                 btn.classList.remove('disabled');
             } else {
