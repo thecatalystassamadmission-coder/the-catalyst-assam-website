@@ -104,6 +104,8 @@
         .checkbox-left { display: flex; align-items: center; gap: 10px; text-transform: uppercase;}
         .checkbox-label input[type="checkbox"] { width: 22px; height: 22px; accent-color: #D8FF00; cursor: pointer; }
         .add-fee { color: #D8FF00; font-weight: 900; font-size: 0.95rem; text-shadow: 0 0 5px rgba(216,255,0,0.4);}
+        
+        .free-text { color: #ffeb3b !important; font-weight: 900 !important; font-size: 0.95rem !important; animation: blink 1.5s infinite; letter-spacing: 1px;}
 
         /* Faded Class for Medium Logic */
         .faded { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
@@ -147,16 +149,15 @@
     <div class="container">
         <div class="package-grid">
             
-            <!-- ASSAMESE MEDIUM CARD -->
             <div class="package-card" id="card-assamese">
                 <div class="card-header">ASSAMESE MEDIUM</div>
                 <div class="card-body">
                     <div class="price-box">
                         <div class="price-title">Calculated Admission Fee</div>
-                        <div class="price-amount" id="asm-adm-fee">₹ 1200</div>
+                        <div class="price-amount" id="asm-adm-fee">₹ 1300</div>
                         <div class="free-offer">★ 1st Month Free ★</div>
                     </div>
-                    <div class="monthly-fee" id="asm-mon-fee">Calculated Monthly Fee: ₹ 1100</div>
+                    <div class="monthly-fee" id="asm-mon-fee">Calculated Monthly Fee: ₹ 1200</div>
                     <hr style="border: 1px solid rgba(216,255,0,0.3); margin: 20px 0;">
                     
                     <div style="font-weight:900; color:#D8FF00; text-align:left; font-size: 1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">BASIC SUBJECTS:</div>
@@ -167,24 +168,18 @@
                     </ul>
 
                     <div class="option-box">
-                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD OPTIONAL SUBJECTS:</div>
+                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD ELECTIVE SUBJECT:</div>
                         <label class="checkbox-label" style="margin-bottom: 0;">
-                            <div class="checkbox-left"><input type="checkbox" id="asm-ss" class="sub-assamese" onchange="calculateAssameseFee()"> SOCIAL SCIENCE</div>
-                            <span class="add-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" id="asm-am" class="sub-assamese" onchange="calculateAssameseFee()"> ADV. MATHEMATICS</div>
+                            <span class="add-fee">+ ₹400</span>
                         </label>
                     </div>
 
                     <div class="option-box">
-                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD ELECTIVE SUBJECT:</div>
-                        
-                        <label class="checkbox-label" id="lbl-asm-am">
-                            <div class="checkbox-left"><input type="checkbox" id="asm-am" class="sub-assamese" onchange="handleAssameseElectives('am')"> ADV. MATHEMATICS</div>
-                            <span class="add-fee">+ ₹400</span>
-                        </label>
-                        
-                        <label class="checkbox-label" id="lbl-asm-geo" style="margin-bottom: 0;">
-                            <div class="checkbox-left"><input type="checkbox" id="asm-geo" class="sub-assamese" onchange="handleAssameseElectives('geo')"> GEOGRAPHY</div>
-                            <span class="add-fee">+ ₹400</span>
+                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD OPTIONAL SUBJECTS:</div>
+                        <label class="checkbox-label" style="margin-bottom: 0;">
+                            <div class="checkbox-left"><input type="checkbox" id="asm-ss" class="sub-assamese" onchange="calculateAssameseFee()"> SOCIAL SCIENCE</div>
+                            <span class="add-fee free-text">FREE</span>
                         </label>
                     </div>
 
@@ -192,16 +187,15 @@
                 </div>
             </div>
 
-            <!-- ENGLISH MEDIUM CARD -->
             <div class="package-card" id="card-english">
                 <div class="card-header">ENGLISH MEDIUM</div>
                 <div class="card-body">
                     <div class="price-box">
                         <div class="price-title">Calculated Admission Fee</div>
-                        <div class="price-amount" id="eng-adm-fee">₹ 1200</div>
+                        <div class="price-amount" id="eng-adm-fee">₹ 1300</div>
                         <div class="free-offer">★ 1st Month Free ★</div>
                     </div>
-                    <div class="monthly-fee" id="eng-mon-fee">Calculated Monthly Fee: ₹ 1100</div>
+                    <div class="monthly-fee" id="eng-mon-fee">Calculated Monthly Fee: ₹ 1200</div>
                     <hr style="border: 1px solid rgba(216,255,0,0.3); margin: 20px 0;">
                     
                     <div style="font-weight:900; color:#D8FF00; text-align:left; font-size: 1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">BASIC SUBJECTS:</div>
@@ -212,24 +206,18 @@
                     </ul>
 
                     <div class="option-box">
-                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD OPTIONAL SUBJECTS:</div>
+                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD ELECTIVE SUBJECT:</div>
                         <label class="checkbox-label" style="margin-bottom: 0;">
-                            <div class="checkbox-left"><input type="checkbox" id="eng-ss" class="sub-english" onchange="calculateEnglishFee()"> SOCIAL SCIENCE</div>
-                            <span class="add-fee">+ ₹250</span>
+                            <div class="checkbox-left"><input type="checkbox" id="eng-am" class="sub-english" onchange="calculateEnglishFee()"> ADV. MATHEMATICS</div>
+                            <span class="add-fee">+ ₹400</span>
                         </label>
                     </div>
 
                     <div class="option-box">
-                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD ELECTIVE SUBJECT:</div>
-                        
-                        <label class="checkbox-label" id="lbl-eng-am">
-                            <div class="checkbox-left"><input type="checkbox" id="eng-am" class="sub-english" onchange="handleEnglishElectives('am')"> ADV. MATHEMATICS</div>
-                            <span class="add-fee">+ ₹400</span>
-                        </label>
-                        
-                        <label class="checkbox-label" id="lbl-eng-geo" style="margin-bottom: 0;">
-                            <div class="checkbox-left"><input type="checkbox" id="eng-geo" class="sub-english" onchange="handleEnglishElectives('geo')"> GEOGRAPHY</div>
-                            <span class="add-fee">+ ₹400</span>
+                        <div style="color: #fff; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px;">ADD OPTIONAL SUBJECTS:</div>
+                        <label class="checkbox-label" style="margin-bottom: 0;">
+                            <div class="checkbox-left"><input type="checkbox" id="eng-ss" class="sub-english" onchange="calculateEnglishFee()"> SOCIAL SCIENCE</div>
+                            <span class="add-fee free-text">FREE</span>
                         </label>
                     </div>
 
@@ -251,14 +239,10 @@
     </footer>
 
     <script>
-        // BASE FEES
-        const BASE_ADM = 1200;
-        const BASE_MON = 1100;
-
-        // EXTRA FEES
-        const FEE_SS = 250;
-        const FEE_ELEC = 400; // Both Adv Math and Geo are 400
-        const COMBO_DISCOUNT = 50;
+        // NEW BASE FEES
+        const BASE_ADM = 1300;
+        const BASE_MON = 1200;
+        const EXTRA_FEE = 400; // Only for Adv Math now
 
         function updateMediumLock() {
             let asmCount = document.querySelectorAll('.sub-assamese:checked').length;
@@ -281,48 +265,15 @@
         }
 
         // ================= ASSAMESE LOGIC =================
-        function handleAssameseElectives(selected) {
-            const chkAm = document.getElementById('asm-am');
-            const chkGeo = document.getElementById('asm-geo');
-            const lblAm = document.getElementById('lbl-asm-am');
-            const lblGeo = document.getElementById('lbl-asm-geo');
-
-            if (selected === 'am') {
-                if (chkAm.checked) {
-                    chkGeo.disabled = true;
-                    lblGeo.classList.add('disabled');
-                } else {
-                    chkGeo.disabled = false;
-                    lblGeo.classList.remove('disabled');
-                }
-            } else if (selected === 'geo') {
-                if (chkGeo.checked) {
-                    chkAm.disabled = true;
-                    lblAm.classList.add('disabled');
-                } else {
-                    chkAm.disabled = false;
-                    lblAm.classList.remove('disabled');
-                }
-            }
-            calculateAssameseFee();
-        }
-
         function calculateAssameseFee() {
             updateMediumLock();
 
-            let isSsChecked = document.getElementById('asm-ss').checked;
-            let isElecChecked = document.getElementById('asm-am').checked || document.getElementById('asm-geo').checked;
-            
+            let chkAm = document.getElementById('asm-am');
             let addFee = 0;
-            let discount = 0;
 
-            if (isSsChecked) addFee += FEE_SS;
-            if (isElecChecked) addFee += FEE_ELEC;
-            
-            // Apply Combo Discount (Hidden from UI)
-            if (isSsChecked && isElecChecked) {
-                discount = COMBO_DISCOUNT;
-                addFee -= discount;
+            // Only Adv Math adds to the fee. Social Science is completely FREE.
+            if (chkAm.checked) {
+                addFee += EXTRA_FEE; 
             }
 
             let totalAdm = BASE_ADM + addFee;
@@ -334,17 +285,18 @@
 
         function submitAssamese() {
             let subjects = "MATHS, SCIENCE, ENGLISH";
+            let chkAm = document.getElementById('asm-am');
+            let chkSs = document.getElementById('asm-ss');
+            
             let addFee = 0;
-            let isSsChecked = document.getElementById('asm-ss').checked;
-            let isAmChecked = document.getElementById('asm-am').checked;
-            let isGeoChecked = document.getElementById('asm-geo').checked;
-            let isElecChecked = isAmChecked || isGeoChecked;
 
-            if(isSsChecked) { subjects += ", SOCIAL SCIENCE"; addFee += FEE_SS; }
-            if(isAmChecked) { subjects += ", ADV. MATHEMATICS"; addFee += FEE_ELEC; }
-            if(isGeoChecked) { subjects += ", GEOGRAPHY"; addFee += FEE_ELEC; }
-
-            if(isSsChecked && isElecChecked) { addFee -= COMBO_DISCOUNT; }
+            if (chkAm.checked) {
+                subjects += ", ADV. MATHEMATICS";
+                addFee += EXTRA_FEE;
+            }
+            if (chkSs.checked) {
+                subjects += ", SOCIAL SCIENCE (FREE)";
+            }
 
             let totalAdm = BASE_ADM + addFee;
             let totalMon = BASE_MON + addFee;
@@ -353,50 +305,16 @@
             window.location.href = finalUrl;
         }
 
-
         // ================= ENGLISH LOGIC =================
-        function handleEnglishElectives(selected) {
-            const chkAm = document.getElementById('eng-am');
-            const chkGeo = document.getElementById('eng-geo');
-            const lblAm = document.getElementById('lbl-eng-am');
-            const lblGeo = document.getElementById('lbl-eng-geo');
-
-            if (selected === 'am') {
-                if (chkAm.checked) {
-                    chkGeo.disabled = true;
-                    lblGeo.classList.add('disabled');
-                } else {
-                    chkGeo.disabled = false;
-                    lblGeo.classList.remove('disabled');
-                }
-            } else if (selected === 'geo') {
-                if (chkGeo.checked) {
-                    chkAm.disabled = true;
-                    lblAm.classList.add('disabled');
-                } else {
-                    chkAm.disabled = false;
-                    lblAm.classList.remove('disabled');
-                }
-            }
-            calculateEnglishFee();
-        }
-
         function calculateEnglishFee() {
             updateMediumLock();
 
-            let isSsChecked = document.getElementById('eng-ss').checked;
-            let isElecChecked = document.getElementById('eng-am').checked || document.getElementById('eng-geo').checked;
-            
+            let chkAm = document.getElementById('eng-am');
             let addFee = 0;
-            let discount = 0;
 
-            if (isSsChecked) addFee += FEE_SS;
-            if (isElecChecked) addFee += FEE_ELEC;
-            
-            // Apply Combo Discount (Hidden from UI)
-            if (isSsChecked && isElecChecked) {
-                discount = COMBO_DISCOUNT;
-                addFee -= discount;
+            // Only Adv Math adds to the fee. Social Science is completely FREE.
+            if (chkAm.checked) {
+                addFee += EXTRA_FEE; 
             }
 
             let totalAdm = BASE_ADM + addFee;
@@ -408,17 +326,18 @@
 
         function submitEnglish() {
             let subjects = "MATHS, SCIENCE, ENGLISH";
+            let chkAm = document.getElementById('eng-am');
+            let chkSs = document.getElementById('eng-ss');
+            
             let addFee = 0;
-            let isSsChecked = document.getElementById('eng-ss').checked;
-            let isAmChecked = document.getElementById('eng-am').checked;
-            let isGeoChecked = document.getElementById('eng-geo').checked;
-            let isElecChecked = isAmChecked || isGeoChecked;
 
-            if(isSsChecked) { subjects += ", SOCIAL SCIENCE"; addFee += FEE_SS; }
-            if(isAmChecked) { subjects += ", ADV. MATHEMATICS"; addFee += FEE_ELEC; }
-            if(isGeoChecked) { subjects += ", GEOGRAPHY"; addFee += FEE_ELEC; }
-
-            if(isSsChecked && isElecChecked) { addFee -= COMBO_DISCOUNT; }
+            if (chkAm.checked) {
+                subjects += ", ADV. MATHEMATICS";
+                addFee += EXTRA_FEE;
+            }
+            if (chkSs.checked) {
+                subjects += ", SOCIAL SCIENCE (FREE)";
+            }
 
             let totalAdm = BASE_ADM + addFee;
             let totalMon = BASE_MON + addFee;
