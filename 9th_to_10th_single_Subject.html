@@ -87,13 +87,13 @@
         .subject-group-title { color: #D8FF00; font-size: 0.95rem; margin-bottom: 10px; font-weight: 900; border-bottom: 1px dashed #D8FF00; padding-bottom: 5px; text-transform: uppercase; text-shadow: 0 0 5px rgba(216,255,0,0.4); }
         
         .checkbox-label { display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; margin-bottom: 8px; font-weight: 900; color: #ffffff; cursor: pointer; transition: 0.2s; padding: 5px; border-radius: 8px; }
-        .checkbox-label:hover { background: rgba(216,255,0,0.1); }
+        .checkbox-label:hover { background: rgba(216,255,0,0.1); border: 1px dashed #D8FF00;}
         .checkbox-left { display: flex; align-items: center; gap: 12px; }
         input[type="checkbox"] { width: 22px; height: 22px; accent-color: #D8FF00; cursor: pointer; }
         .sub-fee { color: #D8FF00; font-size: 0.95rem; text-shadow: 0 0 5px rgba(216,255,0,0.4); }
 
         .checkbox-label.disabled { opacity: 0.5; cursor: not-allowed; }
-        .checkbox-label.disabled:hover { background: transparent; }
+        .checkbox-label.disabled:hover { background: transparent; border: 1px solid transparent;}
         .checkbox-label.disabled input { cursor: not-allowed; }
 
         /* Price Box Style (Fixed Layout) */
@@ -162,7 +162,7 @@
         .contact-box { padding: 25px; font-size: 1.2rem; font-weight: bold; color: #fff; }
         .loc-box { background: rgba(140, 0, 255, 0.5); padding: 20px; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; color: #D8FF00; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
         
-        /* Faded Class for Logic */
+        /* Faded Class for Medium Logic */
         .faded { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
 
         @media (max-width: 600px) { 
@@ -222,13 +222,9 @@
 
                     <div class="subject-group">
                         <div class="subject-group-title">Add Elective Subject:</div>
-                        <label class="checkbox-label" id="lbl-asm-am">
+                        <label class="checkbox-label" id="lbl-asm-am" style="margin-bottom:0;">
                             <div class="checkbox-left"><input type="checkbox" class="sub-assamese-elec" value="ADV. MATHEMATICS" id="chk-asm-am" onclick="calcFees('Assamese')"> ADV. MATHEMATICS</div>
-                            <span class="sub-fee">+ ₹400</span>
-                        </label>
-                        <label class="checkbox-label" id="lbl-asm-geo" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-assamese-elec" value="GEOGRAPHY" id="chk-asm-geo" onclick="calcFees('Assamese')"> GEOGRAPHY</div>
-                            <span class="sub-fee">+ ₹400</span>
+                            <span class="sub-fee" style="color: #ffeb3b; font-size: 1rem;">+ ₹500</span>
                         </label>
                     </div>
 
@@ -279,13 +275,9 @@
 
                     <div class="subject-group">
                         <div class="subject-group-title">Add Elective Subject:</div>
-                        <label class="checkbox-label" id="lbl-eng-am">
+                        <label class="checkbox-label" id="lbl-eng-am" style="margin-bottom:0;">
                             <div class="checkbox-left"><input type="checkbox" class="sub-english-elec" value="ADV. MATHEMATICS" id="chk-eng-am" onclick="calcFees('English')"> ADV. MATHEMATICS</div>
-                            <span class="sub-fee">+ ₹400</span>
-                        </label>
-                        <label class="checkbox-label" id="lbl-eng-geo" style="margin-bottom:0;">
-                            <div class="checkbox-left"><input type="checkbox" class="sub-english-elec" value="GEOGRAPHY" id="chk-eng-geo" onclick="calcFees('English')"> GEOGRAPHY</div>
-                            <span class="sub-fee">+ ₹400</span>
+                            <span class="sub-fee" style="color: #ffeb3b; font-size: 1rem;">+ ₹500</span>
                         </label>
                     </div>
 
@@ -322,37 +314,7 @@
     </footer>
 
     <script>
-        function handleElectiveLocks(medium) {
-            let isAssamese = (medium === 'Assamese');
-            let prefix = isAssamese ? 'asm' : 'eng';
-
-            let chkAm = document.getElementById(`chk-${prefix}-am`);
-            let chkGeo = document.getElementById(`chk-${prefix}-geo`);
-            let lblAm = document.getElementById(`lbl-${prefix}-am`);
-            let lblGeo = document.getElementById(`lbl-${prefix}-geo`);
-
-            // Lock Geography if Adv Math is selected
-            if (chkAm.checked) {
-                chkGeo.disabled = true;
-                lblGeo.classList.add('disabled');
-            } else {
-                chkGeo.disabled = false;
-                lblGeo.classList.remove('disabled');
-            }
-
-            // Lock Adv Math if Geography is selected
-            if (chkGeo.checked) {
-                chkAm.disabled = true;
-                lblAm.classList.add('disabled');
-            } else {
-                chkAm.disabled = false;
-                lblAm.classList.remove('disabled');
-            }
-        }
-
         function calcFees(medium) {
-            handleElectiveLocks(medium);
-
             let isAssamese = (medium === 'Assamese');
             
             // Get checked basic and elective subjects
@@ -375,37 +337,20 @@
                 else { cardAssamese.classList.remove('faded'); }
             }
 
-            // Custom Fee Logic Based on Exact Rules
+            // Simple Calculation: Basic = 400 each, Adv Math = 500
+            let monFee = (basicCount * 400) + (elecCount * 500);
+            let admFee = 0;
+            let isValidSelection = false;
+
+            if (totalCount > 0) {
+                admFee = monFee + 100; // Base admission logic: Monthly + 100 extra
+                isValidSelection = true;
+            }
+
+            // Prepare Subjects String for URL
             let subjects = [];
             basicCheckboxes.forEach(cb => subjects.push(cb.value));
             elecCheckboxes.forEach(cb => subjects.push(cb.value));
-
-            let admFee = 0, monFee = 0;
-            let isValidSelection = false;
-
-            if (basicCount === 3 && elecCount === 0) {
-                admFee = 1200;
-                monFee = 1100;
-                isValidSelection = true;
-            } else if (basicCount === 4 && elecCount === 0) {
-                admFee = 1600;
-                monFee = 1500;
-                isValidSelection = true;
-            } else if (basicCount === 3 && elecCount === 1) {
-                admFee = 1500;
-                monFee = 1400;
-                isValidSelection = true;
-            } else if (basicCount === 4 && elecCount === 1) {
-                admFee = 2000;
-                monFee = 1900;
-                isValidSelection = true;
-            } else if (totalCount > 0 && totalCount < 3) {
-                // Standard single subject price (Fallback for 1 or 2 subjects)
-                let tempTotal = totalCount * 400;
-                monFee = tempTotal;
-                admFee = tempTotal + 100; // assuming +100 for admission
-                isValidSelection = true;
-            }
 
             // Update UI Elements
             let msgBox = document.getElementById(isAssamese ? 'fee-msg-assamese' : 'fee-msg-english');
