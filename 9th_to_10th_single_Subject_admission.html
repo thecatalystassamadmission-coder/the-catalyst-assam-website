@@ -285,7 +285,7 @@
             document.getElementById('disp-adm').innerText = urlAdm;
             document.getElementById('disp-mon').innerText = urlMon;
 
-            // Format subject list with checkmarks
+            // Format subject list with checkmarks (bullet style)
             let subArray = urlSub.split(",");
             let subListHTML = "";
             if (urlSub !== "None") {
@@ -335,9 +335,18 @@
             let pkgText = `${urlMed.toUpperCase()} MEDIUM\n`;
             pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
             pkgText += `Monthly Fee: ₹${urlMon}\n`;
-            pkgText += `Subjects: ${urlSub}`;
+            
+            // Generate exact checkmark format for PDF too
+            let subArray = urlSub.split(",");
+            let pdfSubjects = "";
+            subArray.forEach(sub => {
+                if(sub.trim() !== "") {
+                    pdfSubjects += `✔ ${sub.trim()}\n`;
+                }
+            });
+            pkgText += `\nSelected Subjects:\n${pdfSubjects}`;
 
-            document.getElementById('r_package_text').innerText = pkgText;
+            document.getElementById('r_package_text').innerHTML = pkgText.replace(/\n/g, '<br>');
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
             document.getElementById('r_photo').src = photoData;
         }
