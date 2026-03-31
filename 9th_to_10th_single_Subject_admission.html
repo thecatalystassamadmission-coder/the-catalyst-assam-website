@@ -106,21 +106,19 @@
         .age-box { flex: 1; }
         input[readonly] { background-color: #e9ecef; color: #555; }
         
-        /* AUTO INFO BOX */
         .magic-box { background: rgba(140, 0, 255, 0.3); padding: 20px; border: 2px dashed #D8FF00; border-radius: 15px; margin-bottom: 20px; }
-        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 25px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
-        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
-        .package-list { margin: 15px 0 10px 0; padding-left: 10px; list-style: none; }
-        .package-list li { font-weight: 900; margin-bottom: 8px; font-size: 1.1rem; color: #fff; text-transform: uppercase; }
-        .package-list li::before { content: "✔ "; color: #D8FF00; font-weight: 900; margin-right: 10px; text-shadow: 0 0 10px rgba(216,255,0,0.6); }
-        .free-tag { background: #D8FF00; padding: 5px 12px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 10px 0; font-size: 0.95rem; text-transform: uppercase; }
+        
+        /* Auto Display Box for Packages */
+        .auto-info-box { background: rgba(255,255,255,0.1); border: 2px solid #D8FF00; padding: 20px; border-radius: 10px; margin-top: 15px; color: #fff; box-shadow: inset 0 0 15px rgba(216,255,0,0.1); }
+        .package-title { color: #D8FF00; font-weight: 900; text-decoration: underline; font-size: 1.3rem; margin-bottom: 10px; text-transform: uppercase; text-shadow: 0 0 10px rgba(216,255,0,0.5); }
+        .free-tag { background: #D8FF00; padding: 3px 10px; font-weight: 900; color: #000; border-radius: 5px; box-shadow: 0 0 10px rgba(216,255,0,0.5); display: inline-block; margin: 5px 0; }
 
-        /* RECEIPT TEMPLATE - HIDDEN ON SCREEN, SHOWN ONLY FOR PDF */
-        #receipt-template { display: none; padding: 40px; background: #ffffff; border: 5px solid #7132CA; color: #000000; font-family: Arial, sans-serif; width: 800px; max-width: 800px; margin: 0 auto; box-sizing: border-box; }
+        /* RECEIPT TEMPLATE (Exactly same as 11th-12th file) */
+        #receipt-template { display: none; padding: 30px; background: #ffffff; border: 5px solid #7132CA; margin-top: 20px; color: #000000; font-family: Arial, sans-serif;}
         .rec-header { text-align: center; border-bottom: 3px solid #7132CA; padding-bottom: 15px; margin-bottom: 20px; }
-        .rec-row { display: flex; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px; font-size: 14px;}
-        .rec-label { font-weight: bold; width: 35%; color: #7132CA; text-transform: uppercase;}
-        .rec-val { width: 65%; font-weight: bold; color: #333; }
+        .rec-row { display: flex; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        .rec-label { font-weight: bold; width: 40%; color: #7132CA; }
+        .rec-val { width: 60%; font-weight: bold; }
 
         @media (max-width: 600px) { 
             header h1 { font-size: 1.6rem; } 
@@ -142,7 +140,7 @@
                 <span style="opacity: 0;">_</span> <span>T</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span>
             </div>
         </div>
-        <div class="header-subtext">9TH TO 10TH SINGLE SUBJECT ADMISSION</div>
+        <div class="header-subtext">9TH TO 10TH ADMISSION PACKAGE</div>
     </header>
 
     <div class="container">
@@ -182,19 +180,14 @@
                 <div class="input-group"><label>4. Your Personal Address (নিজৰ ঠিকনা):</label><textarea name="personal_address" id="per_address" rows="2" required></textarea></div>
 
                 <div class="input-group magic-box" id="medium-section">
-                    <label>5. Selected Course Details (নিৰ্বাচিত বিষয়):</label>
+                    <label>5. Selected Package Details (নিৰ্বাচিত বিষয়):</label>
                     
                     <div id="auto-display" class="auto-info-box">
                         <div class="package-title" id="disp-medium">LOADING...</div>
-                        
+                        <div style="font-weight:900; color:#ffffff; margin-bottom:10px; font-size:1.1rem;">Subjects: <span id="disp-subjects" style="color:#D8FF00; text-shadow: 0 0 8px rgba(216,255,0,0.4);"></span></div>
                         <div style="font-weight:900; font-size:1.15rem; color:#ffffff;">Admission Fees: ₹ <span id="disp-adm" style="color:#D8FF00;">0</span></div>
-                        <div style="margin-bottom:5px; margin-top:5px;"><span class="free-tag">★ 1st Month Free ★</span></div>
-                        <div style="font-weight:900; font-size: 1.15rem; color:#ffffff;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
-                        
-                        <div style="margin-top:20px; font-weight:900; color:#D8FF00; text-decoration:underline; font-size: 1.1rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);">SELECTED SUBJECTS:</div>
-                        <ul class="package-list" id="disp-sub-list">
-                            <!-- JS Will auto fill subjects here -->
-                        </ul>
+                        <div style="margin-bottom:8px; margin-top:8px;"><span class="free-tag">★ 1st Month Free ★</span></div>
+                        <div style="font-weight:900; font-size: 1.15rem;">Monthly Fee: ₹ <span id="disp-mon" style="color:#D8FF00;">0</span></div>
                     </div>
                 </div>
 
@@ -230,9 +223,9 @@
 
         <div id="receipt-template">
             <div class="rec-header">
-                <h1 style="margin:0; color:#7132CA; font-size:28px; font-weight:900;">THE CATALYST ASSAM</h1>
-                <p style="margin:5px 0; font-weight:bold; font-size: 16px;">ADMISSION ACKNOWLEDGEMENT RECEIPT (9TH-10TH)</p>
-                <p style="margin:0; font-size:13px; color:#555;">Mayong Bazar, Rajamayong, Morigaon (Assam) 782411</p>
+                <h1 style="margin:0; color:#7132CA; font-size:26px; font-weight:900;">THE CATALYST ASSAM</h1>
+                <p style="margin:5px 0; font-weight:bold;">ADMISSION ACKNOWLEDGEMENT RECEIPT (9th-10th Package)</p>
+                <p style="margin:0; font-size:12px; color:#555;">Mayong Bazar, Rajamayong, Morigaon</p>
             </div>
             <div style="display:flex; justify-content:space-between; align-items: flex-start;">
                 <div style="width:65%;">
@@ -246,58 +239,39 @@
                     <div class="rec-row"><div class="rec-label">Class:</div><div class="rec-val" id="r_class"></div></div>
                     <div class="rec-row"><div class="rec-label">Medium:</div><div class="rec-val" id="r_medium"></div></div>
                     
-                    <div class="rec-row" style="background:#f0f8ff; padding:12px; border:2px solid #7132CA; border-radius:5px; margin-top:15px;">
-                        <div class="rec-label" style="width:100%; color:#000;">FEES & SUBJECTS DETAILS:<br><span id="r_package_text" style="font-weight:bold; font-size:14px; color:#333; display:block; margin-top:8px; line-height:1.6;"></span></div>
+                    <div class="rec-row" style="background:#f9f9f9; padding:10px; border:1px solid #ddd; border-radius:5px; margin-top:10px;">
+                        <div class="rec-label" style="width:100%; color:#000;">Package Details:<br><span id="r_package_text" style="font-weight:normal; font-size:0.95rem; color:#333; display:block; margin-top:5px; line-height:1.4;"></span></div>
                     </div>
-                    <div class="rec-row" style="margin-top:15px;"><div class="rec-label">Submission Date:</div><div class="rec-val" id="r_date"></div></div>
+                    <div class="rec-row" style="margin-top:10px;"><div class="rec-label">Date:</div><div class="rec-val" id="r_date"></div></div>
                 </div>
                 <div style="width:30%; text-align:center;">
-                    <img id="r_photo" src="" style="width:130px; height:170px; object-fit:cover; border:3px solid #7132CA; border-radius:5px; background: #eee;">
-                    <p style="font-size:13px; margin-top:8px; font-weight:bold; color: #7132CA;">Student Photo</p>
+                    <img id="r_photo" src="" style="width:120px; height:150px; object-fit:cover; border:3px solid #7132CA; border-radius:5px;">
+                    <p style="font-size:12px; margin-top:5px; font-weight:bold;">Student Photo</p>
                 </div>
             </div>
-            <div style="margin-top:60px; display:flex; justify-content:space-between; padding: 0 20px;">
-                <div style="text-align:center;"><p style="margin:0; font-weight:bold; color:#7132CA;">_________________________</p><p style="margin-top:8px; font-weight:bold;">Student's Signature</p></div>
-                <div style="text-align:center;"><p style="margin:0; font-weight:bold; color:#7132CA;">_________________________</p><p style="margin-top:8px; font-weight:bold;">Office Seal & Sign</p></div>
+            <div style="margin-top:50px; display:flex; justify-content:space-between;">
+                <div style="text-align:center;"><p style="margin:0;">___________________</p><p style="margin-top:5px; font-weight:bold;">Student Signature</p></div>
+                <div style="text-align:center;"><p style="margin:0;">___________________</p><p style="margin-top:5px; font-weight:bold;">Office Seal & Sign</p></div>
             </div>
         </div>
     </div>
     
     <script>
-        // =======================================================
-        // ✅ YOUR SCRIPT URL
-        // =======================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSjEI7bVjF2jRQMqp2AOZFfTyzn90qFA72nL-WvOgpDBdafQzhRDw5RdAZItlC1amk/exec"; 
-        // =======================================================
         
-        let urlMed = "", urlSub = "", urlAdm = "", urlMon = "";
+        let urlMedium = "", urlSubjects = "", urlAdm = "", urlMon = "";
 
-        // ✅ Auto Fetch From URL
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
-            urlMed = params.get('medium') || "Not Selected";
-            urlSub = params.get('subjects') || "None";
+            urlMedium = params.get('medium') || "Not Selected";
+            urlSubjects = params.get('subjects') || "None";
             urlAdm = params.get('adm') || "0";
             urlMon = params.get('mon') || "0";
 
-            // Display in Form UI
-            document.getElementById('disp-medium').innerText = urlMed.toUpperCase() + " MEDIUM";
+            document.getElementById('disp-medium').innerText = urlMedium.toUpperCase() + " MEDIUM";
+            document.getElementById('disp-subjects').innerText = urlSubjects;
             document.getElementById('disp-adm').innerText = urlAdm;
             document.getElementById('disp-mon').innerText = urlMon;
-
-            // Format subject list with checkmarks (bullet style)
-            let subArray = urlSub.split(",");
-            let subListHTML = "";
-            if (urlSub !== "None") {
-                subArray.forEach(sub => {
-                    if(sub.trim() !== "") {
-                        subListHTML += `<li>${sub.trim()}</li>`;
-                    }
-                });
-            } else {
-                subListHTML = "<li>No subjects selected</li>";
-            }
-            document.getElementById('disp-sub-list').innerHTML = subListHTML;
         }
 
         let photoData = ""; let currentPos = 20;
@@ -316,12 +290,18 @@
             if(!document.querySelector('input[name="gender"]:checked')) isValid = false;
             if(document.getElementById('class_select').value === "") isValid = false;
             
-            if (isValid) { btn.disabled = false; btn.classList.add("active"); btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; } 
-            else { btn.disabled = true; btn.classList.remove("active"); btn.innerHTML = "🔒 Fill All Fields to Unlock"; }
+            if (isValid) { 
+                btn.disabled = false; 
+                btn.classList.add("active"); 
+                btn.innerHTML = "SUBMIT FORM (ফৰ্ম দাখিল কৰক)"; 
+            } else { 
+                btn.disabled = true; 
+                btn.classList.remove("active"); 
+                btn.innerHTML = "🔒 Fill All Fields to Unlock";
+            }
         }
 
-        // Fill PDF Data helper function
-        function populateReceiptData() {
+        function downloadReceipt() {
             document.getElementById('r_name').innerText = document.getElementById('s_name').value;
             document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
             document.getElementById('r_school').innerText = document.getElementById('s_name_school').value;
@@ -330,46 +310,23 @@
             document.getElementById('r_age').innerText = document.getElementById('age_display').value;
             document.getElementById('r_phone').innerText = document.getElementById('phone').value;
             document.getElementById('r_class').innerText = document.getElementById('class_select').value;
-            document.getElementById('r_medium').innerText = urlMed + " Medium"; // Formatting correctly
+            document.getElementById('r_medium').innerText = urlMedium + " Medium";
             
-            let pkgText = `${urlMed.toUpperCase()} MEDIUM\n`;
-            pkgText += `Admission Fee: ₹${urlAdm} (1st Month Free)\n`;
-            pkgText += `Monthly Fee: ₹${urlMon}\n`;
-            
-            // Generate exact checkmark format for PDF too
-            let subArray = urlSub.split(",");
-            let pdfSubjects = "";
-            subArray.forEach(sub => {
-                if(sub.trim() !== "") {
-                    pdfSubjects += `✔ ${sub.trim()}\n`;
-                }
-            });
-            pkgText += `\nSelected Subjects:\n${pdfSubjects}`;
+            // Generate Receipt Text from URL Data
+            let pkgText = `${urlMedium.toUpperCase()} MEDIUM\n`;
+            pkgText += `Subjects: ${urlSubjects}\n`;
+            pkgText += `Fees: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly: ₹${urlMon}`;
 
-            document.getElementById('r_package_text').innerHTML = pkgText.replace(/\n/g, '<br>');
+            document.getElementById('r_package_text').innerText = pkgText;
             document.getElementById('r_date').innerText = new Date().toLocaleDateString();
             document.getElementById('r_photo').src = photoData;
-        }
-
-        function downloadReceipt() {
-            populateReceiptData();
-            
-            var element = document.getElementById('receipt-template'); 
-            element.style.display = 'block'; 
-            
-            // scale: 2 for HD PDF, windowWidth: 800 forces desktop view so mobile format doesn't break
-            var opt = { 
-                margin: 5, 
-                filename: 'Catalyst_Receipt_' + document.getElementById('s_name').value + '.pdf', 
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2, windowWidth: 800 }, 
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-            };
-            
+            var element = document.getElementById('receipt-template'); element.style.display = 'block'; 
+            var opt = { margin: 5, filename: 'Catalyst_Receipt_' + document.getElementById('s_name').value + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; });
         }
 
-        // --- THE MASTER FIX FOR BLANK PDF ISSUE & DATA PUSH ---
+        // --- THE MASTER FIX FOR BLANK PDF ISSUE ---
         document.getElementById('my-form').addEventListener('submit', function(e) {
             e.preventDefault(); 
             document.getElementById('loading-overlay').style.display = 'block';
@@ -378,31 +335,39 @@
             document.getElementById('form-section').style.display = 'none';
             window.scrollTo(0, 0); // Ekdum top par scroll kar diya
             
-            // Prepare Data for Google Sheet
-            let formData = new FormData(this); 
-            let obj = {}; 
-            formData.forEach((value, key) => obj[key] = value); 
-            obj.photo = photoData; 
-            obj.course_type = "Single Subject (9-10)"; 
-            obj.medium = urlMed + " Medium"; 
-            obj.final_subjects = `${urlSub} [Adm: ₹${urlAdm}, Mon: ₹${urlMon}]`; 
+            let formData = new FormData(this); let obj = {}; formData.forEach((value, key) => obj[key] = value); obj.photo = photoData; 
+            
+            obj.course_type = "Package Course (9-10)"; 
+            obj.medium = urlMedium + " Medium"; 
+            obj.final_subjects = `${urlSubjects} [Adm:${urlAdm}, Mon:${urlMon}]`; 
 
-            // Receipt UI update
-            populateReceiptData();
+            // Receipt ka data bharna
+            document.getElementById('r_name').innerText = document.getElementById('s_name').value;
+            document.getElementById('r_parent').innerText = document.getElementById('p_name').value;
+            document.getElementById('r_school').innerText = document.getElementById('s_name_school').value;
+            document.getElementById('r_address').innerText = document.getElementById('per_address').value;
+            document.getElementById('r_gender').innerText = document.querySelector('input[name="gender"]:checked').value;
+            document.getElementById('r_age').innerText = document.getElementById('age_display').value;
+            document.getElementById('r_phone').innerText = document.getElementById('phone').value;
+            document.getElementById('r_class').innerText = document.getElementById('class_select').value;
+            document.getElementById('r_medium').innerText = urlMedium + " Medium";
+            
+            let pkgText = `${urlMedium.toUpperCase()} MEDIUM\n`;
+            pkgText += `Subjects: ${urlSubjects}\n`;
+            pkgText += `Fees: ₹${urlAdm} (1st Month Free)\n`;
+            pkgText += `Monthly: ₹${urlMon}`;
+
+            document.getElementById('r_package_text').innerText = pkgText;
+            document.getElementById('r_date').innerText = new Date().toLocaleDateString();
+            document.getElementById('r_photo').src = photoData;
             
             var element = document.getElementById('receipt-template'); 
             element.style.display = 'block'; 
             
-            // Wait slightly for DOM to render the receipt
+            // Ab form screen ke bilkul samne hai, isliye sirf 1.5 seconds ka wait kafi hai
             setTimeout(function() {
-                // scrollY: 0 and windowWidth: 800 ensures exact A4 rendering anywhere
-                var opt = { 
-                    margin: 5, 
-                    filename: 'Receipt.pdf', 
-                    image: { type: 'jpeg', quality: 0.98 }, 
-                    html2canvas: { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 }, 
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
-                };
+                // scrollY: 0 lagaya hai taaki page offset zero par render ho
+                var opt = { margin: 5, filename: 'Receipt.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
                 
                 html2pdf().set(opt).from(element).toPdf().output('datauristring').then(function(pdfBase64) {
                     element.style.display = 'none'; // Wapas PDF form ko chupa diya
@@ -420,7 +385,7 @@
                         alert("Submission Failed! Please check internet."); 
                     });
                 });
-            }, 1500); // <-- 1.5 Second Wait ensures images and text load fully 
+            }, 1500); // <-- 1.5 Second Wait 
         });
     </script>
 </body>
