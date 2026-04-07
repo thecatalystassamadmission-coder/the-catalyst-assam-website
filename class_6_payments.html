@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 6 Payments - The Catalyst Assam</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* ======================================================== */
@@ -98,11 +102,10 @@
             display: flex; 
             gap: 6px; 
             flex: 1; 
-            overflow-x: auto; /* Allows scrolling on mobile if it doesn't fit */
+            overflow-x: auto; 
             padding-bottom: 4px;
             align-items: center;
         }
-        /* Hide scrollbar for cleaner look */
         .months-inline::-webkit-scrollbar { height: 4px; }
         .months-inline::-webkit-scrollbar-thumb { background: #C47BE4; border-radius: 10px; }
 
@@ -291,6 +294,22 @@
     </div>
 
     <script>
+        // 🔥🔥🔥 MAINE YAHAN AAPKA CORRECT FIREBASE CODE DAAL DIYA HAI 🔥🔥🔥
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
+            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "the-catalyst-assam-payment",
+            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
+            messagingSenderId: "256883795397",
+            appId: "1:256883795397:web:9c55da88762ce2293157ac"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const DB_PATH = "class6_students"; // 🚨 IS FILE KA DATABASE NAAM
+
         // ================= CREDENTIALS & SCRIPT URL =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
@@ -303,8 +322,9 @@
         
         let currentStudentIndex = -1;
         let currentMonthIndex = -1;
-        let currentYear = "2026"; // Default active year
+        let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
+        let studentsData = []; // Ab ye cloud se ayega
 
         document.getElementById('rec-photo').addEventListener('change', function(e) {
             let file = e.target.files[0];
@@ -313,25 +333,31 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // Load & MIGRATION SCRIPT (Convert Old Data to Year-Based Dictionary)
-        let studentsData = JSON.parse(localStorage.getItem("class6_students")) || [];
+        // 🔥🔥🔥 LIVE CLOUD SYNC & MIGRATION 🔥🔥🔥
         
-        studentsData.forEach(student => {
-            // Agar payments array hai (purana structure), usko naye object structure me badlo
-            if (Array.isArray(student.payments)) {
-                let oldPayments = student.payments;
-                for(let i=0; i<12; i++) {
-                    if(oldPayments[i] === false || oldPayments[i] === true) oldPayments[i] = [];
-                    else if(!Array.isArray(oldPayments[i])) oldPayments[i] = [oldPayments[i]]; 
-                }
-                student.payments = { "2026": oldPayments }; // Put all old data in 2026
-            }
+        // Agar purana data browser me hai toh usko ek baar cloud pe bhej do
+        let localOldData = JSON.parse(localStorage.getItem("class6_students"));
+        if (localOldData && localOldData.length > 0) {
+            database.ref(DB_PATH).set(localOldData);
+            localStorage.removeItem("class6_students"); // Local se hata do
+        }
+
+        // Hamesha Cloud se Live Data lo
+        database.ref(DB_PATH).on('value', (snapshot) => {
+            const data = snapshot.val();
+            studentsData = data ? data : [];
             
-            // Ensure basic years exist
-            if(!student.payments) student.payments = {};
-            if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            // Ensure format is correct
+            studentsData.forEach(student => {
+                if(!student.payments) student.payments = {};
+                if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            });
+
+            if (document.getElementById('dashboard').style.display === 'block') {
+                renderStudents();
+            }
         });
 
         function changeYear() {
@@ -387,12 +413,11 @@
             };
 
             studentsData.push(newStudent);
-            saveData();
+            saveData(); // Cloud par save karega
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
             document.getElementById('new-student-age').value = "";
-            renderStudents();
         }
 
         function deleteStudent(index) {
@@ -401,13 +426,15 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData();
-                renderStudents();
+                saveData(); // Cloud par delete karega
             }
         }
 
+        // 🔥 SAVE KARTA HAI CLOUD PE 🔥
         function saveData() {
-            localStorage.setItem("class6_students", JSON.stringify(studentsData));
+            database.ref(DB_PATH).set(studentsData).catch(error => {
+                alert("❌ Internet Error! Data Cloud me save nahi hua.");
+            });
         }
 
         // ================= RENDER UI (SINGLE LINE LAYOUT) =================
@@ -423,17 +450,14 @@
                 let row = document.createElement('div');
                 row.className = 'student-row';
 
-                // LEFT: INFO
                 let infoHTML = `
                     <div class="student-info" title="${student.name} | ${student.parent}">
                         <div class="student-name">${student.name}</div>
                         <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} | Age: ${student.age || 'N/A'}</div>
                     </div>`;
                 
-                // MIDDLE: MONTHS INLINE
                 let monthsHTML = `<div class="months-inline">`;
                 
-                // Ensure year array exists
                 if(!student.payments[currentYear]) student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
 
                 MONTHS.forEach((monthName, mIndex) => {
@@ -444,7 +468,6 @@
                     let totalPaid = 0;
                     paymentsArr.forEach(p => totalPaid += parseInt(p.amount || 0));
 
-                    // Time Lock Logic
                     let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
                     let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
 
@@ -454,19 +477,16 @@
                         onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
                     } 
                     else if (isFutureYear || (!isPastYear && mIndex > currentMonthNum)) {
-                        // Future Lock (Next Year or Future Month of this year)
                         btnClass = "btn-locked";
                         innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
                         onclickLogic = `alert('This button will unlock when the month arrives.')`;
                     } 
                     else if (isPastYear || mIndex < currentMonthNum) {
-                        // Past Month (Locked but can open with password)
                         btnClass = "btn-locked";
                         innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
                         onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
                     }
                     else {
-                        // Unlocked (Current Month)
                         btnClass = "btn-unlocked";
                         onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
                     }
@@ -475,8 +495,6 @@
                 });
 
                 monthsHTML += `</div>`;
-
-                // RIGHT: DELETE
                 let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
 
                 row.innerHTML = infoHTML + monthsHTML + deleteHTML;
@@ -570,7 +588,6 @@
             currentMonthIndex = mIndex;
             let student = studentsData[sIndex];
 
-            // UNIQUE SL NO. GENERATION (DDMMYYYYHHMMSS)
             let now = new Date();
             let uniqueSlNo = String(now.getDate()).padStart(2, '0') + 
                              String(now.getMonth() + 1).padStart(2, '0') + 
@@ -676,12 +693,11 @@
                             };
 
                             studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData();
+                            saveData(); // Cloud pe push karega
 
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
                             closeModal();
-                            renderStudents();
                         } else {
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert("❌ Google Sheet Error: " + data.message);
