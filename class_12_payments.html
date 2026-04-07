@@ -289,31 +289,20 @@
     </div>
 
     <script>
-        // ================= FIREBASE CONFIGURATION (LIVE DATABASE) =================
+        // 🔥🔥🔥 YAHAN MAINE AAPKA ORIGINAL FIREBASE CONFIG DAAL DIYA HAI 🔥🔥🔥
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
             authDomain: "the-catalyst-assam-payment.firebaseapp.com",
-            // 🔥 MAINE YAHAN DATABASE URL ADD KAR DIYA HAI 👇
-            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.firebaseio.com", 
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "the-catalyst-assam-payment",
             storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
             messagingSenderId: "256883795397",
             appId: "1:256883795397:web:9c55da88762ce2293157ac"
         };
 
-        // Initialize Firebase
+        // FIREBASE INITIALIZE
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        
-        // Error checking tool
-        database.ref('.info/connected').on('value', function(snap) {
-          if (snap.val() === true) {
-            console.log("🟢 FIREBASE CONNECTED SUCESSFULLY!");
-          } else {
-            console.log("🔴 DISCONNECTED: Check Firebase Database Rules.");
-          }
-        });
-
         const DB_PATH = "class12_students"; 
 
         // ================= CREDENTIALS & SCRIPT URL =================
@@ -329,6 +318,8 @@
         let currentMonthIndex = -1;
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
+        
+        // DATA AB CLOUD SE AAYEGA
         let studentsData = []; 
 
         // --- DYNAMIC SUBJECTS LOGIC ---
@@ -354,27 +345,21 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // ================= LIVE DATABASE LISTENER & MIGRATION =================
+        // 🔥🔥🔥 LIVE SYNC LOGIC (REPLACED LOCALSTORAGE) 🔥🔥🔥
         
-        let localOldData = JSON.parse(localStorage.getItem(DB_PATH));
-        if (localOldData && localOldData.length > 0) {
-            let pass = confirm("Old Local Data Found! Move to Cloud Database?");
-            if (pass) {
-                database.ref(DB_PATH).set(localOldData);
-                localStorage.removeItem(DB_PATH); 
-                alert("Data Migrated Successfully!");
-            }
+        // 1. Puraana data agar local storage me bacha hai toh cloud pe daal dega
+        let oldLocalData = JSON.parse(localStorage.getItem("class12_students"));
+        if (oldLocalData && oldLocalData.length > 0) {
+            database.ref(DB_PATH).set(oldLocalData);
+            localStorage.removeItem("class12_students"); 
         }
 
-        // Real-time Live Sync from Firebase
+        // 2. Real-time Live Listener 
         database.ref(DB_PATH).on('value', (snapshot) => {
             const data = snapshot.val();
-            if (data) {
-                studentsData = data;
-            } else {
-                studentsData = [];
-            }
+            studentsData = data ? data : [];
             
+            // Format check
             studentsData.forEach(student => {
                 if(!student.payments) student.payments = {};
                 if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
@@ -397,7 +382,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('year-selector').value = currentYear;
-                renderStudents(); 
+                renderStudents();
             }
         };
 
@@ -440,7 +425,7 @@
             };
 
             studentsData.push(newStudent);
-            saveData(); 
+            saveData(); // FIREBASE ME SAVE HOGA
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
@@ -453,17 +438,18 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData(); 
+                saveData(); // FIREBASE ME UPDATE HOGA
             }
         }
 
+        // 🔥🔥🔥 CLOUD SAVING FUNCTION 🔥🔥🔥
         function saveData() {
-            database.ref(DB_PATH).set(studentsData)
-            .then(() => { console.log("Saved to Cloud."); })
-            .catch((error) => { alert("❌ Cloud Error! Data not saved. Check Rules in Firebase Console."); });
+            database.ref(DB_PATH).set(studentsData).catch(error => {
+                alert("❌ Internet Error! Data Cloud me save nahi hua.");
+            });
         }
 
-        // ================= RENDER UI (SINGLE LINE LAYOUT) =================
+        // ================= RENDER UI =================
         function renderStudents() {
             const container = document.getElementById('students-container');
             container.innerHTML = "";
@@ -725,7 +711,7 @@
                             };
 
                             studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData(); // Firebase me update karna 
+                            saveData(); // FIREBASE PE UPDATE KAREGA
 
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
