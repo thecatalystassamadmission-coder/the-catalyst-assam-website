@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class 12 Payments - The Catalyst Assam</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* ======================================================== */
@@ -285,9 +289,27 @@
     </div>
 
     <script>
+        // ================= FIREBASE CONFIGURATION (LIVE DATABASE) =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
+            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "the-catalyst-assam-payment",
+            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
+            messagingSenderId: "256883795397",
+            appId: "1:256883795397:web:9c55da88762ce2293157ac"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // 🚨 IMPORTANT: Yahan par aapki is file ka database ka naam diya hai. 
+        // Dusri files mein ise change karna hoga (Jaise "degree_students", "adre_students")
+        const DB_PATH = "class12_students"; 
+
         // ================= CREDENTIALS & SCRIPT URL =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
-        
         const ADMIN_EMAIL = "thecatalystassam@gmail.com";
         const PASS_1 = "thecatalystassamnitusarkar19471999";
         const PASS_2 = "thecatalystassamtapanmandal19462000";
@@ -297,8 +319,9 @@
         
         let currentStudentIndex = -1;
         let currentMonthIndex = -1;
-        let currentYear = "2026"; // Default active year
+        let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
+        let studentsData = []; // Ye ab cloud se aayega
 
         // --- DYNAMIC SUBJECTS LOGIC ---
         const artsSubjects = ["ECONOMICS", "ENGLISH", "GEOGRAPHY", "POL. SCIENCE"];
@@ -307,7 +330,7 @@
         function updateSubjects() {
             const stream = document.getElementById('rec-medium').value;
             const container = document.getElementById('subject-container');
-            container.innerHTML = ""; // Clear purane subjects
+            container.innerHTML = ""; 
             
             let subjects = stream === "ARTS STREAM" ? artsSubjects : commerceSubjects;
             
@@ -323,23 +346,40 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // Load & MIGRATION SCRIPT FOR CLASS 12
-        let studentsData = JSON.parse(localStorage.getItem("class12_students")) || [];
+        // ================= LIVE DATABASE LISTENER & MIGRATION =================
         
-        studentsData.forEach(student => {
-            if (Array.isArray(student.payments)) {
-                let oldPayments = student.payments;
-                for(let i=0; i<12; i++) {
-                    if(oldPayments[i] === false || oldPayments[i] === true) oldPayments[i] = [];
-                    else if(!Array.isArray(oldPayments[i])) oldPayments[i] = [oldPayments[i]]; 
-                }
-                student.payments = { "2026": oldPayments };
+        // 1. One Time Migration (Agar pehle se koi Local Storage me data hai toh cloud pe daal dega)
+        let localOldData = JSON.parse(localStorage.getItem(DB_PATH));
+        if (localOldData && localOldData.length > 0) {
+            let pass = confirm("Old Local Data Found! Do you want to move old test students to Live Cloud Database?");
+            if (pass) {
+                database.ref(DB_PATH).set(localOldData);
+                localStorage.removeItem(DB_PATH); // Delete local taaki dubara na puche
+                alert("Data Migrated Successfully to Cloud! 🎉");
+            }
+        }
+
+        // 2. Real-time Live Sync from Firebase
+        database.ref(DB_PATH).on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                studentsData = data;
+            } else {
+                studentsData = [];
             }
             
-            if(!student.payments) student.payments = {};
-            if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            // Format check for new years
+            studentsData.forEach(student => {
+                if(!student.payments) student.payments = {};
+                if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            });
+
+            // Agar Dashboard open hai tabhi UI update karo
+            if (document.getElementById('dashboard').style.display === 'block') {
+                renderStudents();
+            }
         });
 
         function changeYear() {
@@ -352,7 +392,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('year-selector').value = currentYear;
-                renderStudents();
+                renderStudents(); // Initial render tab tak ke liye jab tak Live data na aaye
             }
         };
 
@@ -395,12 +435,12 @@
             };
 
             studentsData.push(newStudent);
-            saveData();
+            saveData(); // Yahan se Firebase me save hoga
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
             document.getElementById('new-student-age').value = "";
-            renderStudents();
+            // UI Firebase automatically render kar dega
         }
 
         function deleteStudent(index) {
@@ -409,13 +449,19 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData();
-                renderStudents();
+                saveData(); // Save to Firebase
             }
         }
 
+        // 🚨 UPDATE: Firebase Saving Function
         function saveData() {
-            localStorage.setItem("class12_students", JSON.stringify(studentsData));
+            database.ref(DB_PATH).set(studentsData)
+            .then(() => {
+                console.log("Data saved to Cloud.");
+            })
+            .catch((error) => {
+                alert("❌ Internet Error! Data not syncing.");
+            });
         }
 
         // ================= RENDER UI (SINGLE LINE LAYOUT) =================
@@ -546,10 +592,8 @@
             document.getElementById('rec-parent').value = student.parent || "N/A";
             document.getElementById('rec-date').value = paymentInfo.date;
             
-            // FIXED to Single Subject Only
             document.getElementById('rec-course').value = "Single Subject";
             
-            // Set stream and load its dynamic subjects BEFORE checking them
             document.getElementById('rec-medium').value = paymentInfo.medium || "ARTS STREAM";
             updateSubjects(); 
 
@@ -585,7 +629,6 @@
 
             document.getElementById('rec-slno').value = uniqueSlNo; 
             
-            // Reset to Default Stream and Load Subjects
             document.getElementById('rec-medium').value = "ARTS STREAM";
             updateSubjects();
 
@@ -601,7 +644,6 @@
 
             document.getElementById('receipt-theme').style.background = "#ffffff"; 
 
-            // FIXED to Single Subject Only
             document.getElementById('rec-course').value = "Single Subject";
             document.getElementById('rec-amount').value = "";
             document.getElementById('rec-photo').value = "";
@@ -656,9 +698,9 @@
                     let payload = {
                         student_name: document.getElementById('rec-name').value,
                         parent_name: document.getElementById('rec-parent').value,
-                        student_class: "Class 12", // YAHAN CLASS 12 HO GAYA HAI
+                        student_class: "Class 12", 
                         course_type: document.getElementById('rec-course').value,
-                        medium: document.getElementById('rec-medium').value, // This sends the selected Stream
+                        medium: document.getElementById('rec-medium').value, 
                         final_subjects: Array.from(checkboxes).map(cb => cb.value).join(", ") + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
                         amount: amount,
                         payment_mode: document.getElementById('rec-mode').value,
@@ -684,12 +726,11 @@
                             };
 
                             studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData();
+                            saveData(); // Firebase me update karna 
 
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
                             closeModal();
-                            renderStudents();
                         } else {
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert("❌ Google Sheet Error: " + data.message);
@@ -697,7 +738,7 @@
                     })
                     .catch(err => {
                         document.getElementById('loading-overlay').style.display = 'none';
-                        alert("❌ Network Error! Data NOT Saved. Please check internet connection.");
+                        alert("❌ Network Error! PDF/Photo NOT Saved. Please check internet connection.");
                     });
                 });
             }, 1500); 
