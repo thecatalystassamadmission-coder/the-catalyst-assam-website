@@ -38,6 +38,18 @@
             width: 100%; 
         }
 
+        /* 🔥 NEW: ADMIN RUPEE BUTTON (LEFT SIDE) 🔥 */
+        .admin-login-btn {
+            position: absolute; top: 20px; left: 20px; 
+            background-color: #D8FF00; color: #000; 
+            text-decoration: none; width: 40px; height: 40px; border-radius: 50%; 
+            font-weight: 900; font-size: 1.5rem; border: none; 
+            box-shadow: 0 0 20px rgba(216, 255, 0, 0.6); 
+            z-index: 1000; display: flex; justify-content: center; align-items: center; 
+            transition: 0.3s; 
+        }
+        .admin-login-btn:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(216, 255, 0, 0.9); }
+
         .app-download-btn { 
             position: absolute; top: 20px; right: 20px; 
             background-color: #D8FF00; color: #000; 
@@ -254,6 +266,7 @@
         @media (max-width: 600px) { 
             header h1 { font-size: 1.8rem; } 
             .subtitle { font-size: 0.75rem; } 
+            .admin-login-btn { top: 15px; left: 15px; width: 35px; height: 35px; font-size: 1.2rem; }
             .app-download-btn { top: 15px; right: 15px; font-size: 0.8rem; padding: 5px 10px; }
             .red-banner h2 { font-size: 1.5rem; }
             .special-bubble { font-size: 16px; padding: 10px 20px; white-space: normal; }
@@ -304,6 +317,7 @@
     </div>
 
     <header>
+        <a href="admin_dashboard.html" class="admin-login-btn">₹</a>
         <a href="https://drive.google.com/uc?export=download&id=13-1SYIAoiXurs21gS32jkhd7t-P9J8z7" class="app-download-btn">App ⬇</a>
         <img src="logo.png" alt="Logo" class="logo-img">
         
@@ -394,10 +408,14 @@
                 <div style="color:red; font-weight:900; font-size:1.2rem; text-transform:uppercase;">MR. NITU SARKAR</div>
                 <div style="font-weight:bold; color: red; font-size: 0.9rem;">B.TECH, NIT RAIPUR</div>
             </div>
+            
             <div class="teacher-card">
-                <img src="medhi.png" alt="Medhi Sir" class="pulen-photo">
-                <div style="font-weight: 900; color: #1a0066; font-size: 1.1rem;">MEDHI SIR</div>
+                <img src="medhi.png" alt="Mr. Deepjyoti Medhi" class="pulen-photo">
+                <div style="color:red; font-weight:900; font-size:1.2rem; text-transform:uppercase;">MR. DEEPJYOTI MEDHI</div>
+                <div style="font-weight:bold; color: red; font-size: 0.9rem;">MBA, Maharshi Dayanand University<br>(10 years+ experience in Banking and Financial sector)</div>
+                <div style="font-weight:bold; color: #D8FF00; font-size: 0.9rem; margin-top: 8px; text-shadow: 0 0 5px rgba(216,255,0,0.5);">Sub: Eng, GK, Social studies</div>
             </div>
+            
         </div>
 
     </div>
