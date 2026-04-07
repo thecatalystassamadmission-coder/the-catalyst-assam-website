@@ -293,7 +293,8 @@
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
             authDomain: "the-catalyst-assam-payment.firebaseapp.com",
-            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            // 🔥 MAINE YAHAN DATABASE URL ADD KAR DIYA HAI 👇
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.firebaseio.com", 
             projectId: "the-catalyst-assam-payment",
             storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
             messagingSenderId: "256883795397",
@@ -303,9 +304,16 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        
+        // Error checking tool
+        database.ref('.info/connected').on('value', function(snap) {
+          if (snap.val() === true) {
+            console.log("🟢 FIREBASE CONNECTED SUCESSFULLY!");
+          } else {
+            console.log("🔴 DISCONNECTED: Check Firebase Database Rules.");
+          }
+        });
 
-        // 🚨 IMPORTANT: Yahan par aapki is file ka database ka naam diya hai. 
-        // Dusri files mein ise change karna hoga (Jaise "degree_students", "adre_students")
         const DB_PATH = "class12_students"; 
 
         // ================= CREDENTIALS & SCRIPT URL =================
@@ -321,7 +329,7 @@
         let currentMonthIndex = -1;
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
-        let studentsData = []; // Ye ab cloud se aayega
+        let studentsData = []; 
 
         // --- DYNAMIC SUBJECTS LOGIC ---
         const artsSubjects = ["ECONOMICS", "ENGLISH", "GEOGRAPHY", "POL. SCIENCE"];
@@ -348,18 +356,17 @@
 
         // ================= LIVE DATABASE LISTENER & MIGRATION =================
         
-        // 1. One Time Migration (Agar pehle se koi Local Storage me data hai toh cloud pe daal dega)
         let localOldData = JSON.parse(localStorage.getItem(DB_PATH));
         if (localOldData && localOldData.length > 0) {
-            let pass = confirm("Old Local Data Found! Do you want to move old test students to Live Cloud Database?");
+            let pass = confirm("Old Local Data Found! Move to Cloud Database?");
             if (pass) {
                 database.ref(DB_PATH).set(localOldData);
-                localStorage.removeItem(DB_PATH); // Delete local taaki dubara na puche
-                alert("Data Migrated Successfully to Cloud! 🎉");
+                localStorage.removeItem(DB_PATH); 
+                alert("Data Migrated Successfully!");
             }
         }
 
-        // 2. Real-time Live Sync from Firebase
+        // Real-time Live Sync from Firebase
         database.ref(DB_PATH).on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -368,7 +375,6 @@
                 studentsData = [];
             }
             
-            // Format check for new years
             studentsData.forEach(student => {
                 if(!student.payments) student.payments = {};
                 if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
@@ -376,7 +382,6 @@
                 if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
             });
 
-            // Agar Dashboard open hai tabhi UI update karo
             if (document.getElementById('dashboard').style.display === 'block') {
                 renderStudents();
             }
@@ -392,7 +397,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('year-selector').value = currentYear;
-                renderStudents(); // Initial render tab tak ke liye jab tak Live data na aaye
+                renderStudents(); 
             }
         };
 
@@ -435,12 +440,11 @@
             };
 
             studentsData.push(newStudent);
-            saveData(); // Yahan se Firebase me save hoga
+            saveData(); 
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
             document.getElementById('new-student-age').value = "";
-            // UI Firebase automatically render kar dega
         }
 
         function deleteStudent(index) {
@@ -449,19 +453,14 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData(); // Save to Firebase
+                saveData(); 
             }
         }
 
-        // 🚨 UPDATE: Firebase Saving Function
         function saveData() {
             database.ref(DB_PATH).set(studentsData)
-            .then(() => {
-                console.log("Data saved to Cloud.");
-            })
-            .catch((error) => {
-                alert("❌ Internet Error! Data not syncing.");
-            });
+            .then(() => { console.log("Saved to Cloud."); })
+            .catch((error) => { alert("❌ Cloud Error! Data not saved. Check Rules in Firebase Console."); });
         }
 
         // ================= RENDER UI (SINGLE LINE LAYOUT) =================
