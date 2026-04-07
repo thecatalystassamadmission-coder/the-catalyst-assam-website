@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHS Payments - The Catalyst Assam</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME & COMPACT DASHBOARD STYLES            */
+        /* ======================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1c0936 0%, #3a1c71 100%);
+            background-attachment: fixed;
+            color: #ffffff; 
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; flex-direction: column;
+        }
+        .login-box {
+            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
+            border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4);
+            text-align: center; width: 90%; max-width: 400px;
+        }
+        .login-box h2 { color: #D8FF00; margin-bottom: 20px; text-transform: uppercase; }
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
+            border: 2px solid #C47BE4; background: rgba(255,255,255,0.9);
+            font-size: 1rem; font-weight: bold;
+        }
+        .login-btn {
+            background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900;
+            border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 0 15px rgba(216,255,0,0.5); transition: 0.3s; width: 100%;
+        }
+        .login-btn:hover { background: #fff; transform: scale(1.05); }
+
+        /* --- DASHBOARD HEADER --- */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); 
+            text-align: center; padding: 20px; 
+            border-bottom: 3px solid #D8FF00; 
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            position: relative;
+        }
+        header h1 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin:0; font-size: 2rem;}
+        .sub-header { color: #D8FF00; font-weight: bold; margin-top: 5px; font-size: 1.2rem; }
+
+        .logout-btn { position: absolute; top: 20px; right: 20px; background: #ff4444; color: #fff; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(255,0,0,0.5);}
+        .back-btn { position: absolute; top: 20px; left: 20px; background: #D8FF00; color: #000; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(216,255,0,0.5); text-decoration: none;}
+
+        /* --- DASHBOARD MAIN --- */
+        #dashboard { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        .control-panel {
+            background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;
+            border: 1px dashed #D8FF00; display: flex; gap: 10px; margin-bottom: 20px;
+            flex-wrap: wrap; justify-content: center; align-items: center;
+        }
+        .add-input { padding: 10px; border-radius: 8px; border: none; font-weight: bold; flex: 1; min-width: 150px;}
+        .add-btn { background: #D8FF00; color: #000; padding: 10px 20px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
+        
+        /* YEAR SELECTOR */
+        .year-selector-container { text-align: center; margin-bottom: 15px; }
+        .year-select { padding: 8px 20px; font-weight: bold; font-size: 1.1rem; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; outline: none; cursor: pointer;}
+
+        /* --- COMPACT SINGLE LINE STUDENT ROW --- */
+        .student-row {
+            background: rgba(113, 50, 202, 0.4); 
+            border: 1px solid #C47BE4;
+            border-radius: 10px; 
+            padding: 10px 15px; 
+            margin-bottom: 10px;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .student-row:hover { background: rgba(113, 50, 202, 0.6); border-color: #D8FF00; }
+        
+        /* Left: Info */
+        .student-info { flex: 0 0 250px; overflow: hidden; }
+        .student-name { font-size: 1.1rem; font-weight: 900; color: #D8FF00; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+        .student-details { font-size: 0.75rem; color: #ccc; font-weight: bold; margin-top: 3px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+        
+        /* Middle: 12 Months Inline */
+        .months-inline { 
+            display: flex; 
+            gap: 6px; 
+            flex: 1; 
+            overflow-x: auto; 
+            padding-bottom: 4px;
+            align-items: center;
+        }
+        .months-inline::-webkit-scrollbar { height: 4px; }
+        .months-inline::-webkit-scrollbar-thumb { background: #C47BE4; border-radius: 10px; }
+
+        .month-btn {
+            padding: 6px 5px; 
+            font-weight: bold; 
+            border-radius: 6px; 
+            border: 1px solid transparent;
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            min-width: 55px;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .paid-amt-small { font-size: 0.65rem; font-weight: 900; margin-top: 2px; color: #fff; text-shadow: 0 0 2px #000;}
+        
+        .btn-locked { background: #444; color: #888; border: 1px solid #666; cursor: not-allowed;}
+        .btn-unlocked { background: #fff; color: #000; border-color: #D8FF00; box-shadow: 0 0 5px rgba(216,255,0,0.5); }
+        .btn-unlocked:hover { background: #D8FF00; transform: scale(1.05);}
+        .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.5); cursor: pointer;}
+
+        /* Right: Delete */
+        .student-actions { flex: 0 0 auto; }
+        .del-btn { background: #ff4444; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+
+        /* --- MODALS --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        
+        /* RECEIPT MODAL */
+        .receipt-box {
+            background: #ffffff; border: 3px solid #7132CA; padding: 25px; border-radius: 10px;
+            width: 95%; max-width: 500px; color: #000; position: relative; max-height: 90vh; overflow-y: auto;
+        }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; font-weight: bold; color: #7132CA; cursor: pointer; background:none; border:none;}
+        
+        .receipt-header { text-align: center; border-bottom: 2px solid #7132CA; margin-bottom: 15px; padding-bottom: 10px;}
+        .receipt-header h2 { margin: 0; color: #1a0066; font-size: 1.5rem;}
+        .watermark-paid { display: none; color: red; font-weight: 900; font-size: 1rem; border: 2px dashed red; padding: 5px; margin-bottom: 10px; text-align: center; text-transform: uppercase;}
+        
+        .rec-input-group { margin-bottom: 10px; display: flex; align-items: center; border-bottom: 1px dotted #888; padding-bottom: 5px;}
+        .rec-label { font-weight: bold; width: 45%; font-size: 0.85rem; color: #333;}
+        .rec-input { width: 55%; padding: 5px; border: none; background: transparent; font-weight: bold; outline: none; color: #000;}
+
+        .photo-upload-area { margin-top: 15px; text-align: center; border: 2px dashed #7132CA; padding: 15px; border-radius: 8px;}
+        .save-pay-btn { background: #7132CA; color: #fff; width: 100%; padding: 15px; font-weight: bold; font-size: 1.1rem; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; transition: 0.3s;}
+        
+        /* INSTALLMENT DETAILS MODAL */
+        .details-box { background: #2a1055; border: 3px solid #D8FF00; padding: 25px; border-radius: 15px; width: 95%; max-width: 450px; color: #fff; position: relative;}
+        .inst-card { background: rgba(255,255,255,0.1); border: 1px solid #C47BE4; border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        .inst-amt { font-size: 1.2rem; font-weight: bold; color: #D8FF00;}
+        .inst-date { font-size: 0.8rem; color: #ccc;}
+        .inst-view-btn { background: #C47BE4; color: #fff; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;}
+        
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; color: #D8FF00; text-align: center;}
+
+        @media (max-width: 800px) {
+            .student-row { flex-direction: column; align-items: flex-start; }
+            .student-info { flex: none; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
+            .months-inline { width: 100%; }
+            .student-actions { width: 100%; text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay">
+        <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
+        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing Payment...</h2>
+        <p style="font-weight:bold;">Generating PDF & Saving to Google Drive/Sheet<br>Please wait...</p>
+    </div>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <input type="email" id="email" class="login-input" placeholder="Email Address">
+            <input type="password" id="password" class="login-input" placeholder="Password">
+            <button class="login-btn" onclick="checkLogin()">LOGIN</button>
+            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email or Password!</p>
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <header>
+            <a href="admin_dashboard.html" class="back-btn">⬅ Back</a>
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="sub-header">DHS - PAYMENT DASHBOARD</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+        
+        <div style="margin-top: 20px;">
+            <div class="year-selector-container">
+                <select id="year-selector" class="year-select" onchange="changeYear()">
+                    <option value="2026">Session: 2026</option>
+                    <option value="2027">Session: 2027</option>
+                    <option value="2028">Session: 2028</option>
+                </select>
+            </div>
+            
+            <div class="control-panel">
+                <input type="text" id="new-student-name" class="add-input" placeholder="Student Name...">
+                <input type="text" id="new-parent-name" class="add-input" placeholder="Father/Mother Name...">
+                <input type="number" id="new-student-age" class="add-input" placeholder="Age...">
+                <button class="add-btn" onclick="addStudent()">+ ADD STUDENT</button>
+            </div>
+        </div>
+
+        <div id="students-container"></div>
+    </div>
+
+    <div class="modal-overlay" id="month-details-modal">
+        <div class="details-box">
+            <button class="close-modal" onclick="document.getElementById('month-details-modal').style.display='none'" style="color:#D8FF00;">X</button>
+            <h2 id="details-month-title" style="text-align: center; color: #D8FF00; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;"></h2>
+            <div id="installments-list"></div>
+            <button class="save-pay-btn" id="add-installment-btn" onclick="openNewInstallment()" style="background:#D8FF00; color:#000;">+ ADD NEW PAYMENT</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="payment-modal">
+        <div class="receipt-box" id="receipt-theme">
+            <button class="close-modal" onclick="closeModal()">X</button>
+            
+            <div class="receipt-header">
+                <h2>THE CATALYST ASSAM</h2>
+                <p style="margin:5px 0 0 0; font-size:0.8rem; font-weight:bold;">MONEY RECEIPT</p>
+            </div>
+            
+            <div class="watermark-paid" id="watermark-paid">ALREADY PAID (LOCKED & VIEW ONLY)</div>
+
+            <div class="rec-input-group"><div class="rec-label">Sl. No:</div><input type="text" id="rec-slno" class="rec-input view-lock" placeholder="Auto Generate" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Date:</div><input type="date" id="rec-date" class="rec-input view-lock"></div>
+            <div class="rec-input-group"><div class="rec-label">Received from:</div><input type="text" id="rec-name" class="rec-input" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">S/o, D/o:</div><input type="text" id="rec-parent" class="rec-input" readonly></div>
+            
+            <div class="rec-input-group"><div class="rec-label">Course:</div><input type="text" id="rec-course" class="rec-input view-lock" value="DHS" readonly></div>
+
+            <div class="rec-input-group"><div class="rec-label">By Cash / UPI:</div>
+                <select class="rec-input view-lock" id="rec-mode" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                </select>
+            </div>
+            <div class="rec-input-group"><div class="rec-label">Total Amount (₹):</div><input type="number" id="rec-amount" class="rec-input view-lock" placeholder="e.g. 500"></div>
+
+            <div class="photo-upload-area" id="photo-area">
+                <p style="font-weight:bold; margin-bottom: 10px; color:#7132CA;">Upload Original Receipt Photo Here</p>
+                <input type="file" id="rec-photo" accept="image/*" style="width: 100%;">
+            </div>
+
+            <button class="save-pay-btn" id="save-btn" onclick="savePayment()">MARK AS PAID & SAVE</button>
+        </div>
+    </div>
+
+    <script>
+        // ================= CREDENTIALS & SCRIPT URL =================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
+        
+        const ADMIN_EMAIL = "thecatalystassam@gmail.com";
+        const PASS_1 = "thecatalystassamnitusarkar19471999";
+        const PASS_2 = "thecatalystassamtapanmandal19462000";
+        const ACTION_PASS = "123456"; 
+
+        const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        
+        let currentStudentIndex = -1;
+        let currentMonthIndex = -1;
+        let currentYear = "2026"; // Default active year
+        let uploadedPhotoBase64 = "";
+
+        document.getElementById('rec-photo').addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            reader.onloadend = function() { uploadedPhotoBase64 = reader.result; }
+            if(file) reader.readAsDataURL(file);
+        });
+
+        // Load & MIGRATION SCRIPT FOR DHS
+        let studentsData = JSON.parse(localStorage.getItem("dhs_students")) || [];
+        
+        studentsData.forEach(student => {
+            if (Array.isArray(student.payments)) {
+                let oldPayments = student.payments;
+                for(let i=0; i<12; i++) {
+                    if(oldPayments[i] === false || oldPayments[i] === true) oldPayments[i] = [];
+                    else if(!Array.isArray(oldPayments[i])) oldPayments[i] = [oldPayments[i]]; 
+                }
+                student.payments = { "2026": oldPayments };
+            }
+            
+            if(!student.payments) student.payments = {};
+            if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+        });
+
+        function changeYear() {
+            currentYear = document.getElementById('year-selector').value;
+            renderStudents();
+        }
+
+        window.onload = function() {
+            if(localStorage.getItem("adminLoggedIn") === "true") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('year-selector').value = currentYear;
+                renderStudents();
+            }
+        };
+
+        function checkLogin() {
+            let email = document.getElementById('email').value.trim();
+            let pass = document.getElementById('password').value.trim();
+
+            if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
+                localStorage.setItem("adminLoggedIn", "true");
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                renderStudents();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("adminLoggedIn");
+            window.location.href = "admin_dashboard.html";
+        }
+
+        function addStudent() {
+            let name = document.getElementById('new-student-name').value.trim();
+            let parent = document.getElementById('new-parent-name').value.trim();
+            let age = document.getElementById('new-student-age').value.trim();
+            
+            if(name === "" || parent === "" || age === "") { alert("Please fill all 3 details!"); return; }
+
+            let passPrompt = prompt("Enter Admin Password to Add Student:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Student NOT saved."); return; }
+
+            let newStudent = {
+                name: name, parent: parent, age: age,
+                payments: {
+                    "2026": [[],[],[],[],[],[],[],[],[],[],[],[]],
+                    "2027": [[],[],[],[],[],[],[],[],[],[],[],[]],
+                    "2028": [[],[],[],[],[],[],[],[],[],[],[],[]]
+                } 
+            };
+
+            studentsData.push(newStudent);
+            saveData();
+            
+            document.getElementById('new-student-name').value = "";
+            document.getElementById('new-parent-name').value = "";
+            document.getElementById('new-student-age').value = "";
+            renderStudents();
+        }
+
+        function deleteStudent(index) {
+            let passPrompt = prompt("Enter Admin Password to Delete Student:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+
+            if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
+                studentsData.splice(index, 1);
+                saveData();
+                renderStudents();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem("dhs_students", JSON.stringify(studentsData));
+        }
+
+        // ================= RENDER UI (SINGLE LINE LAYOUT) =================
+        function renderStudents() {
+            const container = document.getElementById('students-container');
+            container.innerHTML = "";
+
+            let currentDate = new Date();
+            let actualCurrentYear = String(currentDate.getFullYear());
+            let currentMonthNum = currentDate.getMonth();
+
+            studentsData.forEach((student, sIndex) => {
+                let row = document.createElement('div');
+                row.className = 'student-row';
+
+                let infoHTML = `
+                    <div class="student-info" title="${student.name} | ${student.parent}">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} | Age: ${student.age || 'N/A'}</div>
+                    </div>`;
+                
+                let monthsHTML = `<div class="months-inline">`;
+                
+                if(!student.payments[currentYear]) student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+
+                MONTHS.forEach((monthName, mIndex) => {
+                    let btnClass = ""; let onclickLogic = "";
+                    let innerText = monthName;
+                    
+                    let paymentsArr = student.payments[currentYear][mIndex] || [];
+                    let totalPaid = 0;
+                    paymentsArr.forEach(p => totalPaid += parseInt(p.amount || 0));
+
+                    let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
+                    let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
+
+                    if (paymentsArr.length > 0) {
+                        btnClass = "btn-paid";
+                        innerText = `${monthName}<br><span class="paid-amt-small">₹${totalPaid}</span>`;
+                        onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
+                    } 
+                    else if (isFutureYear || (!isPastYear && mIndex > currentMonthNum)) {
+                        btnClass = "btn-locked";
+                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
+                        onclickLogic = `alert('This button will unlock when the month arrives.')`;
+                    } 
+                    else if (isPastYear || mIndex < currentMonthNum) {
+                        btnClass = "btn-locked";
+                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
+                        onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
+                    }
+                    else {
+                        btnClass = "btn-unlocked";
+                        onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
+                    }
+
+                    monthsHTML += `<div class="month-btn ${btnClass}" onclick="${onclickLogic}">${innerText}</div>`;
+                });
+
+                monthsHTML += `</div>`;
+                let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
+
+                row.innerHTML = infoHTML + monthsHTML + deleteHTML;
+                container.appendChild(row);
+            });
+        }
+
+        function unlockPastMonth(sIndex, mIndex) {
+            let passPrompt = prompt(`Enter Admin Password to unlock past month (${MONTHS[mIndex]} ${currentYear}):`);
+            if(passPrompt === ACTION_PASS) { 
+                let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
+                if(arr.length > 0) {
+                    openDetailsModal(sIndex, mIndex); 
+                } else {
+                    openPaymentModal(sIndex, mIndex); 
+                }
+            } 
+            else { alert("❌ Wrong Password! Cannot unlock past month."); }
+        }
+
+        // ================= MULTI-PAYMENT (INSTALLMENT) LOGIC =================
+        function openDetailsModal(sIndex, mIndex) {
+            let passPrompt = prompt("Enter Admin Password to VIEW payment details:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+
+            currentStudentIndex = sIndex;
+            currentMonthIndex = mIndex;
+            
+            let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
+            let listDiv = document.getElementById('installments-list');
+            listDiv.innerHTML = "";
+
+            arr.forEach((p, idx) => {
+                listDiv.innerHTML += `
+                <div class="inst-card">
+                    <div>
+                        <div class="inst-amt">Payment ${idx+1}: ₹${p.amount}</div>
+                        <div class="inst-date">Sl No: ${p.slno || 'N/A'} <br> Date: ${p.date}</div>
+                    </div>
+                    <button class="inst-view-btn" onclick="viewPastPayment(${idx})">View PDF</button>
+                </div>`;
+            });
+
+            document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} PAYMENTS`;
+            
+            if(arr.length >= 5) {
+                document.getElementById('add-installment-btn').style.display = 'none';
+            } else {
+                document.getElementById('add-installment-btn').style.display = 'block';
+            }
+
+            document.getElementById('month-details-modal').style.display = 'flex';
+        }
+
+        function openNewInstallment() {
+            document.getElementById('month-details-modal').style.display = 'none';
+            openPaymentModal(currentStudentIndex, currentMonthIndex);
+        }
+
+        function viewPastPayment(installmentIndex) {
+            document.getElementById('month-details-modal').style.display = 'none';
+            
+            let paymentInfo = studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex][installmentIndex];
+            let student = studentsData[currentStudentIndex];
+
+            document.getElementById('rec-slno').value = paymentInfo.slno || "Old Record";
+            document.getElementById('rec-name').value = student.name;
+            document.getElementById('rec-parent').value = student.parent || "N/A";
+            document.getElementById('rec-date').value = paymentInfo.date;
+            
+            // FIXED to DHS Course Only
+            document.getElementById('rec-course').value = "DHS";
+
+            document.getElementById('rec-mode').value = paymentInfo.mode;
+            document.getElementById('rec-amount').value = paymentInfo.amount;
+
+            let inputs = document.querySelectorAll('.view-lock');
+            inputs.forEach(el => { el.disabled = true; el.style.background = "transparent"; });
+            
+            document.getElementById('watermark-paid').style.display = 'block';
+            document.getElementById('photo-area').style.display = 'none'; 
+            document.getElementById('save-btn').style.display = 'none'; 
+
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function openPaymentModal(sIndex, mIndex) {
+            currentStudentIndex = sIndex;
+            currentMonthIndex = mIndex;
+            let student = studentsData[sIndex];
+
+            let now = new Date();
+            let uniqueSlNo = String(now.getDate()).padStart(2, '0') + 
+                             String(now.getMonth() + 1).padStart(2, '0') + 
+                             now.getFullYear() + 
+                             String(now.getHours()).padStart(2, '0') + 
+                             String(now.getMinutes()).padStart(2, '0') + 
+                             String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('rec-slno').value = uniqueSlNo; 
+
+            let inputs = document.querySelectorAll('.view-lock');
+            inputs.forEach(el => { el.disabled = false; });
+            document.getElementById('watermark-paid').style.display = 'none';
+            document.getElementById('photo-area').style.display = 'block'; 
+            document.getElementById('save-btn').style.display = 'block'; 
+
+            document.getElementById('rec-name').value = student.name;
+            document.getElementById('rec-parent').value = student.parent || "N/A";
+            document.getElementById('rec-date').valueAsDate = new Date();
+
+            document.getElementById('receipt-theme').style.background = "#ffffff"; 
+
+            // FIXED to DHS
+            document.getElementById('rec-course').value = "DHS";
+            document.getElementById('rec-amount').value = "";
+            document.getElementById('rec-photo').value = "";
+            uploadedPhotoBase64 = "";
+
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+
+        function savePayment() {
+            let amount = document.getElementById('rec-amount').value;
+            let currentSlNo = document.getElementById('rec-slno').value; 
+            
+            if(amount === "") { alert("Please enter the Amount!"); return; }
+            if(uploadedPhotoBase64 === "") { alert("Please upload the original receipt photo!"); return; }
+
+            let passPrompt = prompt("Enter Admin Password to MARK AS PAID & SAVE:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Payment NOT saved."); return; }
+
+            document.getElementById('loading-overlay').style.display = 'flex';
+            
+            document.querySelector('.close-modal').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'none';
+            document.getElementById('photo-area').style.display = 'none';
+
+            let element = document.getElementById('receipt-theme');
+            element.style.maxHeight = 'none';
+            element.style.overflow = 'visible';
+            element.scrollTop = 0;
+
+            setTimeout(function() {
+                let opt = { margin: 5, filename: 'Receipt_' + currentSlNo + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+
+                html2pdf().set(opt).from(element).outputPdf('datauristring').then(function(pdfBase64) {
+                    
+                    element.style.maxHeight = '90vh';
+                    element.style.overflowY = 'auto';
+                    document.querySelector('.close-modal').style.display = 'block';
+                    document.getElementById('save-btn').style.display = 'block';
+                    document.getElementById('photo-area').style.display = 'block';
+
+                    let currentInstCount = (studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex] || []).length + 1;
+                    let monthLabel = `${MONTHS[currentMonthIndex]} ${currentYear} (Inst ${currentInstCount})`;
+
+                    let payload = {
+                        student_name: document.getElementById('rec-name').value,
+                        parent_name: document.getElementById('rec-parent').value,
+                        student_class: "DHS", // YAHAN DHS HO GAYA HAI
+                        course_type: "DHS",
+                        medium: "N/A", // Removed stream/medium
+                        final_subjects: `DHS Preparation [${monthLabel}] [Sl No: ${currentSlNo}]`, // Safe fallback string
+                        amount: amount,
+                        payment_mode: document.getElementById('rec-mode').value,
+                        pdf_data: pdfBase64,
+                        photo: uploadedPhotoBase64
+                    };
+
+                    fetch(SCRIPT_URL, { 
+                        method: "POST", 
+                        body: JSON.stringify(payload)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result === "success") {
+                            let paymentMetadata = {
+                                slno: currentSlNo,
+                                date: document.getElementById('rec-date').value,
+                                course: "DHS",
+                                medium: "N/A",
+                                subjects: "DHS Preparation",
+                                mode: document.getElementById('rec-mode').value,
+                                amount: amount
+                            };
+
+                            studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
+                            saveData();
+
+                            document.getElementById('loading-overlay').style.display = 'none';
+                            alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
+                            closeModal();
+                            renderStudents();
+                        } else {
+                            document.getElementById('loading-overlay').style.display = 'none';
+                            alert("❌ Google Sheet Error: " + data.message);
+                        }
+                    })
+                    .catch(err => {
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        alert("❌ Network Error! Data NOT Saved. Please check internet connection.");
+                    });
+                });
+            }, 1500); 
+        }
+    </script>
+</body>
+</html>

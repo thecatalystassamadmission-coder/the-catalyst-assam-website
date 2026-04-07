@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Payment Dashboard - The Catalyst Assam</title>
+    <style>
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME & MASTER DASHBOARD STYLES             */
+        /* ======================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1c0936 0%, #3a1c71 100%);
+            background-attachment: fixed;
+            color: #ffffff; 
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; flex-direction: column;
+        }
+        .login-box {
+            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
+            border: 2px solid #D8FF00; box-shadow: 0 0 40px rgba(216,255,0,0.5);
+            text-align: center; width: 90%; max-width: 420px; backdrop-filter: blur(10px);
+        }
+        .logo-img-login { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #D8FF00; margin-bottom: 15px; background: #fff;}
+        .login-box h2 { color: #D8FF00; margin-bottom: 25px; text-transform: uppercase; font-size: 1.8rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);}
+        .login-input {
+            width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px;
+            border: 2px solid #C47BE4; background: rgba(255,255,255,0.95);
+            font-size: 1.1rem; font-weight: bold; color: #000; outline: none; transition: 0.3s;
+        }
+        .login-input:focus { border-color: #D8FF00; box-shadow: 0 0 15px rgba(216,255,0,0.6); }
+        .login-btn {
+            background: #D8FF00; color: #000; padding: 15px; font-weight: 900;
+            border: none; border-radius: 30px; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 0 20px rgba(216,255,0,0.5); transition: 0.3s; width: 100%; text-transform: uppercase;
+        }
+        .login-btn:hover { background: #fff; transform: scale(1.05); box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+
+        /* --- DASHBOARD HEADER --- */
+        #dashboard { display: none; }
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); 
+            text-align: center; padding: 25px 15px; 
+            border-bottom: 3px solid #D8FF00; 
+            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
+            backdrop-filter: blur(12px); position: relative;
+        }
+        header h1 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin:0; font-size: 2.2rem; text-transform: uppercase;}
+        .sub-header { color: #D8FF00; font-weight: 900; margin-top: 5px; font-size: 1.2rem; text-shadow: 0 0 10px rgba(216,255,0,0.5);}
+        .logout-btn { 
+            position: absolute; top: 20px; right: 20px; background: #ff4444; color: #fff; 
+            padding: 10px 20px; border: 2px solid #fff; border-radius: 30px; font-weight: 900; 
+            cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(255,68,68,0.5);
+        }
+        .logout-btn:hover { background: #fff; color: #ff4444; transform: scale(1.05); }
+
+        /* --- MAIN MENU CONTAINER --- */
+        .menu-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        
+        .section-title {
+            color: #fff; font-size: 1.8rem; font-weight: 900; text-transform: uppercase;
+            border-bottom: 3px dashed #D8FF00; display: inline-block; padding-bottom: 10px; margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4);
+        }
+
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px; margin-bottom: 50px;
+        }
+
+        /* --- CATEGORY BUTTONS --- */
+        .category-card {
+            background: rgba(153, 41, 234, 0.4); border: 2px solid #C47BE4;
+            border-radius: 15px; padding: 30px 15px; text-align: center; cursor: pointer;
+            transition: 0.3s; box-shadow: 0 0 20px rgba(153, 41, 234, 0.3); backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 140px;
+        }
+        .category-card:hover {
+            transform: translateY(-10px); border-color: #D8FF00;
+            background: rgba(113, 50, 202, 0.8); box-shadow: 0 0 30px rgba(216,255,0,0.5);
+        }
+        .card-icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .card-title { font-size: 1.3rem; font-weight: 900; color: #D8FF00; text-transform: uppercase; }
+        .card-subtitle { font-size: 0.85rem; color: #eee; margin-top: 5px; font-weight: bold;}
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.6rem; }
+            .logout-btn { top: 10px; right: 10px; padding: 6px 12px; font-size: 0.8rem; }
+            .section-title { font-size: 1.4rem; }
+            .grid-container { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+            .category-card { padding: 20px 10px; min-height: 120px;}
+            .card-title { font-size: 1.1rem; }
+            .card-icon { font-size: 2rem; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="logo.png" alt="Logo" class="logo-img-login" onerror="this.src='https://via.placeholder.com/80?text=Logo'">
+            <h2>Admin Login</h2>
+            <input type="email" id="email" class="login-input" placeholder="Admin Email ID">
+            <input type="password" id="password" class="login-input" placeholder="Enter Secure Password">
+            <button class="login-btn" onclick="checkLogin()">Login to Dashboard</button>
+            <p id="login-error" style="color: #ff4444; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">❌ Access Denied! Wrong Credentials.</p>
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <header>
+            <button class="logout-btn" onclick="logout()">LOGOUT</button>
+            <h1>THE CATALYST ASSAM</h1>
+            <div class="sub-header">MASTER PAYMENT DASHBOARD</div>
+        </header>
+
+        <div class="menu-container">
+            
+            <div class="section-title">🎓 School & Degree Courses</div>
+            <div class="grid-container">
+                <div class="category-card" onclick="openPaymentSheet('Class 6')">
+                    <div class="card-icon">🏫</div><div class="card-title">Class 6th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 7')">
+                    <div class="card-icon">🏫</div><div class="card-title">Class 7th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 8')">
+                    <div class="card-icon">🏫</div><div class="card-title">Class 8th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 9')">
+                    <div class="card-icon">📚</div><div class="card-title">Class 9th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 10')">
+                    <div class="card-icon">📚</div><div class="card-title">Class 10th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 11')">
+                    <div class="card-icon">🎓</div><div class="card-title">Class 11th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Class 12')">
+                    <div class="card-icon">🎓</div><div class="card-title">Class 12th</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Degree')">
+                    <div class="card-icon">🎓</div><div class="card-title">Degree</div><div class="card-subtitle">(College Courses)</div>
+                </div>
+            </div>
+
+            <div class="section-title">🏆 Competitive Exams</div>
+            <div class="grid-container">
+                <div class="category-card" onclick="openPaymentSheet('ADRE')">
+                    <div class="card-icon">📝</div><div class="card-title">ADRE</div><div class="card-subtitle">(Direct Recruitment)</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Assam Police')">
+                    <div class="card-icon">👮</div><div class="card-title">ASSAM POLICE</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('Assam TET')">
+                    <div class="card-icon">👨‍🏫</div><div class="card-title">ASSAM TET</div><div class="card-subtitle">(Teacher Eligibility)</div>
+                </div>
+                <div class="category-card" onclick="openPaymentSheet('DHS')">
+                    <div class="card-icon">🏥</div><div class="card-title">DHS</div><div class="card-subtitle">(Health Services)</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ================= CREDENTIALS STRICTLY AS REQUESTED =================
+        const ADMIN_EMAIL = "thecatalystassam@gmail.com";
+        const PASS_1 = "thecatalystassamnitusarkar19471999";
+        const PASS_2 = "thecatalystassamtapanmandal19462000";
+
+        // Check Login on Page Load to keep session active
+        window.onload = function() {
+            if(localStorage.getItem("adminLoggedIn") === "true") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            }
+        };
+
+        function checkLogin() {
+            let email = document.getElementById('email').value.trim();
+            let pass = document.getElementById('password').value.trim();
+
+            // Verification Logic
+            if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
+                localStorage.setItem("adminLoggedIn", "true");
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("adminLoggedIn");
+            location.reload(); // Reload page to show login screen
+        }
+
+        // ================= NAVIGATION TO PAYMENT SHEET =================
+        function openPaymentSheet(courseName) {
+            if (courseName === 'Class 6') {
+                window.location.href = 'class_6_payments.html';
+            } else if (courseName === 'Class 7') {
+                window.location.href = 'class_7_payments.html'; 
+            } else if (courseName === 'Class 8') {
+                window.location.href = 'class_8_payments.html'; 
+            } else if (courseName === 'Class 9') {
+                window.location.href = 'class_9_payments.html'; 
+            } else if (courseName === 'Class 10') {
+                window.location.href = 'class_10_payments.html'; 
+            } else if (courseName === 'Class 11') {
+                window.location.href = 'class_11_payments.html'; 
+            } else if (courseName === 'Class 12') {
+                window.location.href = 'class_12_payments.html'; 
+            } else if (courseName === 'Degree') {
+                window.location.href = 'degree_payments.html'; 
+            } else if (courseName === 'ADRE') {
+                window.location.href = 'adre_payments.html'; 
+            } else if (courseName === 'Assam Police') {
+                window.location.href = 'assam_police_payments.html'; 
+            } else if (courseName === 'Assam TET') {
+                window.location.href = 'assam_tet_payments.html'; 
+            } else if (courseName === 'DHS') {
+                window.location.href = 'dhs_payments.html'; // DHS Connect ho gaya hai! 😎
+            } else {
+                alert(courseName + " ka system abhi ready nahi hai. Jaldi hi ban jayega!");
+            }
+        }
+    </script>
+</body>
+</html>
