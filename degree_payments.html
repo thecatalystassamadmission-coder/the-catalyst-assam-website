@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Degree Payments - The Catalyst Assam</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* ======================================================== */
@@ -284,6 +288,22 @@
     </div>
 
     <script>
+        // 🔥🔥🔥 NEW FIREBASE LIVE SYNC BLOCK 🔥🔥🔥
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
+            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "the-catalyst-assam-payment",
+            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
+            messagingSenderId: "256883795397",
+            appId: "1:256883795397:web:9c55da88762ce2293157ac"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const DB_PATH = "degree_students"; // 🚨 DEGREE DATABASE PATH
+
         // ================= CREDENTIALS & SCRIPT URL =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
@@ -298,6 +318,7 @@
         let currentMonthIndex = -1;
         let currentYear = "2026"; // Default active year
         let uploadedPhotoBase64 = "";
+        let studentsData = []; // Data will sync from cloud
 
         // --- DYNAMIC SUBJECTS LOGIC FOR DEGREE ---
         const artsSubjects = ["ECONOMICS"];
@@ -321,23 +342,31 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // Load & MIGRATION SCRIPT FOR DEGREE
-        let studentsData = JSON.parse(localStorage.getItem("degree_students")) || [];
+        // 🔥🔥🔥 LIVE CLOUD SYNC & MIGRATION 🔥🔥🔥
         
-        studentsData.forEach(student => {
-            if (Array.isArray(student.payments)) {
-                let oldPayments = student.payments;
-                for(let i=0; i<12; i++) {
-                    if(oldPayments[i] === false || oldPayments[i] === true) oldPayments[i] = [];
-                    else if(!Array.isArray(oldPayments[i])) oldPayments[i] = [oldPayments[i]]; 
-                }
-                student.payments = { "2026": oldPayments };
-            }
+        // Push old data to cloud once if it exists
+        let localOldData = JSON.parse(localStorage.getItem("degree_students"));
+        if (localOldData && localOldData.length > 0) {
+            database.ref(DB_PATH).set(localOldData);
+            localStorage.removeItem("degree_students"); 
+        }
+
+        // Live Listener for Data
+        database.ref(DB_PATH).on('value', (snapshot) => {
+            const data = snapshot.val();
+            studentsData = data ? data : [];
             
-            if(!student.payments) student.payments = {};
-            if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-            if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            // Format check for new fields
+            studentsData.forEach(student => {
+                if(!student.payments) student.payments = {};
+                if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+            });
+
+            if (document.getElementById('dashboard').style.display === 'block') {
+                renderStudents();
+            }
         });
 
         function changeYear() {
@@ -393,12 +422,11 @@
             };
 
             studentsData.push(newStudent);
-            saveData();
+            saveData(); // Cloud push
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
             document.getElementById('new-student-age').value = "";
-            renderStudents();
         }
 
         function deleteStudent(index) {
@@ -407,13 +435,14 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData();
-                renderStudents();
+                saveData(); // Cloud push
             }
         }
 
         function saveData() {
-            localStorage.setItem("degree_students", JSON.stringify(studentsData));
+            database.ref(DB_PATH).set(studentsData).catch(error => {
+                alert("❌ Internet Error! Data Cloud me save nahi hua.");
+            });
         }
 
         // ================= RENDER UI (SINGLE LINE LAYOUT) =================
@@ -682,12 +711,11 @@
                             };
 
                             studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData();
+                            saveData(); // Cloud pe push karega
 
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
                             closeModal();
-                            renderStudents();
                         } else {
                             document.getElementById('loading-overlay').style.display = 'none';
                             alert("❌ Google Sheet Error: " + data.message);
