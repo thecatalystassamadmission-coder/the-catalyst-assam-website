@@ -7,184 +7,93 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         /* ======================================================== */
         /* PREMIUM GLOW THEME & COMPACT DASHBOARD STYLES            */
         /* ======================================================== */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1c0936 0%, #3a1c71 100%); background-attachment: fixed; color: #ffffff; min-height: 100vh;}
         
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #1c0936 0%, #3a1c71 100%);
-            background-attachment: fixed;
-            color: #ffffff; 
-            min-height: 100vh;
-        }
-
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; flex-direction: column;
-        }
-        .login-box {
-            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
-            border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4);
-            text-align: center; width: 90%; max-width: 400px;
-        }
+        /* LOGIN SCREEN */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%); display: flex; justify-content: center; align-items: center; z-index: 9999; flex-direction: column;}
+        .login-box { background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px; border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4); text-align: center; width: 90%; max-width: 400px;}
         .login-box h2 { color: #D8FF00; margin-bottom: 20px; text-transform: uppercase; }
-        .login-input {
-            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
-            border: 2px solid #C47BE4; background: rgba(255,255,255,0.9);
-            font-size: 1rem; font-weight: bold;
-        }
-        .login-btn {
-            background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900;
-            border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 0 15px rgba(216,255,0,0.5); transition: 0.3s; width: 100%;
-        }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 2px solid #C47BE4; background: rgba(255,255,255,0.9); font-size: 1rem; font-weight: bold;}
+        .login-btn { background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900; border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer; width: 100%;}
         .login-btn:hover { background: #fff; transform: scale(1.05); }
 
-        /* --- DASHBOARD HEADER --- */
-        header { 
-            background-color: rgba(113, 50, 202, 0.85); 
-            text-align: center; padding: 20px; 
-            border-bottom: 3px solid #D8FF00; 
-            box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); 
-            position: relative;
-        }
-        header h1 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin:0; font-size: 2rem;}
-        .sub-header { color: #D8FF00; font-weight: bold; margin-top: 5px; font-size: 1.2rem; }
+        /* DASHBOARD HEADER */
+        header { background-color: rgba(113, 50, 202, 0.85); text-align: center; padding: 15px; border-bottom: 3px solid #D8FF00; box-shadow: 0 5px 25px rgba(216, 255, 0, 0.3); position: relative;}
+        header h1 { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); margin:0; font-size: 1.8rem;}
+        .sub-header { color: #D8FF00; font-weight: bold; font-size: 1.1rem; }
+        .logout-btn { position: absolute; top: 15px; right: 15px; background: #ff4444; color: #fff; padding: 8px 12px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+        .back-btn { position: absolute; top: 15px; left: 15px; background: #D8FF00; color: #000; padding: 8px 12px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 0.8rem;}
 
-        .logout-btn { position: absolute; top: 20px; right: 20px; background: #ff4444; color: #fff; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(255,0,0,0.5);}
-        .back-btn { position: absolute; top: 20px; left: 20px; background: #D8FF00; color: #000; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(216,255,0,0.5); text-decoration: none;}
-
-        /* --- DASHBOARD MAIN --- */
-        #dashboard { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        #dashboard { display: none; padding: 15px; max-width: 1400px; margin: 0 auto; }
         
-        .control-panel {
-            background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;
-            border: 1px dashed #D8FF00; display: flex; gap: 10px; margin-bottom: 20px;
-            flex-wrap: wrap; justify-content: center; align-items: center;
-        }
-        .add-input { padding: 10px; border-radius: 8px; border: none; font-weight: bold; flex: 1; min-width: 150px;}
-        .add-btn { background: #D8FF00; color: #000; padding: 10px 20px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
+        /* ADVANCED ADD STUDENT PANEL */
+        .control-panel { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; border: 1px dashed #D8FF00; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px;}
+        .add-input { padding: 8px; border-radius: 6px; border: none; font-weight: bold; width: 100%; color: #000; background: #fff;}
+        .add-btn { background: #D8FF00; color: #000; padding: 10px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; grid-column: 1 / -1; font-size: 1rem; text-transform: uppercase;}
+        .sub-selection-box { grid-column: 1 / -1; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; display: none; gap: 15px; flex-wrap: wrap; border: 1px solid #C47BE4; justify-content: center;}
         
-        /* YEAR SELECTOR */
         .year-selector-container { text-align: center; margin-bottom: 15px; }
-        .year-select { padding: 8px 20px; font-weight: bold; font-size: 1.1rem; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; outline: none; cursor: pointer;}
+        .year-select { padding: 8px 20px; font-weight: bold; font-size: 1rem; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; cursor: pointer;}
 
-        /* --- COMPACT SINGLE LINE STUDENT ROW --- */
-        .student-row {
-            background: rgba(113, 50, 202, 0.4); 
-            border: 1px solid #C47BE4;
-            border-radius: 10px; 
-            padding: 10px 15px; 
-            margin-bottom: 10px;
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            gap: 15px;
-            transition: 0.3s;
-        }
-        .student-row:hover { background: rgba(113, 50, 202, 0.6); border-color: #D8FF00; }
+        /* STUDENT ROW */
+        .student-row { background: rgba(113, 50, 202, 0.4); border: 1px solid #C47BE4; border-radius: 10px; padding: 10px 15px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-left: 5px solid #C47BE4;}
+        .student-row:hover { border-color: #D8FF00;}
+        .student-info { flex: 0 0 320px; overflow: hidden; }
+        .student-name { font-size: 1.1rem; font-weight: 900; color: #D8FF00; text-transform: uppercase; margin-bottom: 3px;}
+        .student-details-list { font-size: 0.75rem; color: #e0e0e0; list-style: none; line-height: 1.3; font-weight: bold;}
+        .student-details-list li { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+        .highlight-subs { color: #fff; background: rgba(0,0,0,0.3); padding: 1px 4px; border-radius: 3px; border: 1px solid #C47BE4;}
         
-        /* Left: Info */
-        .student-info { flex: 0 0 250px; overflow: hidden; }
-        .student-name { font-size: 1.1rem; font-weight: 900; color: #D8FF00; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
-        .student-details { font-size: 0.75rem; color: #ccc; font-weight: bold; margin-top: 3px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
-        
-        /* Middle: 12 Months Inline */
-        .months-inline { 
-            display: flex; 
-            gap: 6px; 
-            flex: 1; 
-            overflow-x: auto; 
-            padding-bottom: 4px;
-            align-items: center;
-        }
+        .months-inline { display: flex; gap: 4px; flex: 1; overflow-x: auto; padding-bottom: 4px; align-items: center; border-left: 1px dashed rgba(255,255,255,0.2); padding-left: 10px;}
         .months-inline::-webkit-scrollbar { height: 4px; }
         .months-inline::-webkit-scrollbar-thumb { background: #C47BE4; border-radius: 10px; }
 
-        .month-btn {
-            padding: 6px 5px; 
-            font-weight: bold; 
-            border-radius: 6px; 
-            border: 1px solid transparent;
-            text-align: center; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            min-width: 55px;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .paid-amt-small { font-size: 0.65rem; font-weight: 900; margin-top: 2px; color: #fff; text-shadow: 0 0 2px #000;}
-        
-        .btn-locked { background: #444; color: #888; border: 1px solid #666; cursor: not-allowed;}
-        .btn-unlocked { background: #fff; color: #000; border-color: #D8FF00; box-shadow: 0 0 5px rgba(216,255,0,0.5); }
-        .btn-unlocked:hover { background: #D8FF00; transform: scale(1.05);}
-        .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.5); cursor: pointer;}
+        .month-btn { padding: 5px; font-weight: bold; border-radius: 6px; border: 1px solid transparent; text-align: center; cursor: pointer; transition: 0.3s; min-width: 60px; font-size: 0.75rem; display: flex; flex-direction: column; justify-content: center; height: 50px;}
+        .paid-amt-small { font-size: 0.6rem; font-weight: bold; margin-top: 1px; color: #fff; }
+        .due-amt-small { font-size: 0.6rem; font-weight: 900; margin-top: 1px; color: #fff; }
 
-        /* Right: Delete */
-        .student-actions { flex: 0 0 auto; }
-        .del-btn { background: #ff4444; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+        .btn-locked { background: #333; color: #666; border: 1px solid #555; cursor: not-allowed;}
+        .btn-unlocked { background: #fff; color: #000; border-color: #D8FF00; box-shadow: 0 0 3px rgba(216,255,0,0.4);}
+        .btn-partial { background: #ff9800; color: #fff; border-color: #ffc107; box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);}
+        .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.4);}
+        .del-btn { background: #ff4444; color: #fff; border: none; padding: 6px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.7rem; height: 30px;}
 
-        /* --- MODALS --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
+        /* MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000;}
+        .receipt-box { background: #ffffff; border: 3px solid #7132CA; padding: 20px; border-radius: 10px; width: 95%; max-width: 480px; color: #000; position: relative; max-height: 90vh; overflow-y: auto;}
+        .close-modal { position: absolute; top: 8px; right: 12px; font-size: 1.4rem; font-weight: bold; color: #7132CA; cursor: pointer; background:none; border:none;}
+        .receipt-header { text-align: center; border-bottom: 2px solid #7132CA; margin-bottom: 12px; padding-bottom: 8px;}
+        .receipt-header h2 { margin: 0; color: #1a0066; font-size: 1.4rem;}
         
-        /* RECEIPT MODAL */
-        .receipt-box {
-            background: #ffffff; border: 3px solid #7132CA; padding: 25px; border-radius: 10px;
-            width: 95%; max-width: 500px; color: #000; position: relative; max-height: 90vh; overflow-y: auto;
-        }
-        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; font-weight: bold; color: #7132CA; cursor: pointer; background:none; border:none;}
+        .rec-input-group { margin-bottom: 6px; display: flex; align-items: center; border-bottom: 1px dotted #ccc; padding-bottom: 3px;}
+        .rec-label { font-weight: bold; width: 45%; font-size: 0.8rem; color: #333;}
+        .rec-input { width: 55%; padding: 4px 6px; border: none; background: transparent; font-weight: bold; outline: none; color: #000; font-size: 0.85rem;}
         
-        .receipt-header { text-align: center; border-bottom: 2px solid #7132CA; margin-bottom: 15px; padding-bottom: 10px;}
-        .receipt-header h2 { margin: 0; color: #1a0066; font-size: 1.5rem;}
-        .watermark-paid { display: none; color: red; font-weight: 900; font-size: 1rem; border: 2px dashed red; padding: 5px; margin-bottom: 10px; text-align: center; text-transform: uppercase;}
+        .photo-upload-area { margin-top: 10px; text-align: center; border: 2px dashed #7132CA; padding: 10px; border-radius: 8px; font-size: 0.8rem;}
+        .save-pay-btn { background: #7132CA; color: #fff; width: 100%; padding: 12px; font-weight: bold; font-size: 1rem; border: none; border-radius: 8px; margin-top: 12px; cursor: pointer; text-transform: uppercase;}
         
-        .rec-input-group { margin-bottom: 10px; display: flex; align-items: center; border-bottom: 1px dotted #888; padding-bottom: 5px;}
-        .rec-label { font-weight: bold; width: 45%; font-size: 0.85rem; color: #333;}
-        .rec-input { width: 55%; padding: 5px; border: none; background: transparent; font-weight: bold; outline: none; color: #000;}
-        
-        .checkbox-container { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0;}
-        .checkbox-label { font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; cursor: pointer; color: #000; }
-        .checkbox-label input { margin-right: 5px; width: 15px; height: 15px; accent-color: #7132CA; }
-
-        .photo-upload-area { margin-top: 15px; text-align: center; border: 2px dashed #7132CA; padding: 15px; border-radius: 8px;}
-        .save-pay-btn { background: #7132CA; color: #fff; width: 100%; padding: 15px; font-weight: bold; font-size: 1.1rem; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; transition: 0.3s;}
-        
-        /* INSTALLMENT DETAILS MODAL */
-        .details-box { background: #2a1055; border: 3px solid #D8FF00; padding: 25px; border-radius: 15px; width: 95%; max-width: 450px; color: #fff; position: relative;}
-        .inst-card { background: rgba(255,255,255,0.1); border: 1px solid #C47BE4; border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
-        .inst-amt { font-size: 1.2rem; font-weight: bold; color: #D8FF00;}
-        .inst-date { font-size: 0.8rem; color: #ccc;}
-        .inst-view-btn { background: #C47BE4; color: #fff; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;}
+        .details-box { background: #2a1055; border: 3px solid #D8FF00; padding: 20px; border-radius: 15px; width: 95%; max-width: 400px; color: #fff; position: relative;}
+        .inst-card { background: rgba(255,255,255,0.1); border: 1px solid #C47BE4; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;}
+        .inst-amt { font-size: 1.1rem; font-weight: bold; color: #D8FF00;}
+        .inst-date { font-size: 0.7rem; color: #ccc;}
+        .inst-view-btn { background: #C47BE4; color: #fff; border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.7rem;}
         
         #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; color: #D8FF00; text-align: center;}
-
-        @media (max-width: 800px) {
-            .student-row { flex-direction: column; align-items: flex-start; }
-            .student-info { flex: none; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
-            .months-inline { width: 100%; }
-            .student-actions { width: 100%; text-align: right; }
-        }
+        .swal2-input-custom { padding: 10px; border-radius: 8px; border: 1px solid #7132CA; font-weight: bold; font-size: 1.1rem; text-align: center; color: #000; }
     </style>
 </head>
 <body>
 
     <div id="loading-overlay">
         <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
-        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing Payment...</h2>
-        <p style="font-weight:bold;">Generating PDF & Saving to Google Drive/Sheet<br>Please wait...</p>
+        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing...</h2>
     </div>
 
     <div id="login-screen">
@@ -193,7 +102,7 @@
             <input type="email" id="email" class="login-input" placeholder="Email Address">
             <input type="password" id="password" class="login-input" placeholder="Password">
             <button class="login-btn" onclick="checkLogin()">LOGIN</button>
-            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email or Password!</p>
+            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email/Password!</p>
         </div>
     </div>
 
@@ -201,7 +110,7 @@
         <header>
             <a href="admin_dashboard.html" class="back-btn">⬅ Back</a>
             <h1>THE CATALYST ASSAM</h1>
-            <div class="sub-header">CLASS 6 - PAYMENT DASHBOARD</div>
+            <div class="sub-header">CLASS 6 - ADVANCED ERP</div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </header>
         
@@ -210,15 +119,30 @@
                 <select id="year-selector" class="year-select" onchange="changeYear()">
                     <option value="2026">Session: 2026</option>
                     <option value="2027">Session: 2027</option>
-                    <option value="2028">Session: 2028</option>
                 </select>
             </div>
             
             <div class="control-panel">
-                <input type="text" id="new-student-name" class="add-input" placeholder="Student Name...">
-                <input type="text" id="new-parent-name" class="add-input" placeholder="Father/Mother Name...">
-                <input type="number" id="new-student-age" class="add-input" placeholder="Age...">
-                <button class="add-btn" onclick="addStudent()">+ ADD STUDENT</button>
+                <input type="text" id="new-student-name" class="add-input" placeholder="Student Full Name">
+                <input type="text" id="new-parent-name" class="add-input" placeholder="Father and Mother name">
+                <input type="text" id="new-mobile" class="add-input" placeholder="Mobile Number (e.g. 9876543210)">
+                <select id="new-medium" class="add-input">
+                    <option value="Assamese Medium">Assamese Medium</option>
+                    <option value="English Medium">English Medium</option>
+                </select>
+                <select id="new-course" class="add-input" onchange="toggleSubjectSelection()">
+                    <option value="Package">Package (Maths, SC, ENG - ₹1000)</option>
+                    <option value="Single Subject">Single Subject (₹350/sub)</option>
+                </select>
+                
+                <div class="sub-selection-box" id="single-sub-box">
+                    <label style="color:#fff; font-weight:bold; font-size: 0.9rem;"><input type="checkbox" class="sub-checkbox" value="Maths"> Maths</label>
+                    <label style="color:#fff; font-weight:bold; font-size: 0.9rem;"><input type="checkbox" class="sub-checkbox" value="Science"> Science</label>
+                    <label style="color:#fff; font-weight:bold; font-size: 0.9rem;"><input type="checkbox" class="sub-checkbox" value="English"> English</label>
+                    <label style="color:#fff; font-weight:bold; font-size: 0.9rem;"><input type="checkbox" class="sub-checkbox" value="Social Science"> Social Science</label>
+                </div>
+
+                <button class="add-btn" onclick="addStudent()">+ SAVE STUDENT DATA LIVE</button>
             </div>
         </div>
 
@@ -230,93 +154,81 @@
             <button class="close-modal" onclick="document.getElementById('month-details-modal').style.display='none'" style="color:#D8FF00;">X</button>
             <h2 id="details-month-title" style="text-align: center; color: #D8FF00; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;"></h2>
             <div id="installments-list"></div>
-            <button class="save-pay-btn" id="add-installment-btn" onclick="openNewInstallment()" style="background:#D8FF00; color:#000;">+ ADD NEW PAYMENT</button>
+            <button class="save-pay-btn" id="add-installment-btn" onclick="openNewInstallment()" style="background:#D8FF00; color:#000;">+ ADD PENDING DUE AMOUNT</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="payment-modal">
         <div class="receipt-box" id="receipt-theme">
             <button class="close-modal" onclick="closeModal()">X</button>
-            
             <div class="receipt-header">
                 <h2>THE CATALYST ASSAM</h2>
-                <p style="margin:5px 0 0 0; font-size:0.8rem; font-weight:bold;">MONEY RECEIPT</p>
+                <p style="margin:5px 0 0 0; font-size:0.75rem; font-weight:bold; color: #7132CA;">MONEY RECEIPT</p>
             </div>
-            
-            <div class="watermark-paid" id="watermark-paid">ALREADY PAID (LOCKED & VIEW ONLY)</div>
 
-            <div class="rec-input-group"><div class="rec-label">Sl. No:</div><input type="text" id="rec-slno" class="rec-input view-lock" placeholder="Auto Generate" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Sl. No:</div><input type="text" id="rec-slno" class="rec-input view-lock" readonly></div>
             <div class="rec-input-group"><div class="rec-label">Date:</div><input type="date" id="rec-date" class="rec-input view-lock"></div>
-            <div class="rec-input-group"><div class="rec-label">Received from:</div><input type="text" id="rec-name" class="rec-input" readonly></div>
-            <div class="rec-input-group"><div class="rec-label">S/o, D/o:</div><input type="text" id="rec-parent" class="rec-input" readonly></div>
-            
-            <div class="rec-input-group"><div class="rec-label">Course:</div>
-                <select class="rec-input view-lock" id="rec-course" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
-                    <option value="Package Course">Package Course</option>
-                    <option value="Single Subject">Single Subject</option>
-                </select>
-            </div>
-            
-            <div class="rec-input-group"><div class="rec-label">Class:</div><input type="text" class="rec-input" value="Class 6" readonly></div>
-            
-            <div class="rec-input-group"><div class="rec-label">Medium:</div>
-                <select class="rec-input view-lock" id="rec-medium" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
-                    <option value="Assamese Medium">Assamese Medium</option>
-                    <option value="English Medium">English Medium</option>
-                </select>
-            </div>
-
-            <div class="rec-input-group" style="flex-direction: column; align-items: flex-start;">
-                <div class="rec-label" style="width: 100%; margin-bottom: 5px;">Subjects Selected:</div>
-                <div class="checkbox-container">
-                    <label class="checkbox-label"><input type="checkbox" name="subject" class="view-lock" value="Maths"> Maths</label>
-                    <label class="checkbox-label"><input type="checkbox" name="subject" class="view-lock" value="Science"> Science</label>
-                    <label class="checkbox-label"><input type="checkbox" name="subject" class="view-lock" value="English"> English</label>
-                    <label class="checkbox-label"><input type="checkbox" name="subject" class="view-lock" value="Social Science"> Social Science</label>
-                </div>
-            </div>
-
+            <div class="rec-input-group"><div class="rec-label">Name:</div><input type="text" id="rec-name" class="rec-input view-lock" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">S/o, D/o:</div><input type="text" id="rec-parent" class="rec-input view-lock" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Class:</div><input type="text" id="rec-class" class="rec-input view-lock" value="Class 6" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Medium:</div><input type="text" id="rec-medium" class="rec-input view-lock" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Course:</div><input type="text" id="rec-course-type" class="rec-input view-lock" readonly></div>
+            <div class="rec-input-group"><div class="rec-label">Subjects Selected:</div><input type="text" id="rec-subjects" class="rec-input view-lock" style="font-size:0.7rem; color:#7132CA;" readonly></div>
             <div class="rec-input-group"><div class="rec-label">By Cash / UPI:</div>
-                <select class="rec-input view-lock" id="rec-mode" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
-                    <option value="Cash">Cash</option>
-                    <option value="UPI">UPI</option>
+                <select class="rec-input view-lock" id="rec-mode" style="background:#fff; border: 1px solid #7132CA; border-radius: 4px; color:#000;">
+                    <option value="Cash">Cash</option><option value="UPI">UPI</option>
                 </select>
             </div>
-            <div class="rec-input-group"><div class="rec-label">Total Amount (₹):</div><input type="number" id="rec-amount" class="rec-input view-lock" placeholder="e.g. 500"></div>
+            
+            <div style="background: rgba(113, 50, 202, 0.05); padding: 8px; border-radius: 6px; border: 1px dashed #7132CA; margin-top: 8px;">
+                <div class="rec-input-group" style="position:relative;">
+                    <div class="rec-label">Total Monthly Fee (₹):</div>
+                    <input type="text" id="rec-total-fee" class="rec-input view-lock" style="color: #7132CA;" readonly>
+                    <span id="pdf-plus-icon" onclick="applyAdmissionFee()" style="position:absolute; right: -5px; top: 0px; color: #00cc44; font-weight: bold; cursor:pointer; font-size: 1.3rem;">[+]</span>
+                </div>
+                <div class="rec-input-group"><div class="rec-label">Previous Paid This Month:</div><input type="text" id="rec-prev-paid" class="rec-input view-lock" style="color:blue;" readonly></div>
+                
+                <div class="rec-input-group" style="background:#fff; border-radius: 4px; border: 1px solid #7132CA;">
+                    <div class="rec-label" style="color:green; padding-left: 5px;">Paying Now (₹) Add Amount:</div>
+                    <input type="number" id="rec-amount" class="rec-input view-lock" placeholder="Enter Amount..." oninput="calculatePending()" style="border-bottom: 2px solid green; background: #fff; color: #000; padding: 5px;">
+                </div>
+                
+                <div class="rec-input-group"><div class="rec-label" style="color:red;">Not Pay / Pending Amount (₹):</div><input type="text" id="rec-pending" class="rec-input view-lock" style="color:red;" readonly></div>
+            </div>
 
             <div class="photo-upload-area" id="photo-area">
-                <p style="font-weight:bold; margin-bottom: 10px; color:#7132CA;">Upload Original Receipt Photo Here</p>
+                <p style="font-weight:bold; margin-bottom: 5px; color:#7132CA;">Upload Original Receipt Photo</p>
                 <input type="file" id="rec-photo" accept="image/*" style="width: 100%;">
             </div>
 
-            <button class="save-pay-btn" id="save-btn" onclick="savePayment()">MARK AS PAID & SAVE</button>
+            <button class="save-pay-btn" id="save-btn" onclick="savePayment()">MARK AS PAID & SAVE TO CLOUD</button>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        // 🔥🔥🔥 MAINE YAHAN AAPKA CORRECT FIREBASE CODE DAAL DIYA HAI 🔥🔥🔥
+        // ================= 🔥 CORRECTED FIREBASE URL SE INITIALIZATION 🔥 =================
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
             authDomain: "the-catalyst-assam-payment.firebaseapp.com",
-            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            // NEW URL FROM SCREENSHOT 2:
+            databaseURL: "https://the-catalyst-assam-pay-2fc8c-default-rtdb.asia-southeast1.firebasedatabase.app/",
             projectId: "the-catalyst-assam-payment",
             storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
             messagingSenderId: "256883795397",
             appId: "1:256883795397:web:9c55da88762ce2293157ac"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const DB_PATH = "class6_students"; // 🚨 IS FILE KA DATABASE NAAM
+        const DB_PATH = "class6_students"; 
 
-        // ================= CREDENTIALS & SCRIPT URL =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
-        
         const ADMIN_EMAIL = "thecatalystassam@gmail.com";
         const PASS_1 = "thecatalystassamnitusarkar19471999";
         const PASS_2 = "thecatalystassamtapanmandal19462000";
         const ACTION_PASS = "123456"; 
+        const ADMISSION_FEE_PASS = "123456"; 
 
         const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
         
@@ -324,7 +236,15 @@
         let currentMonthIndex = -1;
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
-        let studentsData = []; // Ab ye cloud se ayega
+        let studentsData = [];
+        let admissionFeeApplied = false;
+
+        function toggleSubjectSelection() {
+            let course = document.getElementById('new-course').value;
+            let box = document.getElementById('single-sub-box');
+            if(course === "Single Subject") { box.style.display = "flex"; } 
+            else { box.style.display = "none"; }
+        }
 
         document.getElementById('rec-photo').addEventListener('change', function(e) {
             let file = e.target.files[0];
@@ -333,219 +253,191 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // 🔥🔥🔥 LIVE CLOUD SYNC & MIGRATION 🔥🔥🔥
-        
-        // Agar purana data browser me hai toh usko ek baar cloud pe bhej do
-        let localOldData = JSON.parse(localStorage.getItem("class6_students"));
-        if (localOldData && localOldData.length > 0) {
-            database.ref(DB_PATH).set(localOldData);
-            localStorage.removeItem("class6_students"); // Local se hata do
-        }
-
-        // Hamesha Cloud se Live Data lo
+        // LIVE LISTENER
         database.ref(DB_PATH).on('value', (snapshot) => {
-            const data = snapshot.val();
-            studentsData = data ? data : [];
-            
-            // Ensure format is correct
+            studentsData = snapshot.val() || [];
+            let migrated = false;
             studentsData.forEach(student => {
-                if(!student.payments) student.payments = {};
-                if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-                if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
-                if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                if(student.monthlyFee === undefined) { student.monthlyFee = 1000; migrated = true; }
+                if(!student.medium) { student.medium = "Assamese Medium"; migrated = true;}
+                if(!student.courseType) { student.courseType = "Package"; migrated = true;}
+                if(!student.subjects) { student.subjects = ["Maths", "Science", "English"]; migrated = true;}
             });
+            if(migrated) { database.ref(DB_PATH).set(studentsData); }
 
-            if (document.getElementById('dashboard').style.display === 'block') {
-                renderStudents();
-            }
+            if (document.getElementById('dashboard').style.display === 'block') { renderStudents(); }
         });
 
-        function changeYear() {
-            currentYear = document.getElementById('year-selector').value;
-            renderStudents();
-        }
+        function changeYear() { currentYear = document.getElementById('year-selector').value; renderStudents(); }
 
         window.onload = function() {
             if(localStorage.getItem("adminLoggedIn") === "true") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('year-selector').value = currentYear;
-                renderStudents();
             }
         };
 
         function checkLogin() {
             let email = document.getElementById('email').value.trim();
             let pass = document.getElementById('password').value.trim();
-
             if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
                 localStorage.setItem("adminLoggedIn", "true");
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 renderStudents();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
+            } else { document.getElementById('login-error').style.display = 'block'; }
         }
-
-        function logout() {
-            localStorage.removeItem("adminLoggedIn");
-            window.location.href = "admin_dashboard.html";
-        }
+        function logout() { localStorage.removeItem("adminLoggedIn"); window.location.href = "admin_dashboard.html"; }
 
         function addStudent() {
             let name = document.getElementById('new-student-name').value.trim();
             let parent = document.getElementById('new-parent-name').value.trim();
-            let age = document.getElementById('new-student-age').value.trim();
+            let mobile = document.getElementById('new-mobile').value.trim();
+            let medium = document.getElementById('new-medium').value;
+            let course = document.getElementById('new-course').value;
             
-            if(name === "" || parent === "" || age === "") { alert("Please fill all 3 details!"); return; }
+            if(!name || !parent || !mobile) { alert("ERROR! Please fill Name, Parent, and Mobile!"); return; }
 
-            let passPrompt = prompt("Enter Admin Password to Add Student:");
-            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Student NOT saved."); return; }
+            let selectedSubjects = [];
+            let monthlyFee = 0;
+
+            if(course === "Package") {
+                selectedSubjects = ["Maths", "Science", "English"];
+                monthlyFee = 1000;
+            } else {
+                document.querySelectorAll('.sub-checkbox:checked').forEach(cb => selectedSubjects.push(cb.value));
+                if(selectedSubjects.length === 0) { alert("ERROR! Tick at least 1 subject for Single Subject!"); return; }
+                monthlyFee = selectedSubjects.length * 350;
+            }
+
+            if(prompt(`Total Fixed Fee calculated as ₹${monthlyFee}. Enter Admin Password to save:`) !== ACTION_PASS) { alert("❌ Wrong Password! Student not saved."); return; }
 
             let newStudent = {
-                name: name, parent: parent, age: age,
-                payments: {
-                    "2026": [[],[],[],[],[],[],[],[],[],[],[],[]],
-                    "2027": [[],[],[],[],[],[],[],[],[],[],[],[]],
-                    "2028": [[],[],[],[],[],[],[],[],[],[],[],[]]
-                } 
+                name: name, parent: parent, mobile: mobile, medium: medium, courseType: course, subjects: selectedSubjects, monthlyFee: monthlyFee,
+                payments: { "2026": [[],[],[],[],[],[],[],[],[],[],[],[]], "2027": [[],[],[],[],[],[],[],[],[],[],[],[]] } 
             };
 
             studentsData.push(newStudent);
-            saveData(); // Cloud par save karega
-            
-            document.getElementById('new-student-name').value = "";
-            document.getElementById('new-parent-name').value = "";
-            document.getElementById('new-student-age').value = "";
+            database.ref(DB_PATH).set(studentsData).then(() => {
+                alert("✅ New Student saved LIVE with Advanced Fees structure!");
+                document.getElementById('new-student-name').value = "";
+                document.getElementById('new-parent-name').value = "";
+                document.getElementById('new-mobile').value = "";
+                document.getElementById('new-course').value = "Package";
+                toggleSubjectSelection();
+                document.querySelectorAll('.sub-checkbox').forEach(cb => cb.checked = false);
+            }).catch(err => alert("❌ Firebase Live Save Error!"));
         }
 
         function deleteStudent(index) {
-            let passPrompt = prompt("Enter Admin Password to Delete Student:");
-            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
-
-            if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
-                studentsData.splice(index, 1);
-                saveData(); // Cloud par delete karega
-            }
+            if(prompt("Enter Admin Password to Delete Student:") === ACTION_PASS) {
+                if(confirm(`Are you sure you want to delete ${studentsData[index].name}? All live payment data will be lost!`)) { studentsData.splice(index, 1); database.ref(DB_PATH).set(studentsData); }
+            } else { alert("❌ Wrong Password!"); }
         }
 
-        // 🔥 SAVE KARTA HAI CLOUD PE 🔥
-        function saveData() {
-            database.ref(DB_PATH).set(studentsData).catch(error => {
-                alert("❌ Internet Error! Data Cloud me save nahi hua.");
-            });
-        }
-
-        // ================= RENDER UI (SINGLE LINE LAYOUT) =================
         function renderStudents() {
             const container = document.getElementById('students-container');
             container.innerHTML = "";
-
-            let currentDate = new Date();
-            let actualCurrentYear = String(currentDate.getFullYear());
-            let currentMonthNum = currentDate.getMonth();
+            let currentDate = new Date(); let actualYear = String(currentDate.getFullYear()); let currentMonthNum = currentDate.getMonth();
 
             studentsData.forEach((student, sIndex) => {
-                let row = document.createElement('div');
-                row.className = 'student-row';
+                let row = document.createElement('div'); row.className = 'student-row';
+                let monthlyFee = student.monthlyFee; 
+                let subsStr = student.subjects.join(', ');
+                let classMedium = `Class 6 (${student.medium})`;
 
                 let infoHTML = `
-                    <div class="student-info" title="${student.name} | ${student.parent}">
+                    <div class="student-info">
                         <div class="student-name">${student.name}</div>
-                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} | Age: ${student.age || 'N/A'}</div>
+                        <ul class="student-details-list">
+                            <li><span style="color:#D8FF00;">S/o, D/o:</span> ${student.parent}</li>
+                            <li><span style="color:#D8FF00;">Mob:</span> ${student.mobile}</li>
+                            <li><span style="color:#C47BE4;">${classMedium}</span></li>
+                            <li><span style="color:#C47BE4;">${student.courseType} (₹${monthlyFee}/mo)</span></li>
+                            <li class="highlight-subs">Subs: ${subsStr}</li>
+                        </ul>
                     </div>`;
                 
                 let monthsHTML = `<div class="months-inline">`;
-                
                 if(!student.payments[currentYear]) student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
 
                 MONTHS.forEach((monthName, mIndex) => {
-                    let btnClass = ""; let onclickLogic = "";
-                    let innerText = monthName;
+                    let btnClass = ""; let onclickLogic = ""; let innerText = monthName;
                     
                     let paymentsArr = student.payments[currentYear][mIndex] || [];
-                    let totalPaid = 0;
-                    paymentsArr.forEach(p => totalPaid += parseInt(p.amount || 0));
+                    let totalPaid = paymentsArr.reduce((sum, p) => sum + parseInt(p.amount || 0), 0);
+                    let admissionIncluded = paymentsArr.some(p => p.admissionIncluded === true);
+                    let actualMonthlyFeeWithAdm = admissionIncluded ? (monthlyFee + 100) : monthlyFee;
+                    let pendingDue = actualMonthlyFeeWithAdm - totalPaid;
 
-                    let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
-                    let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
+                    let isFutureYear = parseInt(currentYear) > parseInt(actualYear);
+                    let isPastYear = parseInt(currentYear) < parseInt(actualYear);
 
                     if (paymentsArr.length > 0) {
-                        btnClass = "btn-paid";
-                        innerText = `${monthName}<br><span class="paid-amt-small">₹${totalPaid}</span>`;
+                        if(pendingDue > 0) {
+                            btnClass = "btn-partial"; 
+                            innerText = `${monthName}<br><span class="paid-amt-small">Paid: ₹${totalPaid}</span><br><span class="due-amt-small">Due: ₹${pendingDue}</span>`;
+                        } else {
+                            btnClass = "btn-paid"; 
+                            innerText = `${monthName}<br><span class="paid-amt-small">Clear: ₹${totalPaid}</span><br><span class="due-amt-small">Due: ₹0</span>`;
+                        }
                         onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
                     } 
                     else if (isFutureYear || (!isPastYear && mIndex > currentMonthNum)) {
-                        btnClass = "btn-locked";
-                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
-                        onclickLogic = `alert('This button will unlock when the month arrives.')`;
+                        btnClass = "btn-locked"; innerText = `🔒<br><span style="font-size:0.6rem;">${monthName}</span>`;
                     } 
                     else if (isPastYear || mIndex < currentMonthNum) {
-                        btnClass = "btn-locked";
-                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
+                        btnClass = "btn-locked"; innerText = `🔒<br><span style="font-size:0.6rem;">${monthName}</span>`;
                         onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
+                    } else {
+                        btnClass = "btn-unlocked"; innerText = `${monthName}<br><span class="due-amt-small" style="color:#7132CA">Fees ₹${actualMonthlyFeeWithAdm}</span>`; onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
                     }
-                    else {
-                        btnClass = "btn-unlocked";
-                        onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
-                    }
-
                     monthsHTML += `<div class="month-btn ${btnClass}" onclick="${onclickLogic}">${innerText}</div>`;
                 });
 
-                monthsHTML += `</div>`;
-                let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
-
-                row.innerHTML = infoHTML + monthsHTML + deleteHTML;
-                container.appendChild(row);
+                monthsHTML += `</div><div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
+                row.innerHTML = infoHTML + monthsHTML; container.appendChild(row);
             });
         }
 
         function unlockPastMonth(sIndex, mIndex) {
-            let passPrompt = prompt(`Enter Admin Password to unlock past month (${MONTHS[mIndex]} ${currentYear}):`);
-            if(passPrompt === ACTION_PASS) { 
+            if(prompt(`Password to unlock (${MONTHS[mIndex]} ${currentYear}):`) === ACTION_PASS) { 
                 let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
-                if(arr.length > 0) {
-                    openDetailsModal(sIndex, mIndex); 
-                } else {
-                    openPaymentModal(sIndex, mIndex); 
-                }
-            } 
-            else { alert("❌ Wrong Password! Cannot unlock past month."); }
+                if(arr.length > 0) openDetailsModal(sIndex, mIndex); else openPaymentModal(sIndex, mIndex); 
+            } else { alert("❌ Wrong Password!"); }
         }
 
-        // ================= MULTI-PAYMENT (INSTALLMENT) LOGIC =================
         function openDetailsModal(sIndex, mIndex) {
-            let passPrompt = prompt("Enter Admin Password to VIEW payment details:");
-            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
-
-            currentStudentIndex = sIndex;
-            currentMonthIndex = mIndex;
+            if(prompt("Admin Password to VIEW payment details:") !== ACTION_PASS) return;
+            currentStudentIndex = sIndex; currentMonthIndex = mIndex;
+            let student = studentsData[sIndex];
+            let arr = student.payments[currentYear][mIndex] || [];
             
-            let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
-            let listDiv = document.getElementById('installments-list');
-            listDiv.innerHTML = "";
+            let listDiv = document.getElementById('installments-list'); listDiv.innerHTML = "";
+            let totalPaid = 0;
 
             arr.forEach((p, idx) => {
+                totalPaid += parseInt(p.amount || 0);
+                let admLabel = p.admissionIncluded ? "<b style='color:#00cc44'>+Adm</b>" : "";
                 listDiv.innerHTML += `
                 <div class="inst-card">
-                    <div>
-                        <div class="inst-amt">Payment ${idx+1}: ₹${p.amount}</div>
-                        <div class="inst-date">Sl No: ${p.slno || 'N/A'} <br> Date: ${p.date}</div>
-                    </div>
+                    <div><div class="inst-amt">Paid: ₹${p.amount} ${admLabel}</div><div class="inst-date">Sl: ${p.slno} | ${p.date}</div></div>
                     <button class="inst-view-btn" onclick="viewPastPayment(${idx})">View PDF</button>
                 </div>`;
             });
 
-            document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} PAYMENTS`;
-            
-            if(arr.length >= 5) {
+            document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} HISTORY`;
+            let admissionIncludedMth = arr.some(p => p.admissionIncluded === true);
+            let monthlyFeeWithAdm = admissionIncludedMth ? (student.monthlyFee + 100) : student.monthlyFee;
+            let currentDueMth = monthlyFeeWithAdm - totalPaid;
+
+            if(currentDueMth <= 0 || arr.length >= 5) {
                 document.getElementById('add-installment-btn').style.display = 'none';
             } else {
                 document.getElementById('add-installment-btn').style.display = 'block';
+                document.getElementById('add-installment-btn').innerText = `+ ADD PENDING DUE (Due: ₹${currentDueMth})`;
             }
-
             document.getElementById('month-details-modal').style.display = 'flex';
         }
 
@@ -554,159 +446,182 @@
             openPaymentModal(currentStudentIndex, currentMonthIndex);
         }
 
-        function viewPastPayment(installmentIndex) {
-            document.getElementById('month-details-modal').style.display = 'none';
-            
-            let paymentInfo = studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex][installmentIndex];
-            let student = studentsData[currentStudentIndex];
+        function calculatePending() {
+            let total = parseInt(document.getElementById('rec-total-fee').value) || 0;
+            let prev = parseInt(document.getElementById('rec-prev-paid').value) || 0;
+            let now = parseInt(document.getElementById('rec-amount').value) || 0;
+            let due = total - prev - now;
+            document.getElementById('rec-pending').value = due < 0 ? 0 : due; 
+        }
 
-            document.getElementById('rec-slno').value = paymentInfo.slno || "Old Record";
-            document.getElementById('rec-name').value = student.name;
-            document.getElementById('rec-parent').value = student.parent || "N/A";
-            document.getElementById('rec-date').value = paymentInfo.date;
-            document.getElementById('rec-course').value = paymentInfo.course;
-            document.getElementById('rec-medium').value = paymentInfo.medium;
-            document.getElementById('rec-mode').value = paymentInfo.mode;
-            document.getElementById('rec-amount').value = paymentInfo.amount;
-            
-            let checkboxes = document.querySelectorAll('input[name="subject"]');
-            let savedSubjects = paymentInfo.subjects ? paymentInfo.subjects.split(", ") : [];
-            checkboxes.forEach(box => { box.checked = savedSubjects.includes(box.value); });
+        async function applyAdmissionFee() {
+            if(admissionFeeApplied) { alert("ERROR! Admission Fee ₹100 already added for this receipt."); return;}
+            if(studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].some(p => p.admissionIncluded === true)) {
+                 alert("ERROR! This Student has already paid Admission Fee ₹100 this month in previous installment."); return;
+            }
 
-            let inputs = document.querySelectorAll('.view-lock');
-            inputs.forEach(el => { el.disabled = true; el.style.background = "transparent"; });
-            
-            document.getElementById('watermark-paid').style.display = 'block';
-            document.getElementById('photo-area').style.display = 'none'; 
-            document.getElementById('save-btn').style.display = 'none'; 
+            const { value: password } = await Swal.fire({
+                title: 'Enter Admission Fee Password (+₹100)',
+                input: 'password',
+                inputPlaceholder: 'Enter 123456...',
+                inputAttributes: { maxlength: 10, autocapitalize: 'off', autocorrect: 'off' },
+                customClass: { input: 'swal2-input-custom' },
+                showCancelButton: true, confirmButtonText: 'APPLY (+₹100)', confirmButtonColor: '#00cc44'
+            });
 
-            document.getElementById('payment-modal').style.display = 'flex';
+            if (password === ADMISSION_FEE_PASS) {
+                let feeInput = document.getElementById('rec-total-fee');
+                let newFee = parseInt(feeInput.value) + 100;
+                feeInput.value = newFee; 
+                calculatePending(); 
+                admissionFeeApplied = true; 
+                document.getElementById('pdf-plus-icon').style.display = "none";
+                Swal.fire('Success!', '₹100 Admission Fee added to Total Monthly Fee for this receipt only.', 'success');
+            } else if (password !== undefined) {
+                 Swal.fire('❌ ERROR!', 'Wrong Admission Fee Password.', 'error');
+            }
         }
 
         function openPaymentModal(sIndex, mIndex) {
-            currentStudentIndex = sIndex;
-            currentMonthIndex = mIndex;
+            currentStudentIndex = sIndex; currentMonthIndex = mIndex;
             let student = studentsData[sIndex];
+            let arr = student.payments[currentYear][mIndex] || [];
+            let prevPaid = arr.reduce((sum, p) => sum + parseInt(p.amount || 0), 0);
+            let studentMonthlyFee = student.monthlyFee;
 
-            let now = new Date();
-            let uniqueSlNo = String(now.getDate()).padStart(2, '0') + 
-                             String(now.getMonth() + 1).padStart(2, '0') + 
-                             now.getFullYear() + 
-                             String(now.getHours()).padStart(2, '0') + 
-                             String(now.getMinutes()).padStart(2, '0') + 
-                             String(now.getSeconds()).padStart(2, '0');
+            admissionFeeApplied = false; 
 
-            document.getElementById('rec-slno').value = uniqueSlNo; 
+            let admPaidPreviouslyThisMonth = arr.some(p => p.admissionIncluded === true);
+            let displayMonthlyFee = admPaidPreviouslyThisMonth ? (studentMonthlyFee + 100) : studentMonthlyFee;
 
-            let inputs = document.querySelectorAll('.view-lock');
-            inputs.forEach(el => { el.disabled = false; });
-            document.getElementById('watermark-paid').style.display = 'none';
-            document.getElementById('photo-area').style.display = 'block'; 
-            document.getElementById('save-btn').style.display = 'block'; 
-
-            document.getElementById('rec-name').value = student.name;
-            document.getElementById('rec-parent').value = student.parent || "N/A";
+            document.getElementById('rec-slno').value = new Date().getTime(); 
             document.getElementById('rec-date').valueAsDate = new Date();
-
-            document.getElementById('receipt-theme').style.background = "#ffffff"; 
-
-            document.getElementById('rec-course').value = "Package Course";
-            document.getElementById('rec-medium').value = "Assamese Medium";
-            document.getElementById('rec-amount').value = "";
-            document.getElementById('rec-photo').value = "";
-            uploadedPhotoBase64 = "";
+            document.getElementById('rec-name').value = student.name;
+            document.getElementById('rec-parent').value = student.parent;
+            document.getElementById('rec-medium').value = student.medium;
+            document.getElementById('rec-course-type').value = student.courseType;
+            document.getElementById('rec-subjects').value = student.subjects.join(', ');
             
-            document.querySelectorAll('input[name="subject"]').forEach(box => box.checked = false);
+            document.getElementById('rec-total-fee').value = displayMonthlyFee;
+            document.getElementById('rec-prev-paid').value = prevPaid;
+            document.getElementById('rec-amount').value = ""; 
+            document.getElementById('rec-pending').value = displayMonthlyFee - prevPaid;
+
+            if(admPaidPreviouslyThisMonth || prevPaid >= displayMonthlyFee) {
+                document.getElementById('pdf-plus-icon').style.display = "none";
+            } else {
+                document.getElementById('pdf-plus-icon').style.display = "inline";
+            }
+
+            document.querySelectorAll('.view-lock').forEach(el => el.disabled = false);
+            document.getElementById('rec-total-fee').disabled = true;
+            document.getElementById('rec-prev-paid').disabled = true;
+            document.getElementById('rec-pending').disabled = true;
+            
+            document.getElementById('save-btn').style.display = 'block'; 
+            document.getElementById('photo-area').style.display = 'block';
+            uploadedPhotoBase64 = "";
 
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('payment-modal').style.display = 'none';
+        function viewPastPayment(idx) {
+            document.getElementById('month-details-modal').style.display = 'none';
+            let student = studentsData[currentStudentIndex];
+            let paymentInfo = student.payments[currentYear][currentMonthIndex][idx];
+
+            document.getElementById('rec-slno').value = paymentInfo.slno;
+            document.getElementById('rec-date').value = paymentInfo.date;
+            document.getElementById('rec-name').value = student.name;
+            document.getElementById('rec-parent').value = student.parent;
+            document.getElementById('rec-medium').value = student.medium;
+            document.getElementById('rec-course-type').value = student.courseType;
+            document.getElementById('rec-subjects').value = student.subjects.join(', ');
+            
+            let pastPaymentsArr = student.payments[currentYear][currentMonthIndex];
+            let pastAdmissionApplied = pastPaymentsArr.some(p => p.admissionIncluded === true);
+            let pastStdMonthlyFee = student.monthlyFee;
+            let displayViewMonthlyFee = pastAdmissionApplied ? (pastStdMonthlyFee + 100) : pastStdMonthlyFee;
+
+            document.getElementById('rec-total-fee').value = displayViewMonthlyFee;
+            document.getElementById('rec-prev-paid').value = paymentInfo.admissionIncluded ? "Incl. +100 Adm" : "Standard Installment";
+            document.getElementById('rec-amount').value = paymentInfo.amount;
+            
+            let paidAmountPriorToThis = 0;
+            for(let i=0; i < idx; i++) { paidAmountPriorToThis += parseInt(pastPaymentsArr[i].amount || 0); }
+            let payingNowThisPastReceipt = parseInt(paymentInfo.amount || 0);
+            let pendingAfterThisPastReceipt = displayViewMonthlyFee - paidAmountPriorToThis - payingNowThisPastReceipt;
+            document.getElementById('rec-pending').value = pendingAfterThisPastReceipt < 0 ? 0 : pendingAfterThisPastReceipt;
+
+            document.getElementById('pdf-plus-icon').style.display = "none";
+            document.querySelectorAll('.view-lock').forEach(el => el.disabled = true);
+            document.getElementById('save-btn').style.display = 'none'; 
+            document.getElementById('photo-area').style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'flex';
         }
 
-        function savePayment() {
-            let amount = document.getElementById('rec-amount').value;
-            let currentSlNo = document.getElementById('rec-slno').value; 
-            let checkboxes = document.querySelectorAll('input[name="subject"]:checked');
-            
-            if(checkboxes.length === 0) { alert("Please tick at least one Subject!"); return; }
-            if(amount === "") { alert("Please enter the Amount!"); return; }
-            if(uploadedPhotoBase64 === "") { alert("Please upload the original receipt photo!"); return; }
+        function closeModal() { document.getElementById('payment-modal').style.display = 'none'; }
 
-            let passPrompt = prompt("Enter Admin Password to MARK AS PAID & SAVE:");
-            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Payment NOT saved."); return; }
+        function savePayment() {
+            let amountPaidNow = document.getElementById('rec-amount').value;
+            let currentSlNo = document.getElementById('rec-slno').value; 
+            let dueRemainingAfterPay = document.getElementById('rec-pending').value;
+            
+            if(amountPaidNow === "" || amountPaidNow <= 0) { alert("ERROR! Enter valid Amount Paid Now (₹ Add Amount)!"); return; }
+            if(uploadedPhotoBase64 === "") { alert("ERROR! Upload Receipt Photo!"); return; }
+            if(prompt("Password to SAVE PAYMENT & UPLOAD CLOUD:") !== ACTION_PASS) { alert("❌ Wrong Password! Payment not saved."); return; }
 
             document.getElementById('loading-overlay').style.display = 'flex';
-            
-            document.querySelector('.close-modal').style.display = 'none';
-            document.getElementById('save-btn').style.display = 'none';
-            document.getElementById('photo-area').style.display = 'none';
+            document.querySelector('.close-modal').style.display = 'none'; document.getElementById('save-btn').style.display = 'none'; document.getElementById('photo-area').style.display = 'none';
+            document.getElementById('pdf-plus-icon').style.display = "none"; 
 
             let element = document.getElementById('receipt-theme');
-            element.style.maxHeight = 'none';
-            element.style.overflow = 'visible';
-            element.scrollTop = 0;
+            element.style.maxHeight = 'none'; element.style.overflow = 'visible'; element.scrollTop = 0;
 
             setTimeout(function() {
-                let opt = { margin: 5, filename: 'Receipt_' + currentSlNo + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-
-                html2pdf().set(opt).from(element).outputPdf('datauristring').then(function(pdfBase64) {
+                html2pdf().set({ margin: 5, filename: 'Receipt_'+currentSlNo+'.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(element).outputPdf('datauristring').then(function(pdfBase64) {
                     
-                    element.style.maxHeight = '90vh';
-                    element.style.overflowY = 'auto';
-                    document.querySelector('.close-modal').style.display = 'block';
-                    document.getElementById('save-btn').style.display = 'block';
-                    document.getElementById('photo-area').style.display = 'block';
+                    element.style.maxHeight = '90vh'; element.style.overflowY = 'auto';
+                    document.querySelector('.close-modal').style.display = 'block'; document.getElementById('save-btn').style.display = 'block'; document.getElementById('photo-area').style.display = 'block';
 
-                    let currentInstCount = (studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex] || []).length + 1;
-                    let monthLabel = `${MONTHS[currentMonthIndex]} ${currentYear} (Inst ${currentInstCount})`;
+                    let student = studentsData[currentStudentIndex];
+                    let monthLabel = `${MONTHS[currentMonthIndex]} ${currentYear}`;
+                    
+                    let dynamicMedSubMonthData = `${student.medium}, ${student.subjects.join(', ')}, ${monthLabel}`;
+                    if(admissionFeeApplied) { dynamicMedSubMonthData = `(+₹100 ADMISSION FEE INCL.) ` + dynamicMedSubMonthData; }
 
-                    let payload = {
-                        student_name: document.getElementById('rec-name').value,
-                        parent_name: document.getElementById('rec-parent').value,
-                        student_class: "Class 6", 
-                        course_type: document.getElementById('rec-course').value,
-                        medium: document.getElementById('rec-medium').value,
-                        final_subjects: Array.from(checkboxes).map(cb => cb.value).join(", ") + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
-                        amount: amount,
-                        payment_mode: document.getElementById('rec-mode').value,
-                        pdf_data: pdfBase64,
-                        photo: uploadedPhotoBase64
+                    let sheetPayload = {
+                        "Date": document.getElementById('rec-date').value,
+                        "Student Name": student.name,
+                        "Parent Name": student.parent,
+                        "ClassCourse": `Class 6 (${student.courseType || 'N/A'})`, 
+                        "MediumSubjects & Month": dynamicMedSubMonthData,
+                        "Amount (₹)": amountPaidNow,
+                        "Payment Mode": document.getElementById('rec-mode').value,
+                        "pdf_data": pdfBase64,
+                        "photo": uploadedPhotoBase64 
                     };
 
-                    fetch(SCRIPT_URL, { 
-                        method: "POST", 
-                        body: JSON.stringify(payload)
-                    })
+                    fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(sheetPayload) })
                     .then(response => response.json())
                     .then(data => {
                         if (data.result === "success") {
-                            let paymentMetadata = {
-                                slno: currentSlNo,
-                                date: document.getElementById('rec-date').value,
-                                course: document.getElementById('rec-course').value,
-                                medium: document.getElementById('rec-medium').value,
-                                subjects: Array.from(checkboxes).map(cb => cb.value).join(", "),
+                            let paymentMetadataToFirebase = { 
+                                slno: currentSlNo, 
+                                date: document.getElementById('rec-date').value, 
+                                amount: amountPaidNow, 
                                 mode: document.getElementById('rec-mode').value,
-                                amount: amount
+                                admissionIncluded: admissionFeeApplied
                             };
-
-                            studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData(); // Cloud pe push karega
-
-                            document.getElementById('loading-overlay').style.display = 'none';
-                            alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
-                            closeModal();
-                        } else {
-                            document.getElementById('loading-overlay').style.display = 'none';
-                            alert("❌ Google Sheet Error: " + data.message);
-                        }
-                    })
-                    .catch(err => {
-                        document.getElementById('loading-overlay').style.display = 'none';
-                        alert("❌ Network Error! Data NOT Saved. Please check internet connection.");
-                    });
+                            
+                            studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadataToFirebase);
+                            database.ref(DB_PATH).set(studentsData).then(() => {
+                                document.getElementById('loading-overlay').style.display = 'none';
+                                alert(`✅ Live Payment ₹${amountPaidNow} Saved!\nDue Remaining (₹ ${dueRemainingAfterPay})\nSynced with Google Sheet, PDF & Photo saved to Drive!`);
+                                closeModal();
+                            }).catch(err => alert("❌ Firebase Live Save Error!"));
+                        } else { document.getElementById('loading-overlay').style.display = 'none'; alert(`❌ Google Sheet/Drive API Error!\n${data.message}`); }
+                    }).catch(err => { document.getElementById('loading-overlay').style.display = 'none'; alert("❌ Network Error! Please check internet connection."); });
                 });
             }, 1500); 
         }
