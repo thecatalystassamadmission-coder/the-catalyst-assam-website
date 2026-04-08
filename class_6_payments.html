@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
         /* ======================================================== */
@@ -119,6 +120,7 @@
                 <select id="year-selector" class="year-select" onchange="changeYear()">
                     <option value="2026">Session: 2026</option>
                     <option value="2027">Session: 2027</option>
+                    <option value="2028">Session: 2028</option>
                 </select>
             </div>
             
@@ -142,7 +144,7 @@
                     <label style="color:#fff; font-weight:bold; font-size: 0.9rem;"><input type="checkbox" class="sub-checkbox" value="Social Science"> Social Science</label>
                 </div>
 
-                <button class="add-btn" onclick="addStudent()">+ SAVE STUDENT DATA LIVE</button>
+                <button class="add-btn" onclick="addStudent()">+ ADD STUDENT TO LIST (LIVE)</button>
             </div>
         </div>
 
@@ -205,14 +207,11 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         // ================= 🔥 CORRECTED FIREBASE URL SE INITIALIZATION 🔥 =================
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
             authDomain: "the-catalyst-assam-payment.firebaseapp.com",
-            // NEW URL FROM SCREENSHOT 2:
             databaseURL: "https://the-catalyst-assam-pay-2fc8c-default-rtdb.asia-southeast1.firebasedatabase.app/",
             projectId: "the-catalyst-assam-payment",
             storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
@@ -253,17 +252,35 @@
             if(file) reader.readAsDataURL(file);
         });
 
-        // LIVE LISTENER
+        // 🔥 THE REAL FIX: LIVE LISTENER KO SAFE BANAYA GAYA HAI 🔥
+        // Ab Firebase se data khali hone par bhi code crash nahi hoga aur list hamesha bni rahegi.
         database.ref(DB_PATH).on('value', (snapshot) => {
-            studentsData = snapshot.val() || [];
-            let migrated = false;
+            let data = snapshot.val();
+            
+            if(data) {
+                if(Array.isArray(data)) { studentsData = data; } 
+                else { studentsData = Object.values(data); }
+            } else {
+                studentsData = [];
+            }
+
+            // Local structure theek karna bina Google Server par baar-baar bheje (Isse loop ruk jayega)
             studentsData.forEach(student => {
-                if(student.monthlyFee === undefined) { student.monthlyFee = 1000; migrated = true; }
-                if(!student.medium) { student.medium = "Assamese Medium"; migrated = true;}
-                if(!student.courseType) { student.courseType = "Package"; migrated = true;}
-                if(!student.subjects) { student.subjects = ["Maths", "Science", "English"]; migrated = true;}
+                if(!student.payments) { student.payments = {}; }
+                
+                ["2026", "2027", "2028"].forEach(yr => {
+                    if(!student.payments[yr]) { student.payments[yr] = []; }
+                    for(let m = 0; m < 12; m++) {
+                        if(!student.payments[yr][m]) { student.payments[yr][m] = []; }
+                    }
+                });
+
+                if(student.monthlyFee === undefined) { student.monthlyFee = 1000; }
+                if(!student.medium) { student.medium = "Assamese Medium"; }
+                if(!student.courseType) { student.courseType = "Package"; }
+                if(!student.subjects) { student.subjects = ["Maths", "Science", "English"]; }
+                if(!student.mobile) { student.mobile = "N/A"; }
             });
-            if(migrated) { database.ref(DB_PATH).set(studentsData); }
 
             if (document.getElementById('dashboard').style.display === 'block') { renderStudents(); }
         });
@@ -315,12 +332,16 @@
 
             let newStudent = {
                 name: name, parent: parent, mobile: mobile, medium: medium, courseType: course, subjects: selectedSubjects, monthlyFee: monthlyFee,
-                payments: { "2026": [[],[],[],[],[],[],[],[],[],[],[],[]], "2027": [[],[],[],[],[],[],[],[],[],[],[],[]] } 
+                payments: { 
+                    "2026": [[],[],[],[],[],[],[],[],[],[],[],[]], 
+                    "2027": [[],[],[],[],[],[],[],[],[],[],[],[]],
+                    "2028": [[],[],[],[],[],[],[],[],[],[],[],[]]
+                } 
             };
 
             studentsData.push(newStudent);
             database.ref(DB_PATH).set(studentsData).then(() => {
-                alert("✅ New Student saved LIVE with Advanced Fees structure!");
+                alert("✅ New Student Add Ho Gaya! Ab bar-bar add nahi karna padega.");
                 document.getElementById('new-student-name').value = "";
                 document.getElementById('new-parent-name').value = "";
                 document.getElementById('new-mobile').value = "";
@@ -332,7 +353,10 @@
 
         function deleteStudent(index) {
             if(prompt("Enter Admin Password to Delete Student:") === ACTION_PASS) {
-                if(confirm(`Are you sure you want to delete ${studentsData[index].name}? All live payment data will be lost!`)) { studentsData.splice(index, 1); database.ref(DB_PATH).set(studentsData); }
+                if(confirm(`Are you sure you want to delete ${studentsData[index].name}? All live payment data will be lost!`)) { 
+                    studentsData.splice(index, 1); 
+                    database.ref(DB_PATH).set(studentsData); 
+                }
             } else { alert("❌ Wrong Password!"); }
         }
 
@@ -360,7 +384,9 @@
                     </div>`;
                 
                 let monthsHTML = `<div class="months-inline">`;
-                if(!student.payments[currentYear]) student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                
+                // Safe mapping (Crash prevention)
+                if(!student.payments || !student.payments[currentYear]) return;
 
                 MONTHS.forEach((monthName, mIndex) => {
                     let btnClass = ""; let onclickLogic = ""; let innerText = monthName;
@@ -562,6 +588,7 @@
 
         function closeModal() { document.getElementById('payment-modal').style.display = 'none'; }
 
+        // 🔥 GOOGLE SHEET DATA FIX (Puraane Keys wapas aa gaye) 🔥
         function savePayment() {
             let amountPaidNow = document.getElementById('rec-amount').value;
             let currentSlNo = document.getElementById('rec-slno').value; 
@@ -587,19 +614,21 @@
                     let student = studentsData[currentStudentIndex];
                     let monthLabel = `${MONTHS[currentMonthIndex]} ${currentYear}`;
                     
-                    let dynamicMedSubMonthData = `${student.medium}, ${student.subjects.join(', ')}, ${monthLabel}`;
-                    if(admissionFeeApplied) { dynamicMedSubMonthData = `(+₹100 ADMISSION FEE INCL.) ` + dynamicMedSubMonthData; }
+                    let dynamicMedSubMonthData = `${student.subjects.join(', ')} [${monthLabel}] [Sl: ${currentSlNo}]`;
+                    if(admissionFeeApplied) { dynamicMedSubMonthData = `(+₹100 ADM) ` + dynamicMedSubMonthData; }
 
+                    // 🔥 EXACT MATCH WITH OLD APP SCRIPT TO PREVENT "UNKNOWN" AND "STUCK" ERROR 🔥
                     let sheetPayload = {
-                        "Date": document.getElementById('rec-date').value,
-                        "Student Name": student.name,
-                        "Parent Name": student.parent,
-                        "ClassCourse": `Class 6 (${student.courseType || 'N/A'})`, 
-                        "MediumSubjects & Month": dynamicMedSubMonthData,
-                        "Amount (₹)": amountPaidNow,
-                        "Payment Mode": document.getElementById('rec-mode').value,
-                        "pdf_data": pdfBase64,
-                        "photo": uploadedPhotoBase64 
+                        student_name: student.name,
+                        parent_name: student.parent,
+                        student_class: "Class 6", 
+                        course_type: student.courseType,
+                        medium: student.medium,
+                        final_subjects: dynamicMedSubMonthData,
+                        amount: amountPaidNow,
+                        payment_mode: document.getElementById('rec-mode').value,
+                        pdf_data: pdfBase64,
+                        photo: uploadedPhotoBase64 
                     };
 
                     fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(sheetPayload) })
@@ -620,7 +649,7 @@
                                 alert(`✅ Live Payment ₹${amountPaidNow} Saved!\nDue Remaining (₹ ${dueRemainingAfterPay})\nSynced with Google Sheet, PDF & Photo saved to Drive!`);
                                 closeModal();
                             }).catch(err => alert("❌ Firebase Live Save Error!"));
-                        } else { document.getElementById('loading-overlay').style.display = 'none'; alert(`❌ Google Sheet/Drive API Error!\n${data.message}`); }
+                        } else { document.getElementById('loading-overlay').style.display = 'none'; alert(`❌ Google Sheet API Error!\n${data.message}`); }
                     }).catch(err => { document.getElementById('loading-overlay').style.display = 'none'; alert("❌ Network Error! Please check internet connection."); });
                 });
             }, 1500); 
