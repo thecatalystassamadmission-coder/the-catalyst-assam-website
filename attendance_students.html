@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Catalyst Assam - Attendance Register</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* ======================================================== */
+        /* PREMIUM GLOW THEME & DASHBOARD STYLES                    */
+        /* ======================================================== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1c0936 0%, #3a1c71 100%);
+            background-attachment: fixed;
+            color: #ffffff; 
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 999999; flex-direction: column;
+        }
+        .login-box {
+            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
+            border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4);
+            text-align: center; width: 90%; max-width: 400px;
+        }
+        .login-box h2 { color: #D8FF00; margin-bottom: 20px; text-transform: uppercase; }
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
+            border: 2px solid #C47BE4; background: rgba(255,255,255,0.9);
+            font-size: 1rem; font-weight: bold;
+        }
+        .login-btn {
+            background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900;
+            border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 0 15px rgba(216,255,0,0.5); transition: 0.3s; width: 100%;
+        }
+        .login-btn:hover { background: #fff; transform: scale(1.05); }
+
+        /* --- DASHBOARD HEADER --- */
+        header { 
+            background-color: rgba(113, 50, 202, 0.85); 
+            text-align: center; padding: 25px 20px; 
+            border-bottom: 4px solid #D8FF00; 
+            box-shadow: 0 8px 30px rgba(216, 255, 0, 0.4); 
+            position: relative;
+        }
+        header h1 { color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.7); margin:0; font-size: 2.5rem; text-transform: uppercase;}
+        .sub-header { color: #D8FF00; font-weight: bold; margin-top: 10px; font-size: 1.3rem; }
+        .logout-btn { position: absolute; top: 20px; right: 20px; background: #ff4444; color: #fff; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(255,0,0,0.5);}
+
+        /* --- DASHBOARD MAIN --- */
+        #dashboard { padding: 30px; max-width: 1600px; margin: 0 auto; display: grid; gap: 30px;}
+        
+        /* Dashboard Panels */
+        .panel {
+            background: rgba(113, 50, 202, 0.2); 
+            border: 1px solid #C47BE4;
+            border-radius: 15px; 
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .panel:hover { border-color: #D8FF00; }
+        .panel-title { color: #D8FF00; font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px; text-transform: uppercase;}
+        
+        /* Group Section (Grid) */
+        .group-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .group-card {
+            background: rgba(255,255,255,0.05); border: 1px solid transparent; border-radius: 10px; padding: 15px;
+            display: flex; justify-content: space-between; align-items: center; transition: 0.3s; cursor: pointer;
+        }
+        .group-card:hover, .group-card.active { background: rgba(113, 50, 202, 0.5); border-color: #D8FF00;}
+        .group-name { font-size: 1.1rem; font-weight: 900; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; margin-right: 10px;}
+        .group-count { font-size: 0.8rem; color: #ccc; font-weight: bold;}
+        .group-delete-btn { background: #ff4444; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
+
+        /* Controls Panel */
+        .control-panel {
+            background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;
+            border: 1px dashed #D8FF00; display: flex; gap: 10px; margin-bottom: 20px;
+            flex-wrap: wrap; justify-content: center; align-items: center;
+        }
+        .add-input { padding: 10px; border-radius: 8px; border: none; font-weight: bold; flex: 1; min-width: 150px;}
+        .add-btn { background: #D8FF00; color: #000; padding: 10px 20px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
+
+        /* Month Info Display & Selectors */
+        .current-date-info {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background: #2a1055;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #D8FF00;
+            display: inline-block;
+            margin: 0 auto;
+        }
+        .date-select { padding: 10px 15px; font-weight: bold; font-size: 1rem; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; outline: none; cursor: pointer;}
+
+        /* --- COMPACT TABLE (DAILY VIEW ON SCREEN) --- */
+        .attendance-section { display: none; margin-top: 20px; }
+        .register-container { background: transparent; border: 1px solid transparent; border-radius: 10px; padding: 0; overflow-x: auto; position: relative;}
+        /* Smaller min-width since we only show Name + Today + Action */
+        .attendance-table { width: 100%; border-collapse: collapse; min-width: 400px; max-width: 600px; margin: 0 auto;}
+        .attendance-table th, .attendance-table td { border-bottom: 1px solid rgba(255,255,255,0.15); padding: 12px 5px; font-size: 1rem; text-align: center; font-weight: bold;}
+        .attendance-table th { background: rgba(0,0,0,0.3); color: #fff; text-transform: uppercase; font-size: 0.9rem;}
+        .attendance-table td { background: transparent; transition: 0.2s;}
+        .attendance-table tr:hover td { background: rgba(113, 50, 202, 0.4);}
+        .attendance-table th:first-child, .attendance-table td:first-child { text-align: left; padding-left: 15px; border-right: 1px solid rgba(255,255,255,0.15);}
+        .student-mark { text-align: center; font-weight: 900; font-size: 1.5rem; display: block; width: 100%; cursor: pointer;}
+        
+        /* Marking colors */
+        .mark-p { color: #00ff00; }
+        .mark-a { color: #ff0000; }
+        .mark-empty { color: #888; } /* Color when nothing is selected yet */
+
+        /* Actions Section */
+        .actions-section { margin-top: 25px; display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;}
+        .main-action-btn { background: #7132CA; color: #fff; padding: 15px 30px; font-weight: bold; font-size: 1.2rem; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(113, 50, 202, 0.5); width: 100%; max-width: 500px;}
+        .main-action-btn:hover { background: #fff; color: #7132CA; transform: translateY(-2px);}
+        .secondary-btn { background: #fff; color: #000; border-color: #D8FF00; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 0 5px rgba(216,255,0,0.5); font-size: 0.9rem;}
+        
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; color: #D8FF00; text-align: center;}
+
+        /* PDF Preview Modal */
+        .pdf-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 100000;
+        }
+        .pdf-modal-content {
+            background: #fff; border-radius: 10px; width: 95%; max-width: 1200px; height: 90vh;
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
+        }
+        .pdf-modal-header {
+            background: #7132CA; color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .pdf-modal-header h2 { margin: 0; font-size: 1.5rem; color: #D8FF00; }
+        .pdf-close-btn {
+            background: #ff4444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1rem;
+        }
+        .pdf-preview-container {
+            flex: 1; overflow-y: auto; padding: 20px; background: #525659; /* Standard PDF viewer background */
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+        .pdf-page-wrapper {
+            background: #fff; width: 100%; max-width: 1122px; /* A4 Landscape width ratio roughly */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); padding: 20px;
+            color: #000; /* Ensure text is black on white page */
+        }
+
+        @media (max-width: 800px) {
+            header h1 { font-size: 1.8rem; }
+            #dashboard { padding: 15px; }
+            .control-panel { flex-direction: column; align-items: stretch; gap: 8px;}
+        }
+
+        /* --- PRINT STYLES FOR CLASSIC REGISTER PDF (WHITE) --- */
+        @media print {
+            body { background: #fff; color: #000; }
+            header, #dashboard, .modal-overlay, .pdf-modal-overlay, #login-screen { display: none !important; }
+            #print-area { display: block !important; }
+            .print-table { border-collapse: collapse; width: 100%; border: 2px solid #000; color: #000;}
+            .print-table th, .print-table td { border: 1px solid #000; padding: 5px; font-size: 10px; text-align: center; }
+            .print-table th { background-color: #f2f2f2 !important; color: #000; font-weight: bold;}
+        }
+
+        #print-area { display: none; padding: 20px; color: #000; background: #fff; }
+        .page-break { page-break-after: always; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <input type="email" id="email" class="login-input" placeholder="Email Address">
+            <input type="password" id="password" class="login-input" placeholder="Password">
+            <button class="login-btn" onclick="checkLogin()">LOGIN</button>
+            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email or Password!</p>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
+        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing...</h2>
+        <p style="font-weight:bold;" id="loading-text">Generating Live PDF & Saving to Database<br>Please wait...</p>
+    </div>
+
+    <div class="pdf-modal-overlay" id="pdf-preview-modal">
+        <div class="pdf-modal-content">
+            <div class="pdf-modal-header">
+                <h2>PDF PREVIEW</h2>
+                <div>
+                    <button class="secondary-btn" style="margin-right: 10px;" onclick="executePDFDownload()">DOWNLOAD NOW</button>
+                    <button class="pdf-close-btn" onclick="closePDFPreview()">CLOSE</button>
+                </div>
+            </div>
+            <div class="pdf-preview-container" id="pdf-preview-content">
+                </div>
+        </div>
+    </div>
+
+    <header>
+        <h1>THE CATALYST ASSAM</h1>
+        <div class="sub-header">DAILY ATTENDANCE REGISTER</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </header>
+    
+    <div id="dashboard">
+        <div class="panel">
+            <div class="panel-title">1. Group Management</div>
+            
+            <div class="control-panel">
+                <input type="text" id="new-group-name" class="add-input" placeholder="Enter New Group Name (e.g., Class 6 Alpha)...">
+                <button class="add-btn" onclick="createGroup()">+ CREATE GROUP</button>
+            </div>
+            
+            <div class="group-container" id="groups-list"></div>
+            
+            <div style="margin-top: 25px; border-top: 1px dashed #C47BE4; padding-top: 15px; text-align: center;">
+                <div class="panel-title" style="font-size: 1.2rem; margin-bottom: 10px; text-align: left;">Current System Date</div>
+                <div class="current-date-info" id="system-date-display">
+                    Loading Date...
+                </div>
+                <p style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">*Attendance is marked for today.</p>
+            </div>
+        </div>
+
+        <div class="panel attendance-section" id="attendance-panel">
+            <div class="panel-title">2. Mark Today's Attendance: <span id="active-group-display" style="color:#D8FF00; text-decoration: underline;">Group Name</span></div>
+            
+            <div class="control-panel">
+                <input type="text" id="new-student-name" class="add-input" placeholder="Enter New Student Name...">
+                <button class="add-btn" onclick="addStudent()">+ ADD STUDENT (Max 300)</button>
+            </div>
+            
+            <div class="register-container">
+                <table class="attendance-table" id="attendance-table">
+                    <thead id="table-head"></thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+
+            <div class="actions-section">
+                <button class="main-action-btn" onclick="saveAttendance()">SAVE TODAY's ATTENDANCE</button>
+                
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 1px dashed #D8FF00; width: 100%; max-width: 500px; text-align: center; margin-top: 10px;">
+                    <div style="color: #D8FF00; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase;">View / Download Past PDF Records</div>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <select id="pdf-month-selector" class="date-select"></select>
+                        <select id="pdf-year-selector" class="date-select"></select>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <button class="secondary-btn" onclick="handlePDFAction('view')">VIEW PDF</button>
+                        <button class="secondary-btn" onclick="handlePDFAction('download')">DOWNLOAD PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-area"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
+            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "the-catalyst-assam-payment",
+            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
+            messagingSenderId: "256883795397",
+            appId: "1:256883795397:web:9c55da88762ce2293157ac"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const GROUPS_PATH = "attendance_groups"; 
+        const MASTER_PASSWORD = "123456"; 
+
+        const MONTHS_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const MARK_CYCLE = ["P", "A", ""]; // Cycle starts with P when clicked, H and O removed
+
+        let groupsData = {};
+        let activeGroupId = null;
+        let attendanceMarks = {}; // Full month data loaded from DB
+        
+        // System variables for CURRENT real-world date
+        let sysDate = new Date();
+        let sysDay = sysDate.getDate();
+        let sysMonthIndex = sysDate.getMonth();
+        let sysYear = sysDate.getFullYear();
+
+        window.onload = function() {
+            if(localStorage.getItem("attendanceAdminLoggedIn") === "true") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'grid';
+                document.getElementById('system-date-display').innerText = `Today: ${sysDay} ${MONTHS_NAMES[sysMonthIndex]} ${sysYear}`;
+                populatePDFSelectors();
+                loadGroups();
+            } else {
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('dashboard').style.display = 'none';
+            }
+        };
+
+        function checkLogin() {
+            let email = document.getElementById('email').value.trim();
+            let pass = document.getElementById('password').value.trim();
+
+            if(email === "thecatalystassam@gmail.com" && pass === "thecatalystassam194720260401@") {
+                localStorage.setItem("attendanceAdminLoggedIn", "true");
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'grid';
+                document.getElementById('system-date-display').innerText = `Today: ${sysDay} ${MONTHS_NAMES[sysMonthIndex]} ${sysYear}`;
+                populatePDFSelectors();
+                loadGroups();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem("attendanceAdminLoggedIn");
+            location.reload();
+        }
+
+        function populatePDFSelectors() {
+            let monthSel = document.getElementById('pdf-month-selector');
+            let yearSel = document.getElementById('pdf-year-selector');
+            
+            MONTHS_NAMES.forEach((name, index) => {
+                let opt = new Option(name, index);
+                monthSel.add(opt);
+            });
+            monthSel.value = sysMonthIndex;
+
+            for (let y = sysYear - 1; y <= sysYear + 2; y++) {
+                let opt = new Option(y, y);
+                yearSel.add(opt);
+            }
+            yearSel.value = sysYear;
+        }
+
+        function checkPassword(action) {
+            let pass = prompt(`Enter security password to ${action}:`);
+            if (pass === MASTER_PASSWORD) return true;
+            alert("❌ Wrong password! Action cancelled.");
+            return false;
+        }
+
+        function loadGroups() {
+            database.ref(GROUPS_PATH).on('value', (snapshot) => {
+                const data = snapshot.val();
+                groupsData = data ? data : {};
+                renderGroupsList();
+            });
+        }
+
+        function renderGroupsList() {
+            let list = document.getElementById('groups-list');
+            list.innerHTML = "";
+            let groupIds = Object.keys(groupsData);
+
+            if(groupIds.length === 0) {
+                list.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: #ccc;">No groups created yet. Add one above!</p>`;
+                document.getElementById('attendance-panel').style.display = 'none'; 
+                activeGroupId = null;
+                return;
+            }
+
+            groupIds.forEach(id => {
+                let group = groupsData[id];
+                let count = (group.students ? Object.keys(group.students).length : 0);
+                
+                let card = document.createElement('div');
+                card.className = `group-card ${activeGroupId === id ? 'active' : ''}`;
+                card.onclick = (e) => {
+                    if(e.target.tagName !== 'BUTTON') { selectGroup(id); }
+                };
+
+                card.innerHTML = `
+                    <div style="display: flex; flex-direction: column;">
+                        <span class="group-name" title="${group.name}">${group.name}</span>
+                        <span class="group-count">(${count}/300 students)</span>
+                    </div>
+                    <button class="group-delete-btn" onclick="deleteGroup('${id}')">DEL</button>
+                `;
+                list.appendChild(card);
+            });
+            
+            if(activeGroupId) {
+                document.getElementById('attendance-panel').style.display = 'block';
+                document.getElementById('active-group-display').innerText = groupsData[activeGroupId].name;
+                renderDailyAttendanceTable();
+            }
+        }
+
+        function createGroup() {
+            let name = document.getElementById('new-group-name').value.trim();
+            if(!name) { alert("Please enter a group name!"); return; }
+            if(!checkPassword("CREATE GROUP")) return;
+
+            let now = new Date();
+            let uniqueId = `grp_${now.getTime()}`;
+            database.ref(`${GROUPS_PATH}/${uniqueId}`).set({
+                name: name,
+                students: {}
+            }).then(() => {
+                document.getElementById('new-group-name').value = "";
+                selectGroup(uniqueId); 
+            });
+        }
+
+        function deleteGroup(id) {
+            if(!checkPassword(`DELETE GROUP '${groupsData[id].name}'`)) return;
+            if(!confirm(`Are you sure you want to delete '${groupsData[id].name}'? All student and attendance data for this group will be lost permanently!`)) return;
+
+            database.ref(`${GROUPS_PATH}/${id}`).remove().then(() => {
+                if(activeGroupId === id) { activeGroupId = null; }
+            });
+        }
+
+        function selectGroup(id) {
+            activeGroupId = id;
+            document.getElementById('attendance-panel').style.display = 'block';
+            document.getElementById('active-group-display').innerText = groupsData[id].name;
+            renderDailyAttendanceTable(); 
+            renderGroupsList(); 
+        }
+
+        function addStudent() {
+            if(!activeGroupId) return;
+            if(!checkPassword("ADD STUDENT")) return;
+            let group = groupsData[activeGroupId];
+            let count = (group.students ? Object.keys(group.students).length : 0);
+            
+            if(count >= 300) { alert("Max limit of 300 students reached for this group!"); return; }
+            
+            let name = document.getElementById('new-student-name').value.trim();
+            if(!name) { alert("Please enter student name!"); return; }
+
+            let now = new Date();
+            let studentId = `std_${now.getTime()}`;
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/students/${studentId}`).set({
+                name: name
+            }).then(() => {
+                document.getElementById('new-student-name').value = "";
+            });
+        }
+
+        function deleteStudent(id, name) {
+            if(!activeGroupId) return;
+            if(!checkPassword(`DELETE student '${name}'`)) return;
+
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/students/${id}`).remove();
+        }
+
+        function getDaysInMonth(month, year) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        function renderDailyAttendanceTable() {
+            if(!activeGroupId) return;
+            let group = groupsData[activeGroupId];
+            let students = group.students || {};
+            let studentIds = Object.keys(students);
+            
+            attendanceMarks = {}; 
+            let path = `attendance/${sysYear}/${sysMonthIndex}`;
+            
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/${path}`).once('value', (snapshot) => {
+                attendanceMarks = snapshot.val() || {};
+                doDailyRender(students, studentIds);
+            });
+
+            function doDailyRender(students, studentIds) {
+                let tHead = document.getElementById('table-head');
+                let tBody = document.getElementById('table-body');
+                tHead.innerHTML = "";
+                tBody.innerHTML = "";
+
+                let headRow = `<tr>
+                                  <th>STUDENT NAME</th>
+                                  <th style="text-align:center; color:#D8FF00; font-size:1rem;">TODAY (${sysDay} ${MONTHS_NAMES[sysMonthIndex]})</th>
+                                  <th>ACTION</th>
+                               </tr>`;
+                tHead.innerHTML = headRow;
+
+                if(studentIds.length === 0) {
+                    tBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ccc;">No students in this group yet. Add one above!</td></tr>`;
+                    return;
+                }
+
+                studentIds.forEach((id, index) => {
+                    let student = students[id];
+                    let stdMarks = attendanceMarks[id] || {}; 
+                    
+                    let todayMark = stdMarks[sysDay] || ""; 
+                    let isSaved = todayMark ? 'true' : 'false';
+                    let markClass = todayMark ? `mark-${todayMark.toLowerCase()}` : 'mark-empty';
+                    let displayMark = todayMark ? todayMark : '-'; 
+
+                    let row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td title="${student.name}">${student.name}</td>
+                        <td onclick="cycleDailyMark('${id}', this)" data-is-saved="${isSaved}"><span class="student-mark ${markClass}">${displayMark}</span></td>
+                        <td><button class="group-delete-btn" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteStudent('${id}', '${student.name}')">DEL</button></td>
+                    `;
+                    tBody.appendChild(row);
+                });
+            }
+        }
+
+        function cycleDailyMark(stdId, cell) {
+            let isSaved = cell.getAttribute('data-is-saved') === 'true';
+            if (isSaved) {
+                let pass = prompt("Enter security password to change saved attendance:");
+                if (pass !== MASTER_PASSWORD) {
+                    alert("❌ Wrong password! Action cancelled.");
+                    return;
+                }
+                cell.setAttribute('data-is-saved', 'false');
+            }
+
+            let span = cell.querySelector('.student-mark');
+            let currentDisplay = span.innerText;
+            let currentActualMark = currentDisplay === '-' ? "" : currentDisplay;
+            
+            let currentIndex = MARK_CYCLE.indexOf(currentActualMark);
+            let nextIndex = (currentIndex + 1) % MARK_CYCLE.length;
+            let nextMark = MARK_CYCLE[nextIndex];
+
+            span.innerText = nextMark ? nextMark : '-';
+            span.className = 'student-mark';
+            if(nextMark) {
+                span.classList.add(`mark-${nextMark.toLowerCase()}`);
+            } else {
+                span.classList.add('mark-empty');
+            }
+
+            if(!attendanceMarks[stdId]) attendanceMarks[stdId] = {};
+            attendanceMarks[stdId][sysDay] = nextMark; 
+        }
+
+        function saveAttendance() {
+            if(!activeGroupId) return;
+            if(!checkPassword("SAVE TODAY's ATTENDANCE")) return;
+            
+            let loading = document.getElementById('loading-overlay');
+            document.getElementById('loading-text').innerHTML = "Saving to Database<br>Please wait...";
+            loading.style.display = 'flex';
+
+            let cleanedData = {};
+            Object.keys(attendanceMarks).forEach(stdId => {
+                let marks = attendanceMarks[stdId];
+                if(Object.keys(marks).some(day => marks[day])) { 
+                    cleanedData[stdId] = marks;
+                }
+            });
+
+            let path = `attendance/${sysYear}/${sysMonthIndex}`;
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/${path}`).set(cleanedData)
+                .then(() => {
+                    loading.style.display = 'none';
+                    alert(`✅ Today's Attendance (${sysDay} ${MONTHS_NAMES[sysMonthIndex]}) saved successfully!`);
+                    renderDailyAttendanceTable(); 
+                })
+                .catch(err => {
+                    loading.style.display = 'none';
+                    alert("❌ Error saving data! Please check internet connection.");
+                });
+        }
+
+        function handlePDFAction(actionType) {
+            if(!activeGroupId) return;
+            
+            let actionName = actionType === 'view' ? "VIEW PDF" : "DOWNLOAD PDF";
+            if(!checkPassword(actionName)) return;
+
+            let selectedMonthIndex = parseInt(document.getElementById('pdf-month-selector').value);
+            let selectedYear = parseInt(document.getElementById('pdf-year-selector').value);
+
+            let group = groupsData[activeGroupId];
+            let students = group.students || {};
+            let studentIds = Object.keys(students);
+            let daysInMonth = getDaysInMonth(selectedMonthIndex, selectedYear);
+
+            if(studentIds.length === 0) { alert("No students in this group to generate PDF."); return; }
+            
+            let loading = document.getElementById('loading-overlay');
+            loading.querySelector('h2').innerText = actionType === 'view' ? "Preparing Preview..." : "Generating PDF...";
+            document.getElementById('loading-text').innerText = `Building Full Month Register for ${MONTHS_NAMES[selectedMonthIndex]} ${selectedYear}`;
+            loading.style.display = 'flex';
+
+            let path = `attendance/${selectedYear}/${selectedMonthIndex}`;
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/${path}`).once('value').then((snapshot) => {
+                let monthMarks = snapshot.val() || {};
+                
+                if (actionType === 'view') {
+                    showPDFPreview(group, students, studentIds, daysInMonth, monthMarks, selectedMonthIndex, selectedYear);
+                    loading.style.display = 'none';
+                } else {
+                    createPrintAreaStructure(group, students, studentIds, daysInMonth, monthMarks, document.getElementById('print-area'), selectedMonthIndex, selectedYear);
+                    executePDFDownload(group, selectedMonthIndex, selectedYear);
+                }
+            });
+        }
+
+        function createPrintAreaStructure(group, students, studentIds, days, monthMarksData, targetContainer, targetMonthIndex, targetYear) {
+            targetContainer.innerHTML = ""; 
+            
+            let stdPerPrintPage = 25; 
+            let totalPages = Math.ceil(studentIds.length / stdPerPrintPage);
+            if(totalPages === 0) totalPages = 1;
+
+            let monthStr = MONTHS_NAMES[targetMonthIndex];
+            let yearStr = String(targetYear);
+
+            for(let page = 0; page < totalPages; page++) {
+                let printPage = document.createElement('div');
+                printPage.className = `print-page ${page === totalPages - 1 ? '' : 'page-break'}`; 
+                if (targetContainer.id === 'pdf-preview-content') {
+                    printPage.className = 'pdf-page-wrapper';
+                }
+                
+                let header = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
+                        <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Name of the Institution: THE CATALYST ASSAM</div>
+                        <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Register of Attendance for the Month of ${monthStr} ${yearStr}</div>
+                        <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Class/Section: ${group.name}</div>
+                    </div>
+                `;
+                printPage.innerHTML = header;
+
+                let table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
+                table.style.border = '2px solid #000';
+                table.style.marginTop = '10px';
+                table.style.color = '#000';
+
+                let thead = document.createElement('thead');
+                let tr1 = document.createElement('tr');
+                tr1.innerHTML = `
+                    <th rowspan="2" style="width: 3%; border: 1px solid #000; font-size: 11px; background:#f2f2f2; color:#000;">Sl.<br>No.</th>
+                    <th rowspan="2" style="width: 15%; border: 1px solid #000; font-size: 12px; text-align: left; padding-left: 5px; background:#f2f2f2; color:#000;">Name of the Student</th>
+                    <th colspan="${days}" style="border: 1px solid #000; font-size: 10px; letter-spacing: 2px; text-align: center; background:#f2f2f2; color:#000;">DATES</th>
+                    <th colspan="2" style="border: 1px solid #000; font-size: 10px; text-align: center; background:#f2f2f2; color:#000;">TOTAL</th>
+                `;
+                
+                let tr2 = document.createElement('tr');
+                let tr2HTML = "";
+                for(let d = 1; d <= days; d++) {
+                    tr2HTML += `<th style="width: 2%; border: 1px solid #000; font-size: 10px; text-align: center; padding: 2px; background:#f2f2f2; color:#000;">${d}</th>`;
+                }
+                tr2HTML += `<th style="width: 3%; border: 1px solid #000; font-size: 10px; text-align: center; background:#f2f2f2; color:#000;">P</th>`;
+                tr2HTML += `<th style="width: 3%; border: 1px solid #000; font-size: 10px; text-align: center; background:#f2f2f2; color:#000;">A</th>`;
+                tr2.innerHTML = tr2HTML;
+                
+                thead.appendChild(tr1);
+                thead.appendChild(tr2);
+                table.appendChild(thead);
+
+                let tbody = document.createElement('tbody');
+                let startIdx = page * stdPerPrintPage;
+                let endIdx = Math.min(startIdx + stdPerPrintPage, studentIds.length);
+
+                for(let i = startIdx; i < endIdx; i++) {
+                    let id = studentIds[i];
+                    let stdMarks = monthMarksData[id] || {};
+                    let p = 0, a = 0;
+
+                    let row = tbody.insertRow();
+                    row.style.height = "22px";
+                    row.innerHTML = `<td style="border: 1px solid #000; text-align: center; font-size: 11px; font-weight: bold;">${i + 1}</td>`;
+                    row.innerHTML += `<td style="border: 1px solid #000; text-align: left; padding-left: 5px; font-size: 12px; font-weight: bold; text-transform: uppercase;">${students[id].name}</td>`;
+
+                    for(let d = 1; d <= days; d++) {
+                        let mark = stdMarks[d] || "";
+                        if(mark === "P") p++;
+                        else if(mark === "A") a++;
+                        
+                        let color = 'black';
+                        if(mark === 'A') color = 'red';
+                        else if(mark === 'P') color = 'green';
+
+                        row.innerHTML += `<td style="border: 1px solid #000; text-align: center; font-size: 10px; font-weight: bold; color: ${color};">${mark}</td>`;
+                    }
+                    row.innerHTML += `<td style="border: 1px solid #000; text-align: center; font-size: 11px; font-weight: bold;">${p > 0 ? p : ''}</td>`;
+                    row.innerHTML += `<td style="border: 1px solid #000; text-align: center; font-size: 11px; font-weight: bold;">${a > 0 ? a : ''}</td>`;
+                }
+                
+                for(let i = endIdx - startIdx; i < stdPerPrintPage; i++) {
+                    let row = tbody.insertRow();
+                    row.style.height = "22px";
+                    row.innerHTML = `<td style="border: 1px solid #000;"></td><td style="border: 1px solid #000;"></td>`;
+                    for(let d = 1; d <= days + 2; d++) { 
+                        row.innerHTML += `<td style="border: 1px solid #000;"></td>`; 
+                    }
+                }
+
+                table.appendChild(tbody);
+                printPage.appendChild(table);
+                targetContainer.appendChild(printPage);
+            }
+        }
+
+        function showPDFPreview(group, students, studentIds, days, monthMarksData, mIndex, year) {
+            let previewContent = document.getElementById('pdf-preview-content');
+            createPrintAreaStructure(group, students, studentIds, days, monthMarksData, previewContent, mIndex, year);
+            document.getElementById('pdf-preview-modal').style.display = 'flex';
+        }
+
+        function closePDFPreview() {
+            document.getElementById('pdf-preview-modal').style.display = 'none';
+            document.getElementById('pdf-preview-content').innerHTML = "";
+        }
+
+        function executePDFDownload(group, mIndex, year) {
+            if(!activeGroupId) return;
+            
+            group = group || groupsData[activeGroupId];
+            mIndex = mIndex !== undefined ? mIndex : parseInt(document.getElementById('pdf-month-selector').value);
+            year = year !== undefined ? year : parseInt(document.getElementById('pdf-year-selector').value);
+            
+            let monthStr = MONTHS_NAMES[mIndex];
+            let yearStr = String(year);
+            
+            let loading = document.getElementById('loading-overlay');
+            loading.querySelector('h2').innerText = "Generating PDF...";
+            document.getElementById('loading-text').innerText = "Downloading...";
+            loading.style.display = 'flex';
+
+            const printArea = document.getElementById('print-area');
+            
+            database.ref(`${GROUPS_PATH}/${activeGroupId}/attendance/${year}/${mIndex}`).once('value').then((snapshot) => {
+                createPrintAreaStructure(group, group.students || {}, Object.keys(group.students || {}), getDaysInMonth(mIndex, year), snapshot.val() || {}, printArea, mIndex, year);
+                
+                printArea.style.display = 'block'; 
+
+                let opt = {
+                    margin: [10, 10, 10, 10], 
+                    filename: `Attendance_Register_${group.name}_${monthStr}_${yearStr}.pdf`,
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 3, useCORS: true, letterRendering: true }, 
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                    pagebreak: { mode: ['avoid-all', 'css'] }
+                };
+
+                html2pdf().set(opt).from(printArea).save().then(() => {
+                    printArea.style.display = 'none';
+                    printArea.innerHTML = "";
+                    loading.style.display = 'none';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
