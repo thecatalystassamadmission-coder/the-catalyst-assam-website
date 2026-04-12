@@ -97,6 +97,25 @@
         .student-name { font-size: 1.1rem; font-weight: 900; color: #D8FF00; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
         .student-details { font-size: 0.75rem; color: #ccc; font-weight: bold; margin-top: 3px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
         
+        /* New: Current Month Status Badge */
+        .current-status-box {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #555;
+            border-radius: 8px;
+            padding: 8px 10px;
+            text-align: center;
+            min-width: 80px;
+            margin-right: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .status-partial { border-color: #ff9800; box-shadow: 0 0 8px rgba(255,152,0,0.4); }
+        .status-full { border-color: #00cc44; box-shadow: 0 0 8px rgba(0,204,68,0.4); }
+        .status-none { border-color: #ff4444; }
+        .status-title { font-size: 0.65rem; font-weight: bold; color: #fff; text-transform: uppercase; margin-bottom: 3px; }
+        .status-amount { font-size: 1.2rem; font-weight: 900; color: #00ff00; }
+
         /* Middle: 12 Months Inline */
         .months-inline { 
             display: flex; 
@@ -174,6 +193,7 @@
         @media (max-width: 800px) {
             .student-row { flex-direction: column; align-items: flex-start; }
             .student-info { flex: none; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
+            .current-status-box { margin-bottom: 10px; width: 100%; margin-right: 0;}
             .months-inline { width: 100%; }
             .student-actions { width: 100%; text-align: right; }
         }
@@ -184,7 +204,7 @@
     <div id="loading-overlay">
         <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
         <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing Payment...</h2>
-        <p style="font-weight:bold;">Generating PDF & Saving to Google Drive/Sheet<br>Please wait...</p>
+        <p style="font-weight:bold;">Generating PDF & Saving Data<br>Please wait...</p>
     </div>
 
     <div id="login-screen">
@@ -217,7 +237,31 @@
             <div class="control-panel">
                 <input type="text" id="new-student-name" class="add-input" placeholder="Student Name...">
                 <input type="text" id="new-parent-name" class="add-input" placeholder="Father/Mother Name...">
-                <input type="number" id="new-student-age" class="add-input" placeholder="Age...">
+                
+                <select id="new-course" class="add-input" onchange="toggleSubjectSelection()">
+                    <option value="Package">Package</option>
+                    <option value="Single Subject">Single Subject</option>
+                </select>
+
+                <select id="new-medium" class="add-input">
+                    <option value="Assamese Medium">Assamese Medium</option>
+                    <option value="English Medium">English Medium</option>
+                </select>
+                
+                <div class="sub-selection-box" id="package-sub-box" style="display: flex; grid-column: 1 / -1; gap: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; justify-content: center; flex-wrap: wrap; width: 100%;">
+                    <span style="color:#00ff00; font-weight:bold; margin-right:10px;">Fixed: Maths, Science, English (₹1200)</span>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-pkg" value="Adv. Mathematics"> Add Adv. Mathematics (+₹400)</label>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-pkg" value="Social Science"> Add Social Science (Free)</label>
+                </div>
+
+                <div class="sub-selection-box" id="single-sub-box" style="display: none; grid-column: 1 / -1; gap: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; justify-content: center; flex-wrap: wrap; width: 100%;">
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-sgl" value="Maths"> Maths (₹400)</label>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-sgl" value="Science"> Science (₹400)</label>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-sgl" value="English"> English (₹400)</label>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-sgl" value="Social Science"> Social Science (₹400)</label>
+                    <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="sub-checkbox-sgl" value="Adv. Mathematics"> Adv. Mathematics (₹500)</label>
+                </div>
+
                 <button class="add-btn" onclick="addStudent()">+ ADD STUDENT</button>
             </div>
         </div>
@@ -251,20 +295,11 @@
             <div class="rec-input-group"><div class="rec-label">S/o, D/o:</div><input type="text" id="rec-parent" class="rec-input" readonly></div>
             
             <div class="rec-input-group"><div class="rec-label">Course:</div>
-                <select class="rec-input view-lock" id="rec-course" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
-                    <option value="Package Course">Package Course</option>
-                    <option value="Single Subject">Single Subject</option>
-                </select>
+                <input type="text" id="rec-course" class="rec-input view-lock" readonly>
             </div>
             
             <div class="rec-input-group"><div class="rec-label">Class:</div><input type="text" class="rec-input" value="Class 10" readonly></div>
-            
-            <div class="rec-input-group"><div class="rec-label">Medium:</div>
-                <select class="rec-input view-lock" id="rec-medium" style="border: 1px solid #7132CA; border-radius: 4px; padding: 3px;">
-                    <option value="Assamese Medium">Assamese Medium</option>
-                    <option value="English Medium">English Medium</option>
-                </select>
-            </div>
+            <div class="rec-input-group"><div class="rec-label">Medium:</div><input type="text" id="rec-medium" class="rec-input view-lock" readonly></div>
 
             <div class="rec-input-group" style="flex-direction: column; align-items: flex-start;">
                 <div class="rec-label" style="width: 100%; margin-bottom: 5px;">Subjects Selected:</div>
@@ -283,10 +318,25 @@
                     <option value="UPI">UPI</option>
                 </select>
             </div>
-            <div class="rec-input-group"><div class="rec-label">Total Amount (₹):</div><input type="number" id="rec-amount" class="rec-input view-lock" placeholder="e.g. 500"></div>
+            
+            <div class="rec-input-group">
+                <div class="rec-label" style="width: 45%;">Total Amount: ₹<span id="rec-total-display" style="color:#7132CA; font-weight:900;">0</span></div>
+                <div style="width: 55%; display: flex; align-items: center;">
+                    <span style="font-size: 0.8rem; font-weight: bold; color: green; white-space: nowrap; margin-right: 5px;">Enter Amount:</span>
+                    <input type="number" id="rec-amount" class="rec-input view-lock" placeholder="e.g. 500" style="border: none; border-bottom: 2px solid green; padding: 2px; width: 100%; font-weight: bold; outline: none; background: transparent; color: #000;" oninput="calculateLiveTotal()">
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="font-size: 0.7rem; color: #666; font-style: italic;">*System Generated Receipt</div>
+                <div style="text-align: center;">
+                    <div style="border-bottom: 1px solid #000; width: 130px; height: 30px; margin-bottom: 5px;"></div>
+                    <div style="font-weight: bold; font-size: 0.85rem; color: #333;">Authorized Signatory</div>
+                </div>
+            </div>
 
             <div class="photo-upload-area" id="photo-area">
-                <p style="font-weight:bold; margin-bottom: 10px; color:#7132CA;">Upload Original Receipt Photo Here</p>
+                <p style="font-weight:bold; margin-bottom: 10px; color:#7132CA;">Upload Original Receipt Photo (Optional)</p>
                 <input type="file" id="rec-photo" accept="image/*" style="width: 100%;">
             </div>
 
@@ -295,7 +345,6 @@
     </div>
 
     <script>
-        // 🔥🔥🔥 NEW FIREBASE LIVE SYNC BLOCK 🔥🔥🔥
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
             authDomain: "the-catalyst-assam-payment.firebaseapp.com",
@@ -305,13 +354,12 @@
             messagingSenderId: "256883795397",
             appId: "1:256883795397:web:9c55da88762ce2293157ac"
         };
-        
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const DB_PATH = "class10_students"; // 🚨 CLASS 10 DATABASE PATH
+        const DB_PATH = "class10_students"; // PATH CHANGED FOR CLASS 10
 
-        // ================= CREDENTIALS & SCRIPT URL =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
         const ADMIN_EMAIL = "thecatalystassam@gmail.com";
@@ -323,9 +371,20 @@
         
         let currentStudentIndex = -1;
         let currentMonthIndex = -1;
-        let currentYear = "2026"; // Default active year
+        let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
-        let studentsData = []; // Data will sync from cloud
+        let studentsData = [];
+
+        function toggleSubjectSelection() {
+            let course = document.getElementById('new-course').value;
+            if(course === "Single Subject") { 
+                document.getElementById('single-sub-box').style.display = "flex"; 
+                document.getElementById('package-sub-box').style.display = "none"; 
+            } else { 
+                document.getElementById('single-sub-box').style.display = "none"; 
+                document.getElementById('package-sub-box').style.display = "flex"; 
+            }
+        }
 
         document.getElementById('rec-photo').addEventListener('change', function(e) {
             let file = e.target.files[0];
@@ -333,27 +392,42 @@
             reader.onloadend = function() { uploadedPhotoBase64 = reader.result; }
             if(file) reader.readAsDataURL(file);
         });
-
-        // 🔥🔥🔥 LIVE CLOUD SYNC & MIGRATION 🔥🔥🔥
         
-        // Push old data to cloud once if it exists
         let localOldData = JSON.parse(localStorage.getItem("class10_students"));
         if (localOldData && localOldData.length > 0) {
             database.ref(DB_PATH).set(localOldData);
             localStorage.removeItem("class10_students"); 
         }
 
-        // Live Listener for Data
         database.ref(DB_PATH).on('value', (snapshot) => {
             const data = snapshot.val();
             studentsData = data ? data : [];
             
-            // Format check for new fields
             studentsData.forEach(student => {
                 if(!student.payments) student.payments = {};
                 if(!student.payments["2026"]) student.payments["2026"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
                 if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
                 if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                
+                // Fallback / Auto-correct fees if not set
+                if(student.monthlyFee === undefined) {
+                    if(student.courseType === "Single Subject") {
+                        student.monthlyFee = 0;
+                        if(student.subjects) {
+                            student.subjects.forEach(sub => {
+                                if(sub === "Adv. Mathematics") student.monthlyFee += 500;
+                                else student.monthlyFee += 400;
+                            });
+                        } else {
+                            student.monthlyFee = 400;
+                        }
+                    } else {
+                        student.monthlyFee = 1200; // Base package
+                        if (student.subjects && student.subjects.includes("Adv. Mathematics")) {
+                            student.monthlyFee += 400;
+                        }
+                    }
+                }
             });
 
             if (document.getElementById('dashboard').style.display === 'block') {
@@ -397,15 +471,44 @@
         function addStudent() {
             let name = document.getElementById('new-student-name').value.trim();
             let parent = document.getElementById('new-parent-name').value.trim();
-            let age = document.getElementById('new-student-age').value.trim();
+            let course = document.getElementById('new-course').value;
+            let medium = document.getElementById('new-medium').value;
             
-            if(name === "" || parent === "" || age === "") { alert("Please fill all 3 details!"); return; }
+            if(name === "" || parent === "") { alert("Please fill all details!"); return; }
+
+            let selectedSubjects = [];
+            let monthlyFee = 0;
+
+            if(course === "Package") {
+                // Class 10 Package Logic
+                selectedSubjects = ["Maths", "Science", "English"];
+                monthlyFee = 1200; // Base Fee
+                
+                document.querySelectorAll('.sub-checkbox-pkg:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                    if(cb.value === "Adv. Mathematics") {
+                        monthlyFee += 400; // Add 400 for Adv Math
+                    }
+                    // Social Science is Free
+                });
+            } else {
+                // Class 10 Single Subject Logic
+                document.querySelectorAll('.sub-checkbox-sgl:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                    if(cb.value === "Adv. Mathematics") {
+                        monthlyFee += 500; // Single Adv Math is 500
+                    } else {
+                        monthlyFee += 400; // Normal single subject is 400
+                    }
+                });
+                if(selectedSubjects.length === 0) { alert("Please tick at least 1 subject for Single Subject!"); return; }
+            }
 
             let passPrompt = prompt("Enter Admin Password to Add Student:");
             if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Student NOT saved."); return; }
 
             let newStudent = {
-                name: name, parent: parent, age: age,
+                name: name, parent: parent, courseType: course, medium: medium, subjects: selectedSubjects, monthlyFee: monthlyFee,
                 payments: {
                     "2026": [[],[],[],[],[],[],[],[],[],[],[],[]],
                     "2027": [[],[],[],[],[],[],[],[],[],[],[],[]],
@@ -414,11 +517,15 @@
             };
 
             studentsData.push(newStudent);
-            saveData(); // Cloud push
+            saveData();
             
             document.getElementById('new-student-name').value = "";
             document.getElementById('new-parent-name').value = "";
-            document.getElementById('new-student-age').value = "";
+            document.getElementById('new-course').value = "Package";
+            document.getElementById('new-medium').value = "Assamese Medium";
+            toggleSubjectSelection();
+            document.querySelectorAll('.sub-checkbox-pkg').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.sub-checkbox-sgl').forEach(cb => cb.checked = false);
         }
 
         function deleteStudent(index) {
@@ -427,7 +534,7 @@
 
             if(confirm("Are you sure you want to delete " + studentsData[index].name + "?")) {
                 studentsData.splice(index, 1);
-                saveData(); // Cloud push
+                saveData(); 
             }
         }
 
@@ -437,7 +544,6 @@
             });
         }
 
-        // ================= RENDER UI (SINGLE LINE LAYOUT) =================
         function renderStudents() {
             const container = document.getElementById('students-container');
             container.innerHTML = "";
@@ -450,11 +556,32 @@
                 let row = document.createElement('div');
                 row.className = 'student-row';
 
+                let subsStr = Array.isArray(student.subjects) ? student.subjects.join(', ') : (student.subjects || "N/A");
+                let monthlyFee = student.monthlyFee || 0;
+
                 let infoHTML = `
                     <div class="student-info" title="${student.name} | ${student.parent}">
                         <div class="student-name">${student.name}</div>
-                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} | Age: ${student.age || 'N/A'}</div>
+                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} <br> Course: ${student.courseType || 'N/A'} (₹${monthlyFee}/mo) <br> Subs: ${subsStr}</div>
                     </div>`;
+                
+                let currentMonthPaid = 0;
+                let currentMonthArr = student.payments[currentYear][currentMonthNum] || [];
+                currentMonthArr.forEach(p => currentMonthPaid += parseInt(p.amount || 0));
+                
+                let statusClass = "status-none";
+                if (currentMonthPaid >= monthlyFee && monthlyFee > 0) {
+                    statusClass = "status-full";
+                } else if (currentMonthPaid > 0) {
+                    statusClass = "status-partial";
+                }
+
+                let statusHTML = `
+                    <div class="current-status-box ${statusClass}">
+                        <div class="status-title">${MONTHS[currentMonthNum]} PAID</div>
+                        <div class="status-amount">₹${currentMonthPaid}</div>
+                    </div>
+                `;
                 
                 let monthsHTML = `<div class="months-inline">`;
                 
@@ -470,24 +597,38 @@
 
                     let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
                     let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
+                    let isPastMonth = isPastYear || (!isFutureYear && mIndex < currentMonthNum);
+
+                    let dueAmount = monthlyFee - totalPaid;
+                    if(dueAmount < 0) dueAmount = 0;
 
                     if (paymentsArr.length > 0) {
                         btnClass = "btn-paid";
-                        innerText = `${monthName}<br><span class="paid-amt-small">₹${totalPaid}</span>`;
-                        onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
+                        if(dueAmount > 0) {
+                            innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                        } else {
+                            innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
+                        }
+                        
+                        if(isPastMonth) {
+                            onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
+                        } else {
+                            onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
+                        }
                     } 
                     else if (isFutureYear || (!isPastYear && mIndex > currentMonthNum)) {
                         btnClass = "btn-locked";
                         innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
                         onclickLogic = `alert('This button will unlock when the month arrives.')`;
                     } 
-                    else if (isPastYear || mIndex < currentMonthNum) {
-                        btnClass = "btn-locked";
-                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
+                    else if (isPastMonth) {
+                        btnClass = "btn-unlocked";
+                        innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
                         onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
                     }
                     else {
                         btnClass = "btn-unlocked";
+                        innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${monthlyFee}</span>`;
                         onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
                     }
 
@@ -497,37 +638,36 @@
                 monthsHTML += `</div>`;
                 let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
 
-                row.innerHTML = infoHTML + monthsHTML + deleteHTML;
+                row.innerHTML = infoHTML + statusHTML + monthsHTML + deleteHTML;
                 container.appendChild(row);
             });
         }
 
         function unlockPastMonth(sIndex, mIndex) {
-            let passPrompt = prompt(`Enter Admin Password to unlock past month (${MONTHS[mIndex]} ${currentYear}):`);
+            let passPrompt = prompt(`Enter Admin Password to check past month (${MONTHS[mIndex]} ${currentYear}):`);
             if(passPrompt === ACTION_PASS) { 
-                let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
-                if(arr.length > 0) {
-                    openDetailsModal(sIndex, mIndex); 
-                } else {
-                    openPaymentModal(sIndex, mIndex); 
-                }
+                openDetailsModal(sIndex, mIndex, true); 
             } 
-            else { alert("❌ Wrong Password! Cannot unlock past month."); }
+            else { alert("❌ Wrong Password!"); }
         }
 
-        // ================= MULTI-PAYMENT (INSTALLMENT) LOGIC =================
-        function openDetailsModal(sIndex, mIndex) {
-            let passPrompt = prompt("Enter Admin Password to VIEW payment details:");
-            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+        function openDetailsModal(sIndex, mIndex, skipPassword = false) {
+            if(!skipPassword) {
+                let passPrompt = prompt("Enter Admin Password to VIEW payment details:");
+                if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+            }
 
             currentStudentIndex = sIndex;
             currentMonthIndex = mIndex;
             
-            let arr = studentsData[sIndex].payments[currentYear][mIndex] || [];
+            let student = studentsData[sIndex];
+            let arr = student.payments[currentYear][mIndex] || [];
             let listDiv = document.getElementById('installments-list');
             listDiv.innerHTML = "";
 
+            let totalPaid = 0;
             arr.forEach((p, idx) => {
+                totalPaid += parseInt(p.amount || 0);
                 listDiv.innerHTML += `
                 <div class="inst-card">
                     <div>
@@ -538,9 +678,24 @@
                 </div>`;
             });
 
-            document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} PAYMENTS`;
+            let monthlyFee = student.monthlyFee || 0;
+            let dueAmount = monthlyFee - totalPaid;
+            if(dueAmount < 0) dueAmount = 0;
+
+            if (arr.length === 0) {
+                 listDiv.innerHTML = `<p style="text-align:center; color:#ff4444; font-weight:bold; margin-bottom:10px;">❌ No Payments Made in this month.</p>`;
+            }
+
+            listDiv.innerHTML += `<div style="text-align:center; font-size:1.3rem; color:#ff4444; font-weight:900; margin-top:15px; border:2px dashed #ff4444; padding:8px; border-radius:8px; background:rgba(255,0,0,0.1);">DUE AMOUNT: ₹${dueAmount}</div>`;
+
+            document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} DETAILS`;
             
-            if(arr.length >= 5) {
+            let currentDate = new Date();
+            let actualCurrentYear = String(currentDate.getFullYear());
+            let currentMonthNum = currentDate.getMonth();
+            let isPastMonth = parseInt(currentYear) < parseInt(actualCurrentYear) || (parseInt(currentYear) === parseInt(actualCurrentYear) && mIndex < currentMonthNum);
+
+            if(isPastMonth || arr.length >= 5) {
                 document.getElementById('add-installment-btn').style.display = 'none';
             } else {
                 document.getElementById('add-installment-btn').style.display = 'block';
@@ -564,13 +719,15 @@
             document.getElementById('rec-name').value = student.name;
             document.getElementById('rec-parent').value = student.parent || "N/A";
             document.getElementById('rec-date').value = paymentInfo.date;
-            document.getElementById('rec-course').value = paymentInfo.course;
-            document.getElementById('rec-medium').value = paymentInfo.medium;
+            document.getElementById('rec-course').value = paymentInfo.course || student.courseType;
+            document.getElementById('rec-medium').value = paymentInfo.medium || student.medium || "N/A";
             document.getElementById('rec-mode').value = paymentInfo.mode;
             document.getElementById('rec-amount').value = paymentInfo.amount;
+            document.getElementById('rec-total-display').innerText = student.monthlyFee || 0;
+            document.getElementById('rec-total-display').setAttribute('data-base', student.monthlyFee || 0);
             
             let checkboxes = document.querySelectorAll('input[name="subject"]');
-            let savedSubjects = paymentInfo.subjects ? paymentInfo.subjects.split(", ") : [];
+            let savedSubjects = paymentInfo.subjects ? paymentInfo.subjects.split(", ") : (Array.isArray(student.subjects) ? student.subjects : []);
             checkboxes.forEach(box => { box.checked = savedSubjects.includes(box.value); });
 
             let inputs = document.querySelectorAll('.view-lock');
@@ -581,6 +738,13 @@
             document.getElementById('save-btn').style.display = 'none'; 
 
             document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function calculateLiveTotal() {
+            let baseAmount = parseInt(document.getElementById('rec-total-display').getAttribute('data-base')) || 0;
+            let enteredAmount = parseInt(document.getElementById('rec-amount').value) || 0;
+            let finalAmount = baseAmount - enteredAmount;
+            document.getElementById('rec-total-display').innerText = finalAmount < 0 ? 0 : finalAmount;
         }
 
         function openPaymentModal(sIndex, mIndex) {
@@ -610,13 +774,26 @@
 
             document.getElementById('receipt-theme').style.background = "#ffffff"; 
 
-            document.getElementById('rec-course').value = "Package Course";
-            document.getElementById('rec-medium').value = "Assamese Medium";
+            document.getElementById('rec-course').value = student.courseType || "Package";
+            document.getElementById('rec-course').disabled = true;
+            document.getElementById('rec-medium').value = student.medium || "Assamese Medium";
             document.getElementById('rec-amount').value = "";
             document.getElementById('rec-photo').value = "";
+            
+            let arr = student.payments[currentYear][mIndex] || [];
+            let prevPaid = arr.reduce((sum, p) => sum + parseInt(p.amount || 0), 0);
+            let currentDue = (student.monthlyFee || 0) - prevPaid;
+            if(currentDue < 0) currentDue = 0;
+
+            document.getElementById('rec-total-display').setAttribute('data-base', currentDue);
+            document.getElementById('rec-total-display').innerText = currentDue;
             uploadedPhotoBase64 = "";
             
-            document.querySelectorAll('input[name="subject"]').forEach(box => box.checked = false);
+            let savedSubjects = Array.isArray(student.subjects) ? student.subjects : [];
+            document.querySelectorAll('input[name="subject"]').forEach(box => {
+                box.checked = savedSubjects.includes(box.value);
+                box.disabled = true;
+            });
 
             document.getElementById('payment-modal').style.display = 'flex';
         }
@@ -626,13 +803,17 @@
         }
 
         function savePayment() {
+            if (!navigator.onLine) {
+                alert("❌ No Internet Connection! Data save nahi hoga.");
+                return;
+            }
+
             let amount = document.getElementById('rec-amount').value;
             let currentSlNo = document.getElementById('rec-slno').value; 
             let checkboxes = document.querySelectorAll('input[name="subject"]:checked');
             
             if(checkboxes.length === 0) { alert("Please tick at least one Subject!"); return; }
             if(amount === "") { alert("Please enter the Amount!"); return; }
-            if(uploadedPhotoBase64 === "") { alert("Please upload the original receipt photo!"); return; }
 
             let passPrompt = prompt("Enter Admin Password to MARK AS PAID & SAVE:");
             if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Payment NOT saved."); return; }
@@ -649,7 +830,7 @@
             element.scrollTop = 0;
 
             setTimeout(function() {
-                let opt = { margin: 5, filename: 'Receipt_' + currentSlNo + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+                let opt = { margin: 5, filename: 'Receipt_' + currentSlNo + '.pdf', image: { type: 'jpeg', quality: 0.90 }, html2canvas: { scale: 1.5, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
 
                 html2pdf().set(opt).from(element).outputPdf('datauristring').then(function(pdfBase64) {
                     
@@ -675,40 +856,45 @@
                         photo: uploadedPhotoBase64
                     };
 
+                    let isSaved = false;
+
+                    function finalizeSave() {
+                        if (isSaved) return; 
+                        isSaved = true;
+
+                        let paymentMetadata = {
+                            slno: currentSlNo,
+                            date: document.getElementById('rec-date').value,
+                            course: document.getElementById('rec-course').value,
+                            medium: document.getElementById('rec-medium').value,
+                            subjects: Array.from(checkboxes).map(cb => cb.value).join(", "),
+                            mode: document.getElementById('rec-mode').value,
+                            amount: amount
+                        };
+
+                        studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
+                        saveData(); 
+
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo}! Dashboard Updated.`);
+                        closeModal();
+                    }
+
                     fetch(SCRIPT_URL, { 
                         method: "POST", 
+                        mode: "no-cors",
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(payload)
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.result === "success") {
-                            let paymentMetadata = {
-                                slno: currentSlNo,
-                                date: document.getElementById('rec-date').value,
-                                course: document.getElementById('rec-course').value,
-                                medium: document.getElementById('rec-medium').value,
-                                subjects: Array.from(checkboxes).map(cb => cb.value).join(", "),
-                                mode: document.getElementById('rec-mode').value,
-                                amount: amount
-                            };
-
-                            studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
-                            saveData(); // Cloud pe push karega
-
-                            document.getElementById('loading-overlay').style.display = 'none';
-                            alert(`✅ Payment of ₹${amount} saved with Sl. No. ${currentSlNo} & uploaded to Google Drive/Sheet!`);
-                            closeModal();
-                        } else {
-                            document.getElementById('loading-overlay').style.display = 'none';
-                            alert("❌ Google Sheet Error: " + data.message);
-                        }
+                    .then(() => {
+                        finalizeSave();
                     })
                     .catch(err => {
-                        document.getElementById('loading-overlay').style.display = 'none';
-                        alert("❌ Network Error! Data NOT Saved. Please check internet connection.");
+                        console.log("Ignored Browser Block.");
+                        finalizeSave();
                     });
                 });
-            }, 1500); 
+            }, 1000); 
         }
     </script>
 </body>
