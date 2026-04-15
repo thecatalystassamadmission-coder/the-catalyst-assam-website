@@ -75,8 +75,14 @@
         .panel:hover { border-color: #D8FF00; }
         .panel-title { color: #D8FF00; font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px; text-transform: uppercase;}
         
+        /* NEW: Category Tabs Container */
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .cat-tab-btn { background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #C47BE4; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .cat-tab-btn:hover { border-color: #D8FF00; }
+        .cat-tab-btn.active { background: #D8FF00; color: #000; border-color: #D8FF00; box-shadow: 0 0 10px rgba(216,255,0,0.5); }
+
         /* Group Section (Grid) */
-        .group-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .group-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px;}
         .group-card {
             background: rgba(255,255,255,0.05); border: 1px solid transparent; border-radius: 10px; padding: 15px;
             display: flex; justify-content: space-between; align-items: center; transition: 0.3s; cursor: pointer;
@@ -93,6 +99,7 @@
             flex-wrap: wrap; justify-content: center; align-items: center;
         }
         .add-input { padding: 10px; border-radius: 8px; border: none; font-weight: bold; flex: 1; min-width: 150px;}
+        .category-select { padding: 10px; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; font-weight: bold; outline: none; cursor: pointer;}
         .add-btn { background: #D8FF00; color: #000; padding: 10px 20px; font-weight: 900; border: none; border-radius: 8px; cursor: pointer; }
 
         /* Month Info Display & Selectors */
@@ -122,10 +129,14 @@
         .attendance-table th:first-child, .attendance-table td:first-child { text-align: left; padding-left: 15px; border-right: 1px solid rgba(255,255,255,0.15);}
         .student-mark { text-align: center; font-weight: 900; font-size: 1.5rem; display: block; width: 100%; cursor: pointer;}
         
-        /* Marking colors */
+        /* Marking colors & Buttons */
         .mark-p { color: #00ff00; }
         .mark-a { color: #ff0000; }
         .mark-empty { color: #888; } /* Color when nothing is selected yet */
+
+        .btn-present { background: #00ff00; color: #000; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin: 0 5px; box-shadow: 0 0 5px rgba(0,255,0,0.5);}
+        .btn-absent { background: #ff0000; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin: 0 5px; box-shadow: 0 0 5px rgba(255,0,0,0.5);}
+
 
         /* Actions Section */
         .actions-section { margin-top: 25px; display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;}
@@ -221,14 +232,28 @@
     
     <div id="dashboard">
         <div class="panel">
-            <div class="panel-title">1. Group Management</div>
+            <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>1. GROUP MANAGEMENT</span>
+            </div>
             
             <div class="control-panel">
-                <input type="text" id="new-group-name" class="add-input" placeholder="Enter New Group Name (e.g., Class 6 Alpha)...">
+                <input type="text" id="new-group-name" class="add-input" placeholder="Enter New Group Name (e.g., Section A)...">
+                <select id="new-group-category" class="category-select">
+                    <option value="CLASS 6TH">CLASS 6TH</option>
+                    <option value="CLASS 7TH">CLASS 7TH</option>
+                    <option value="CLASS 8TH">CLASS 8TH</option>
+                    <option value="CLASS 9TH">CLASS 9TH</option>
+                    <option value="CLASS 10TH">CLASS 10TH</option>
+                    <option value="CLASS 11TH">CLASS 11TH</option>
+                    <option value="CLASS 12TH">CLASS 12TH</option>
+                    <option value="DEGREE COURSES">DEGREE COURSES</option>
+                    <option value="COMPETITIVE EXAMS COURSES">COMPETITIVE EXAMS COURSES</option>
+                </select>
                 <button class="add-btn" onclick="createGroup()">+ CREATE GROUP</button>
             </div>
             
-            <div class="group-container" id="groups-list"></div>
+            <div id="groups-list-wrapper">
+                </div>
             
             <div style="margin-top: 25px; border-top: 1px dashed #C47BE4; padding-top: 15px; text-align: center;">
                 <div class="panel-title" style="font-size: 1.2rem; margin-bottom: 10px; text-align: left;">Current System Date</div>
@@ -291,13 +316,15 @@
         const MASTER_PASSWORD = "123456"; 
 
         const MONTHS_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-        const MARK_CYCLE = ["P", "A", ""]; // Cycle starts with P when clicked, H and O removed
+        const CATEGORIES = [
+            "CLASS 6TH", "CLASS 7TH", "CLASS 8TH", "CLASS 9TH", "CLASS 10TH", "CLASS 11TH", "CLASS 12TH", "DEGREE COURSES", "COMPETITIVE EXAMS COURSES"
+        ];
 
         let groupsData = {};
         let activeGroupId = null;
-        let attendanceMarks = {}; // Full month data loaded from DB
+        let attendanceMarks = {}; 
+        let activeCategoryTab = CATEGORIES[0]; // NEW: Default to first category
         
-        // System variables for CURRENT real-world date
         let sysDate = new Date();
         let sysDay = sysDate.getDate();
         let sysMonthIndex = sysDate.getMonth();
@@ -369,47 +396,85 @@
             });
         }
 
+        function switchCategoryTab(cat) {
+            activeCategoryTab = cat;
+            renderGroupsList();
+        }
+
         function renderGroupsList() {
-            let list = document.getElementById('groups-list');
-            list.innerHTML = "";
+            let wrapper = document.getElementById('groups-list-wrapper');
+            wrapper.innerHTML = "";
             let groupIds = Object.keys(groupsData);
 
-            if(groupIds.length === 0) {
-                list.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: #ccc;">No groups created yet. Add one above!</p>`;
-                document.getElementById('attendance-panel').style.display = 'none'; 
-                activeGroupId = null;
-                return;
-            }
+            let tabsContainer = document.createElement('div');
+            tabsContainer.className = 'category-tabs';
+            CATEGORIES.forEach(cat => {
+                let btn = document.createElement('button');
+                btn.className = `cat-tab-btn ${activeCategoryTab === cat ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => switchCategoryTab(cat);
+                tabsContainer.appendChild(btn);
+            });
+            wrapper.appendChild(tabsContainer);
+
+            let groupedByCategory = {};
+            CATEGORIES.forEach(cat => groupedByCategory[cat] = []);
 
             groupIds.forEach(id => {
                 let group = groupsData[id];
-                let count = (group.students ? Object.keys(group.students).length : 0);
-                
-                let card = document.createElement('div');
-                card.className = `group-card ${activeGroupId === id ? 'active' : ''}`;
-                card.onclick = (e) => {
-                    if(e.target.tagName !== 'BUTTON') { selectGroup(id); }
-                };
-
-                card.innerHTML = `
-                    <div style="display: flex; flex-direction: column;">
-                        <span class="group-name" title="${group.name}">${group.name}</span>
-                        <span class="group-count">(${count}/300 students)</span>
-                    </div>
-                    <button class="group-delete-btn" onclick="deleteGroup('${id}')">DEL</button>
-                `;
-                list.appendChild(card);
+                let cat = group.category || "OTHER";
+                if(!groupedByCategory[cat]) groupedByCategory[cat] = [];
+                groupedByCategory[cat].push({id: id, ...group});
             });
+
+            let currentCat = activeCategoryTab;
             
-            if(activeGroupId) {
+            if (groupedByCategory[currentCat] && groupedByCategory[currentCat].length > 0) {
+                let groupContainer = document.createElement('div');
+                groupContainer.className = 'group-container';
+
+                groupedByCategory[currentCat].forEach(groupData => {
+                    let id = groupData.id;
+                    let count = (groupData.students ? Object.keys(groupData.students).length : 0);
+                    
+                    let card = document.createElement('div');
+                    card.className = `group-card ${activeGroupId === id ? 'active' : ''}`;
+                    card.onclick = (e) => {
+                        if(e.target.tagName !== 'BUTTON') { selectGroup(id); }
+                    };
+
+                    card.innerHTML = `
+                        <div style="display: flex; flex-direction: column;">
+                            <span class="group-name" title="${groupData.name}">${groupData.name}</span>
+                            <span class="group-count">(${count}/300 students)</span>
+                        </div>
+                        <button class="group-delete-btn" onclick="deleteGroup('${id}')">DEL</button>
+                    `;
+                    groupContainer.appendChild(card);
+                });
+
+                wrapper.appendChild(groupContainer);
+            } else {
+                let msg = document.createElement('p');
+                msg.style.cssText = "text-align: center; color: #ccc; margin-top: 15px;";
+                msg.innerText = `No groups created in ${currentCat} yet.`;
+                wrapper.appendChild(msg);
+            }
+            
+            if(activeGroupId && groupsData[activeGroupId]) {
                 document.getElementById('attendance-panel').style.display = 'block';
-                document.getElementById('active-group-display').innerText = groupsData[activeGroupId].name;
+                let activeGrp = groupsData[activeGroupId];
+                document.getElementById('active-group-display').innerText = `${activeGrp.category} - ${activeGrp.name}`;
                 renderDailyAttendanceTable();
+            } else {
+                document.getElementById('attendance-panel').style.display = 'none';
             }
         }
 
         function createGroup() {
             let name = document.getElementById('new-group-name').value.trim();
+            let category = document.getElementById('new-group-category').value;
+
             if(!name) { alert("Please enter a group name!"); return; }
             if(!checkPassword("CREATE GROUP")) return;
 
@@ -417,9 +482,11 @@
             let uniqueId = `grp_${now.getTime()}`;
             database.ref(`${GROUPS_PATH}/${uniqueId}`).set({
                 name: name,
+                category: category,
                 students: {}
             }).then(() => {
                 document.getElementById('new-group-name').value = "";
+                activeCategoryTab = category; 
                 selectGroup(uniqueId); 
             });
         }
@@ -435,8 +502,10 @@
 
         function selectGroup(id) {
             activeGroupId = id;
+            let activeGrp = groupsData[id];
+            activeCategoryTab = activeGrp.category; 
             document.getElementById('attendance-panel').style.display = 'block';
-            document.getElementById('active-group-display').innerText = groupsData[id].name;
+            document.getElementById('active-group-display').innerText = `${activeGrp.category} - ${activeGrp.name}`;
             renderDailyAttendanceTable(); 
             renderGroupsList(); 
         }
@@ -510,14 +579,23 @@
                     
                     let todayMark = stdMarks[sysDay] || ""; 
                     let isSaved = todayMark ? 'true' : 'false';
-                    let markClass = todayMark ? `mark-${todayMark.toLowerCase()}` : 'mark-empty';
-                    let displayMark = todayMark ? todayMark : '-'; 
+
+                    let tdContent = "";
+                    if (todayMark === "P") {
+                        tdContent = `<span class="student-mark mark-p" onclick="markAttendance('${id}', '', this)">P</span>`;
+                    } else if (todayMark === "A") {
+                        tdContent = `<span class="student-mark mark-a" onclick="markAttendance('${id}', '', this)">A</span>`;
+                    } else {
+                        tdContent = `
+                            <button class="btn-present" onclick="markAttendance('${id}', 'P', this.parentElement)">Present</button>
+                            <button class="btn-absent" onclick="markAttendance('${id}', 'A', this.parentElement)">Absent</button>
+                        `;
+                    }
 
                     let row = document.createElement('tr');
-                    
                     row.innerHTML = `
                         <td title="${student.name}">${student.name}</td>
-                        <td onclick="cycleDailyMark('${id}', this)" data-is-saved="${isSaved}"><span class="student-mark ${markClass}">${displayMark}</span></td>
+                        <td data-is-saved="${isSaved}" style="text-align: center;">${tdContent}</td>
                         <td><button class="group-delete-btn" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteStudent('${id}', '${student.name}')">DEL</button></td>
                     `;
                     tBody.appendChild(row);
@@ -525,35 +603,34 @@
             }
         }
 
-        function cycleDailyMark(stdId, cell) {
-            let isSaved = cell.getAttribute('data-is-saved') === 'true';
+        // NEW: Function to handle P / A clicks
+        function markAttendance(stdId, mark, element) {
+            let td = element.tagName === 'TD' ? element : element.parentElement;
+            let isSaved = td.getAttribute('data-is-saved') === 'true';
+            
             if (isSaved) {
                 let pass = prompt("Enter security password to change saved attendance:");
                 if (pass !== MASTER_PASSWORD) {
                     alert("❌ Wrong password! Action cancelled.");
                     return;
                 }
-                cell.setAttribute('data-is-saved', 'false');
+                td.setAttribute('data-is-saved', 'false');
             }
 
-            let span = cell.querySelector('.student-mark');
-            let currentDisplay = span.innerText;
-            let currentActualMark = currentDisplay === '-' ? "" : currentDisplay;
-            
-            let currentIndex = MARK_CYCLE.indexOf(currentActualMark);
-            let nextIndex = (currentIndex + 1) % MARK_CYCLE.length;
-            let nextMark = MARK_CYCLE[nextIndex];
-
-            span.innerText = nextMark ? nextMark : '-';
-            span.className = 'student-mark';
-            if(nextMark) {
-                span.classList.add(`mark-${nextMark.toLowerCase()}`);
+            if (mark === "P") {
+                td.innerHTML = `<span class="student-mark mark-p" onclick="markAttendance('${stdId}', '', this)">P</span>`;
+            } else if (mark === "A") {
+                td.innerHTML = `<span class="student-mark mark-a" onclick="markAttendance('${stdId}', '', this)">A</span>`;
             } else {
-                span.classList.add('mark-empty');
+                // Empty state (reset)
+                td.innerHTML = `
+                    <button class="btn-present" onclick="markAttendance('${stdId}', 'P', this.parentElement)">Present</button>
+                    <button class="btn-absent" onclick="markAttendance('${stdId}', 'A', this.parentElement)">Absent</button>
+                `;
             }
 
             if(!attendanceMarks[stdId]) attendanceMarks[stdId] = {};
-            attendanceMarks[stdId][sysDay] = nextMark; 
+            attendanceMarks[stdId][sysDay] = mark; 
         }
 
         function saveAttendance() {
@@ -577,7 +654,18 @@
                 .then(() => {
                     loading.style.display = 'none';
                     alert(`✅ Today's Attendance (${sysDay} ${MONTHS_NAMES[sysMonthIndex]}) saved successfully!`);
-                    renderDailyAttendanceTable(); 
+                    
+                    // Update UI to set "data-is-saved" to true
+                    let rows = document.getElementById('table-body').querySelectorAll('tr');
+                    rows.forEach(row => {
+                        let td = row.querySelectorAll('td')[1];
+                        if (td) {
+                            let text = td.innerText.trim();
+                            if (text === 'P' || text === 'A') {
+                                td.setAttribute('data-is-saved', 'true');
+                            }
+                        }
+                    });
                 })
                 .catch(err => {
                     loading.style.display = 'none';
@@ -641,7 +729,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
                         <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Name of the Institution: THE CATALYST ASSAM</div>
                         <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Register of Attendance for the Month of ${monthStr} ${yearStr}</div>
-                        <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Class/Section: ${group.name}</div>
+                        <div style="font-size: 16px; font-weight: bold; border-bottom: 1px dotted #000; padding-bottom: 2px;">Category: ${group.category} <br> Group: ${group.name}</div>
                     </div>
                 `;
                 printPage.innerHTML = header;
@@ -754,7 +842,7 @@
 
                 let opt = {
                     margin: [10, 10, 10, 10], 
-                    filename: `Attendance_Register_${group.name}_${monthStr}_${yearStr}.pdf`,
+                    filename: `Attendance_Register_${group.category}_${group.name}_${monthStr}_${yearStr}.pdf`,
                     image: { type: 'jpeg', quality: 1 },
                     html2canvas: { scale: 3, useCORS: true, letterRendering: true }, 
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
