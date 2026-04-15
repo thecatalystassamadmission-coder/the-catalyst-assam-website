@@ -323,7 +323,7 @@
         let groupsData = {};
         let activeGroupId = null;
         let attendanceMarks = {}; 
-        let activeCategoryTab = CATEGORIES[0]; // NEW: Default to first category
+        let activeCategoryTab = CATEGORIES[0]; // Default to first category
         
         let sysDate = new Date();
         let sysDay = sysDate.getDate();
@@ -401,6 +401,46 @@
             renderGroupsList();
         }
 
+        // ==========================================
+        // EDIT GROUP FUNCTION (NEW)
+        // ==========================================
+        function editGroup(id) {
+            if(!checkPassword(`EDIT / TRANSFER GROUP '${groupsData[id].name}'`)) return;
+
+            let group = groupsData[id];
+            let currentName = group.name;
+            let currentCat = group.category || CATEGORIES[0];
+
+            let newName = prompt("Enter new Group Name:", currentName);
+            if(newName === null || newName.trim() === "") return;
+
+            let catPromptText = "Transfer to Class/Category (Enter Number):\n";
+            CATEGORIES.forEach((cat, index) => {
+                catPromptText += `${index + 1}. ${cat}\n`;
+            });
+
+            let catInput = prompt(catPromptText, CATEGORIES.indexOf(currentCat) + 1);
+            if(catInput === null || catInput.trim() === "") return;
+
+            let catIndex = parseInt(catInput) - 1;
+            if(isNaN(catIndex) || catIndex < 0 || catIndex >= CATEGORIES.length) {
+                alert("❌ Invalid category selection! Group NOT transferred.");
+                return;
+            }
+
+            let newCategory = CATEGORIES[catIndex];
+
+            // Save updates in Firebase
+            database.ref(`${GROUPS_PATH}/${id}/name`).set(newName.trim());
+            database.ref(`${GROUPS_PATH}/${id}/category`).set(newCategory).then(() => {
+                activeCategoryTab = newCategory; // Auto switch to the new category tab
+                if (activeGroupId === id) {
+                    document.getElementById('active-group-display').innerText = `${newCategory} - ${newName.trim()}`;
+                }
+                alert(`✅ Group successfully updated and moved to ${newCategory}!`);
+            });
+        }
+
         function renderGroupsList() {
             let wrapper = document.getElementById('groups-list-wrapper');
             wrapper.innerHTML = "";
@@ -443,12 +483,16 @@
                         if(e.target.tagName !== 'BUTTON') { selectGroup(id); }
                     };
 
+                    // Added EDIT button here next to DEL
                     card.innerHTML = `
                         <div style="display: flex; flex-direction: column;">
                             <span class="group-name" title="${groupData.name}">${groupData.name}</span>
                             <span class="group-count">(${count}/300 students)</span>
                         </div>
-                        <button class="group-delete-btn" onclick="deleteGroup('${id}')">DEL</button>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="group-delete-btn" style="background: #2196F3;" onclick="editGroup('${id}')">EDIT</button>
+                            <button class="group-delete-btn" onclick="deleteGroup('${id}')">DEL</button>
+                        </div>
                     `;
                     groupContainer.appendChild(card);
                 });
@@ -603,7 +647,7 @@
             }
         }
 
-        // NEW: Function to handle P / A clicks
+        // Function to handle P / A clicks
         function markAttendance(stdId, mark, element) {
             let td = element.tagName === 'TD' ? element : element.parentElement;
             let isSaved = td.getAttribute('data-is-saved') === 'true';
