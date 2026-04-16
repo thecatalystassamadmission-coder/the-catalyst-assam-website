@@ -96,7 +96,7 @@
         .control-panel {
             background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;
             border: 1px dashed #D8FF00; display: flex; gap: 10px; margin-bottom: 20px;
-            flex-wrap: wrap; justify-content: center; align-items: center;
+            flex-wrap: justify-content: center; align-items: center;
         }
         .add-input { padding: 10px; border-radius: 8px; border: none; font-weight: bold; flex: 1; min-width: 150px;}
         .category-select { padding: 10px; border-radius: 8px; border: 2px solid #D8FF00; background: #2a1055; color: #fff; font-weight: bold; outline: none; cursor: pointer;}
@@ -638,7 +638,7 @@
 
                     let row = document.createElement('tr');
                     row.innerHTML = `
-                        <td title="${student.name}">${student.name}</td>
+                        <td title="${student.name}">${index + 1}. ${student.name}</td>
                         <td data-is-saved="${isSaved}" style="text-align: center;">${tdContent}</td>
                         <td><button class="group-delete-btn" style="padding: 4px 8px; font-size: 0.8rem;" onclick="deleteStudent('${id}', '${student.name}')">DEL</button></td>
                     `;
