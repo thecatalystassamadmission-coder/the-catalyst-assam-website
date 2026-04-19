@@ -155,6 +155,7 @@
             display: block;
             text-shadow: 0 0 5px rgba(0,0,0,0.5);
             letter-spacing: 1px;
+            transition: 0.3s;
         }
         
         .routine-table td { background: transparent; transition: 0.2s; font-weight: bold; min-width: 150px; }
@@ -280,6 +281,7 @@
         </div>
 
         <div class="admin-controls" id="admin-controls">
+            <button class="admin-btn" onclick="addTimeSlot()">+ ADD TIME SLOT</button>
             <button class="admin-btn" style="background: #00ff00;" onclick="saveRoutine()">💾 SAVE ROUTINE</button>
         </div>
 
@@ -315,7 +317,7 @@
         ];
         
         const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
-        const NUM_SLOTS = 7; // 7 Time slots columns
+        const JS_DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
         let routineData = {};
         let activeTab = CATEGORIES[0];
@@ -345,7 +347,7 @@
             let email = document.getElementById('admin-email').value.trim();
             let pass = document.getElementById('admin-pass').value.trim();
             
-            // 🔥 NEW PASSWORD
+            // Password
             if(email === "thecatalystassam@gmail.com" && pass === "thecatalystassam19472026routine") {
                 localStorage.setItem("routineAdminLoggedIn", "true");
                 isAdmin = true;
@@ -371,15 +373,15 @@
             document.getElementById('loading-overlay').style.display = 'flex';
             database.ref(DB_PATH).on('value', (snapshot) => {
                 routineData = snapshot.val() || {};
-                // Initialize missing categories
+                // Initialize missing categories with 7 default slots if none exist
                 CATEGORIES.forEach(cat => {
                     if(!routineData[cat]) {
                         routineData[cat] = {
-                            headers: Array(NUM_SLOTS).fill(""), // 7 Slot Headers
-                            daysData: {} // Data for Mon-Sun
+                            headers: Array(7).fill(""), 
+                            daysData: {} 
                         };
                         DAYS.forEach(day => {
-                            routineData[cat].daysData[day] = Array(NUM_SLOTS).fill("");
+                            routineData[cat].daysData[day] = Array(7).fill("");
                         });
                     }
                 });
@@ -412,9 +414,12 @@
             let data = routineData[activeTab];
             if(!data) return; // Failsafe
             
+            let currentSlots = data.headers ? data.headers.length : 7;
+            const todayStr = JS_DAYS[new Date().getDay()];
+
             // 1. Render Header
             tHeadRow.innerHTML = "<th>DAY / TIME</th>";
-            for(let i=0; i<NUM_SLOTS; i++) {
+            for(let i=0; i<currentSlots; i++) {
                 let th = document.createElement('th');
                 let slotVal = data.headers[i] || `TIME SLOT ${i+1}`;
                 if(isAdmin) {
@@ -434,19 +439,32 @@
                 
                 // First column (Day name styled as premium badge)
                 let tdDay = document.createElement('td');
-                tdDay.innerHTML = `<div class="day-badge">${day}</div>`;
+                
+                // 🔥 TODAY HIGHLIGHT (GREEN) 🔥
+                if (day === todayStr) {
+                    tdDay.innerHTML = `<div class="day-badge" style="background: #00ff00; color: #000; border-color: #00ff00; box-shadow: 0 0 20px rgba(0,255,0,0.8);">${day}</div>`;
+                } else {
+                    tdDay.innerHTML = `<div class="day-badge">${day}</div>`;
+                }
                 tr.appendChild(tdDay);
 
-                // 7 Data columns for this day
-                let dayArr = data.daysData[day] || Array(NUM_SLOTS).fill("");
+                // Data columns for this day
+                let dayArr = data.daysData[day] || Array(currentSlots).fill("");
                 
-                for(let i=0; i<NUM_SLOTS; i++) {
+                for(let i=0; i<currentSlots; i++) {
                     let td = document.createElement('td');
                     if(isAdmin) {
-                        td.innerHTML = `<input type="text" class="cell-input" value="${dayArr[i] || ''}" id="cell-${day}-${i}">`;
+                        td.innerHTML = `<input type="text" class="cell-input" value="${dayArr[i] || ''}" id="cell-${day}-${i}" ${day === todayStr ? 'style="color: #00ff00;"' : ''}>`;
                     } else {
                         td.innerText = dayArr[i] || '-';
-                        if(dayArr[i]) td.style.color = "#ffffff";
+                        if(dayArr[i]) {
+                            if (day === todayStr) {
+                                td.style.color = "#00ff00";
+                                td.style.textShadow = "0 0 10px rgba(0,255,0,0.5)";
+                            } else {
+                                td.style.color = "#ffffff";
+                            }
+                        }
                     }
                     tr.appendChild(td);
                 }
@@ -454,18 +472,38 @@
             });
         }
 
+        // 🔥 ADD UNLIMITED TIME SLOT FUNCTION 🔥
+        function addTimeSlot() {
+            let data = routineData[activeTab];
+            if (!data.headers) data.headers = Array(7).fill("");
+            
+            data.headers.push(""); // Add new column header
+            
+            DAYS.forEach(day => {
+                if (!data.daysData[day]) data.daysData[day] = Array(data.headers.length - 1).fill("");
+                data.daysData[day].push(""); // Add cell for each day
+            });
+            
+            renderTable(); // Re-render with new slot
+        }
+
         // Save Routine to Firebase
         function saveRoutine() {
+            let data = routineData[activeTab];
+            let currentSlots = data.headers ? data.headers.length : 7;
+
             let newHeaders = [];
-            for(let i=0; i<NUM_SLOTS; i++) {
-                newHeaders.push(document.getElementById(`header-input-${i}`).value.trim());
+            for(let i=0; i<currentSlots; i++) {
+                let input = document.getElementById(`header-input-${i}`);
+                newHeaders.push(input ? input.value.trim() : "");
             }
 
             let newDaysData = {};
             DAYS.forEach(day => {
                 newDaysData[day] = [];
-                for(let i=0; i<NUM_SLOTS; i++) {
-                    newDaysData[day].push(document.getElementById(`cell-${day}-${i}`).value.trim());
+                for(let i=0; i<currentSlots; i++) {
+                    let input = document.getElementById(`cell-${day}-${i}`);
+                    newDaysData[day].push(input ? input.value.trim() : "");
                 }
             });
 
