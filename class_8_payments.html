@@ -6,6 +6,7 @@
     <title>Class 8 Payments - The Catalyst Assam</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -22,31 +23,6 @@
             color: #ffffff; 
             min-height: 100vh;
         }
-
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; flex-direction: column;
-        }
-        .login-box {
-            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
-            border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4);
-            text-align: center; width: 90%; max-width: 400px;
-        }
-        .login-box h2 { color: #D8FF00; margin-bottom: 20px; text-transform: uppercase; }
-        .login-input {
-            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
-            border: 2px solid #C47BE4; background: rgba(255,255,255,0.9);
-            font-size: 1rem; font-weight: bold;
-        }
-        .login-btn {
-            background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900;
-            border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 0 15px rgba(216,255,0,0.5); transition: 0.3s; width: 100%;
-        }
-        .login-btn:hover { background: #fff; transform: scale(1.05); }
 
         /* --- DASHBOARD HEADER --- */
         header { 
@@ -207,16 +183,6 @@
         <p style="font-weight:bold;">Generating PDF & Saving Data<br>Please wait...</p>
     </div>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>Admin Login</h2>
-            <input type="email" id="email" class="login-input" placeholder="Email Address">
-            <input type="password" id="password" class="login-input" placeholder="Password">
-            <button class="login-btn" onclick="checkLogin()">LOGIN</button>
-            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email or Password!</p>
-        </div>
-    </div>
-
     <div id="dashboard">
         <header>
             <a href="admin_dashboard.html" class="back-btn">⬅ Back</a>
@@ -347,15 +313,15 @@
             appId: "1:256883795397:web:9c55da88762ce2293157ac"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
         const database = firebase.database();
         const DB_PATH = "class8_students"; 
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
-        const ADMIN_EMAIL = "thecatalystassam@gmail.com";
-        const PASS_1 = "thecatalystassamnitusarkar19471999";
-        const PASS_2 = "thecatalystassamtapanmandal19462000";
         const ACTION_PASS = "123456"; 
 
         const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -365,6 +331,27 @@
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
         let studentsData = [];
+
+        // ================= FIREBASE MASTER SECURITY CHECK =================
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('year-selector').value = currentYear;
+                if(studentsData.length > 0) renderStudents();
+            } else {
+                window.location.href = 'admin_dashboard.html';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem("adminLoggedIn");
+                window.location.href = "admin_dashboard.html";
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        }
+        // =================================================================
 
         function toggleSubjectSelection() {
             let course = document.getElementById('new-course').value;
@@ -413,34 +400,6 @@
         function changeYear() {
             currentYear = document.getElementById('year-selector').value;
             renderStudents();
-        }
-
-        window.onload = function() {
-            if(localStorage.getItem("adminLoggedIn") === "true") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                document.getElementById('year-selector').value = currentYear;
-                renderStudents();
-            }
-        };
-
-        function checkLogin() {
-            let email = document.getElementById('email').value.trim();
-            let pass = document.getElementById('password').value.trim();
-
-            if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
-                localStorage.setItem("adminLoggedIn", "true");
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                renderStudents();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("adminLoggedIn");
-            window.location.href = "admin_dashboard.html";
         }
 
         function addStudent() {
