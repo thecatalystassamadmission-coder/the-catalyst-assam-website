@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Payment Dashboard - The Catalyst Assam</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <style>
         /* ======================================================== */
         /* PREMIUM GLOW THEME & MASTER DASHBOARD STYLES             */
@@ -111,7 +115,7 @@
             <h2>Admin Login</h2>
             <input type="email" id="email" class="login-input" placeholder="Admin Email ID">
             <input type="password" id="password" class="login-input" placeholder="Enter Secure Password">
-            <button class="login-btn" onclick="checkLogin()">Login to Dashboard</button>
+            <button class="login-btn" id="loginBtn" onclick="checkLogin()">Login to Dashboard</button>
             <p id="login-error" style="color: #ff4444; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">❌ Access Denied! Wrong Credentials.</p>
         </div>
     </div>
@@ -173,67 +177,92 @@
     </div>
 
     <script>
-        // ================= CREDENTIALS STRICTLY AS REQUESTED =================
-        const ADMIN_EMAIL = "thecatalystassam@gmail.com";
-        const PASS_1 = "thecatalystassamnitusarkar19471999";
-        const PASS_2 = "thecatalystassamtapanmandal19462000";
-
-        // Check Login on Page Load to keep session active
-        window.onload = function() {
-            if(localStorage.getItem("adminLoggedIn") === "true") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            }
+        // ================= FIREBASE PRO SECURITY SETUP =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
+            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
+            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "the-catalyst-assam-payment",
+            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
+            messagingSenderId: "256883795397",
+            appId: "1:256883795397:web:9c55da88762ce2293157ac"
         };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
-        function checkLogin() {
-            let email = document.getElementById('email').value.trim();
-            let pass = document.getElementById('password').value.trim();
-
-            // Verification Logic
-            if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
+        // ================= PERSISTENT LOGIN STATE =================
+        // Yeh check karega ki agar aap ek baar login hain toh hamesha login rakhega (jab tak LOGOUT na karein)
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
                 localStorage.setItem("adminLoggedIn", "true");
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
             } else {
-                document.getElementById('login-error').style.display = 'block';
+                localStorage.removeItem("adminLoggedIn");
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('dashboard').style.display = 'none';
             }
+        });
+
+        // ================= PRO LOGIN FUNCTION =================
+        function checkLogin() {
+            let email = document.getElementById('email').value.trim();
+            let pass = document.getElementById('password').value.trim();
+            let loginBtn = document.getElementById('loginBtn');
+
+            if(email === "" || pass === "") {
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-error').innerText = "❌ Please enter Email and Password!";
+                return;
+            }
+
+            loginBtn.innerText = "Checking Security...";
+            loginBtn.style.opacity = "0.7";
+
+            // Asli Firebase Server Check
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    // Login successful (onAuthStateChanged apne aap screen change kar dega)
+                    document.getElementById('login-error').style.display = 'none';
+                    loginBtn.innerText = "Login to Dashboard";
+                    loginBtn.style.opacity = "1";
+                })
+                .catch((error) => {
+                    loginBtn.innerText = "Login to Dashboard";
+                    loginBtn.style.opacity = "1";
+                    document.getElementById('login-error').style.display = 'block';
+                    document.getElementById('login-error').innerText = "❌ Access Denied! " + error.message;
+                });
         }
 
+        // ================= SECURE LOGOUT FUNCTION =================
         function logout() {
-            localStorage.removeItem("adminLoggedIn");
-            location.reload(); // Reload page to show login screen
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem("adminLoggedIn");
+                location.reload(); 
+            }).catch((error) => {
+                alert("Logout Error: " + error.message);
+            });
         }
 
         // ================= NAVIGATION TO PAYMENT SHEET =================
         function openPaymentSheet(courseName) {
-            if (courseName === 'Class 6') {
-                window.location.href = 'class_6_payments.html';
-            } else if (courseName === 'Class 7') {
-                window.location.href = 'class_7_payments.html'; 
-            } else if (courseName === 'Class 8') {
-                window.location.href = 'class_8_payments.html'; 
-            } else if (courseName === 'Class 9') {
-                window.location.href = 'class_9_payments.html'; 
-            } else if (courseName === 'Class 10') {
-                window.location.href = 'class_10_payments.html'; 
-            } else if (courseName === 'Class 11') {
-                window.location.href = 'class_11_payments.html'; 
-            } else if (courseName === 'Class 12') {
-                window.location.href = 'class_12_payments.html'; 
-            } else if (courseName === 'Degree') {
-                window.location.href = 'degree_payments.html'; 
-            } else if (courseName === 'ADRE') {
-                window.location.href = 'adre_payments.html'; 
-            } else if (courseName === 'Assam Police') {
-                window.location.href = 'assam_police_payments.html'; 
-            } else if (courseName === 'Assam TET') {
-                window.location.href = 'assam_tet_payments.html'; 
-            } else if (courseName === 'DHS') {
-                window.location.href = 'dhs_payments.html'; // DHS Connect ho gaya hai! 😎
-            } else {
-                alert(courseName + " ka system abhi ready nahi hai. Jaldi hi ban jayega!");
-            }
+            if (courseName === 'Class 6') { window.location.href = 'class_6_payments.html'; } 
+            else if (courseName === 'Class 7') { window.location.href = 'class_7_payments.html'; } 
+            else if (courseName === 'Class 8') { window.location.href = 'class_8_payments.html'; } 
+            else if (courseName === 'Class 9') { window.location.href = 'class_9_payments.html'; } 
+            else if (courseName === 'Class 10') { window.location.href = 'class_10_payments.html'; } 
+            else if (courseName === 'Class 11') { window.location.href = 'class_11_payments.html'; } 
+            else if (courseName === 'Class 12') { window.location.href = 'class_12_payments.html'; } 
+            else if (courseName === 'Degree') { window.location.href = 'degree_payments.html'; } 
+            else if (courseName === 'ADRE') { window.location.href = 'adre_payments.html'; } 
+            else if (courseName === 'Assam Police') { window.location.href = 'assam_police_payments.html'; } 
+            else if (courseName === 'Assam TET') { window.location.href = 'assam_tet_payments.html'; } 
+            else if (courseName === 'DHS') { window.location.href = 'dhs_payments.html'; } 
+            else { alert(courseName + " ka system abhi ready nahi hai. Jaldi hi ban jayega!"); }
         }
     </script>
 </body>
