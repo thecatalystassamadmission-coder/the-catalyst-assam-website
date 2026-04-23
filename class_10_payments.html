@@ -149,8 +149,9 @@
         .btn-unlocked:hover { background: #D8FF00; transform: scale(1.05);}
         .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.5); cursor: pointer;}
 
-        /* Right: Delete */
-        .student-actions { flex: 0 0 auto; }
+        /* Right: Delete & Edit */
+        .student-actions { flex: 0 0 auto; display: flex; gap: 5px; align-items: center;}
+        .edit-btn { background: #00cc44; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
         .del-btn { background: #ff4444; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
 
         /* --- MODALS --- */
@@ -195,7 +196,7 @@
             .student-info { flex: none; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
             .current-status-box { margin-bottom: 10px; width: 100%; margin-right: 0;}
             .months-inline { width: 100%; }
-            .student-actions { width: 100%; text-align: right; }
+            .student-actions { width: 100%; text-align: right; justify-content: flex-end;}
         }
     </style>
 </head>
@@ -267,6 +268,34 @@
         </div>
 
         <div id="students-container"></div>
+    </div>
+
+    <div class="modal-overlay" id="edit-student-modal">
+        <div class="details-box" style="max-width: 500px;">
+            <button class="close-modal" onclick="document.getElementById('edit-student-modal').style.display='none'" style="color:#D8FF00;">X</button>
+            <h2 id="edit-modal-title" style="text-align: center; color: #D8FF00; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">EDIT STUDENT</h2>
+            
+            <input type="text" id="edit-student-name" class="add-input" style="width: 100%; margin-bottom: 10px;" placeholder="Student Name">
+            <input type="text" id="edit-parent-name" class="add-input" style="width: 100%; margin-bottom: 10px;" placeholder="Father/Mother Name">
+            
+            <div id="edit-single-box" style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; display: none; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <div style="width: 100%; text-align: center; color:#D8FF00; font-weight:bold; margin-bottom: 5px;">Update Subjects:</div>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-sgl" value="Maths"> Maths (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-sgl" value="Science"> Science (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-sgl" value="English"> English (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-sgl" value="Social Science"> Social Science (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-sgl" value="Adv. Mathematics"> Adv. Mathematics (₹500)</label>
+            </div>
+
+            <div id="edit-package-box" style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; display: none; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <div style="width: 100%; text-align: center; color:#D8FF00; font-weight:bold; margin-bottom: 5px;">Update Package Extras:</div>
+                <span style="color:#00ff00; font-weight:bold; margin-right:10px; width: 100%; text-align:center;">Fixed: Maths, Science, English (₹1200)</span>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-pkg" value="Adv. Mathematics"> Add Adv. Mathematics (+₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-pkg" value="Social Science"> Add Social Science (Free)</label>
+            </div>
+            
+            <button class="save-pay-btn" onclick="saveEditedStudent()" style="background:#D8FF00; color:#000;">SAVE CHANGES</button>
+        </div>
     </div>
 
     <div class="modal-overlay" id="month-details-modal">
@@ -358,7 +387,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const DB_PATH = "class10_students"; // PATH CHANGED FOR CLASS 10
+        const DB_PATH = "class10_students"; 
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
@@ -371,6 +400,7 @@
         
         let currentStudentIndex = -1;
         let currentMonthIndex = -1;
+        let editingStudentIndex = -1; 
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
         let studentsData = [];
@@ -480,25 +510,22 @@
             let monthlyFee = 0;
 
             if(course === "Package") {
-                // Class 10 Package Logic
                 selectedSubjects = ["Maths", "Science", "English"];
                 monthlyFee = 1200; // Base Fee
                 
                 document.querySelectorAll('.sub-checkbox-pkg:checked').forEach(cb => {
                     selectedSubjects.push(cb.value);
                     if(cb.value === "Adv. Mathematics") {
-                        monthlyFee += 400; // Add 400 for Adv Math
+                        monthlyFee += 400; 
                     }
-                    // Social Science is Free
                 });
             } else {
-                // Class 10 Single Subject Logic
                 document.querySelectorAll('.sub-checkbox-sgl:checked').forEach(cb => {
                     selectedSubjects.push(cb.value);
                     if(cb.value === "Adv. Mathematics") {
-                        monthlyFee += 500; // Single Adv Math is 500
+                        monthlyFee += 500; 
                     } else {
-                        monthlyFee += 400; // Normal single subject is 400
+                        monthlyFee += 400; 
                     }
                 });
                 if(selectedSubjects.length === 0) { alert("Please tick at least 1 subject for Single Subject!"); return; }
@@ -527,6 +554,88 @@
             document.querySelectorAll('.sub-checkbox-pkg').forEach(cb => cb.checked = false);
             document.querySelectorAll('.sub-checkbox-sgl').forEach(cb => cb.checked = false);
         }
+
+        // --- UPDATED EDIT FUNCTIONS START ---
+        function openEditStudentModal(index) {
+            let passPrompt = prompt("Enter Admin Password to Edit Student:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+
+            editingStudentIndex = index;
+            let student = studentsData[index];
+
+            document.getElementById('edit-student-name').value = student.name;
+            document.getElementById('edit-parent-name').value = student.parent || "";
+
+            let savedSubjects = Array.isArray(student.subjects) ? student.subjects : [];
+
+            if (student.courseType === "Single Subject") {
+                document.getElementById('edit-modal-title').innerText = "EDIT STUDENT (SINGLE SUBJECT)";
+                document.getElementById('edit-single-box').style.display = "flex";
+                document.getElementById('edit-package-box').style.display = "none";
+                
+                document.querySelectorAll('.edit-sub-checkbox-sgl').forEach(cb => {
+                    cb.checked = savedSubjects.includes(cb.value);
+                });
+            } else { // Package
+                document.getElementById('edit-modal-title').innerText = "EDIT STUDENT (PACKAGE)";
+                document.getElementById('edit-single-box').style.display = "none";
+                document.getElementById('edit-package-box').style.display = "flex";
+                
+                document.querySelectorAll('.edit-sub-checkbox-pkg').forEach(cb => {
+                    cb.checked = savedSubjects.includes(cb.value);
+                });
+            }
+
+            document.getElementById('edit-student-modal').style.display = 'flex';
+        }
+
+        function saveEditedStudent() {
+            let newName = document.getElementById('edit-student-name').value.trim();
+            let newParent = document.getElementById('edit-parent-name').value.trim();
+            
+            if(newName === "" || newParent === "") { alert("Please fill Name and Parent details!"); return; }
+
+            let student = studentsData[editingStudentIndex];
+            let selectedSubjects = [];
+            let newMonthlyFee = 0;
+
+            if (student.courseType === "Single Subject") {
+                document.querySelectorAll('.edit-sub-checkbox-sgl:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                    if(cb.value === "Adv. Mathematics") {
+                        newMonthlyFee += 500;
+                    } else {
+                        newMonthlyFee += 400;
+                    }
+                });
+                if(selectedSubjects.length === 0) { alert("Please tick at least 1 subject!"); return; }
+            } else { // Package
+                selectedSubjects = ["Maths", "Science", "English"]; // Fixed base subjects
+                newMonthlyFee = 1200; // Base Fee
+                
+                document.querySelectorAll('.edit-sub-checkbox-pkg:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                    if(cb.value === "Adv. Mathematics") {
+                        newMonthlyFee += 400; // Add 400 extra for Adv. Maths
+                    }
+                    // Social Science is Free, fee remains unchanged.
+                });
+            }
+
+            // Update student data
+            studentsData[editingStudentIndex].name = newName;
+            studentsData[editingStudentIndex].parent = newParent;
+            studentsData[editingStudentIndex].subjects = selectedSubjects;
+            studentsData[editingStudentIndex].monthlyFee = newMonthlyFee;
+
+            saveData(); 
+
+            document.getElementById('edit-student-modal').style.display = 'none';
+            alert(`✅ Student updated successfully!\nNew Monthly Fee: ₹${newMonthlyFee}`);
+            
+            renderStudents(); 
+        }
+        // --- UPDATED EDIT FUNCTIONS END ---
 
         function deleteStudent(index) {
             let passPrompt = prompt("Enter Admin Password to Delete Student:");
@@ -636,9 +745,13 @@
                 });
 
                 monthsHTML += `</div>`;
-                let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
+                
+                // ADDED EDIT BUTTON LOGIC FOR BOTH PACKAGE AND SINGLE SUBJECT
+                let actionsHTML = `<div class="student-actions">`;
+                actionsHTML += `<button class="edit-btn" onclick="openEditStudentModal(${sIndex})">EDIT</button>`;
+                actionsHTML += `<button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
 
-                row.innerHTML = infoHTML + statusHTML + monthsHTML + deleteHTML;
+                row.innerHTML = infoHTML + statusHTML + monthsHTML + actionsHTML;
                 container.appendChild(row);
             });
         }
@@ -846,7 +959,7 @@
                     let payload = {
                         student_name: document.getElementById('rec-name').value,
                         parent_name: document.getElementById('rec-parent').value,
-                        student_class: "Class 10", // YAHAN CLASS 10 HO GAYA HAI
+                        student_class: "Class 10", 
                         course_type: document.getElementById('rec-course').value,
                         medium: document.getElementById('rec-medium').value,
                         final_subjects: Array.from(checkboxes).map(cb => cb.value).join(", ") + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
