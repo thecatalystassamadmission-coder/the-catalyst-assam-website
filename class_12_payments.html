@@ -6,6 +6,7 @@
     <title>Class 12 Payments - The Catalyst Assam</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -22,31 +23,6 @@
             color: #ffffff; 
             min-height: 100vh;
         }
-
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #8C00FF 0%, #7132CA 100%);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; flex-direction: column;
-        }
-        .login-box {
-            background: rgba(0,0,0,0.6); padding: 40px; border-radius: 20px;
-            border: 2px solid #D8FF00; box-shadow: 0 0 30px rgba(216,255,0,0.4);
-            text-align: center; width: 90%; max-width: 400px;
-        }
-        .login-box h2 { color: #D8FF00; margin-bottom: 20px; text-transform: uppercase; }
-        .login-input {
-            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px;
-            border: 2px solid #C47BE4; background: rgba(255,255,255,0.9);
-            font-size: 1rem; font-weight: bold;
-        }
-        .login-btn {
-            background: #D8FF00; color: #000; padding: 12px 25px; font-weight: 900;
-            border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 0 15px rgba(216,255,0,0.5); transition: 0.3s; width: 100%;
-        }
-        .login-btn:hover { background: #fff; transform: scale(1.05); }
 
         /* --- DASHBOARD HEADER --- */
         header { 
@@ -149,8 +125,9 @@
         .btn-unlocked:hover { background: #D8FF00; transform: scale(1.05);}
         .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.5); cursor: pointer;}
 
-        /* Right: Delete */
-        .student-actions { flex: 0 0 auto; }
+        /* Right: Delete & Edit */
+        .student-actions { flex: 0 0 auto; display: flex; gap: 5px; align-items: center;}
+        .edit-btn { background: #00cc44; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
         .del-btn { background: #ff4444; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.8rem;}
 
         /* --- MODALS --- */
@@ -195,7 +172,7 @@
             .student-info { flex: none; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;}
             .current-status-box { margin-bottom: 10px; width: 100%; margin-right: 0;}
             .months-inline { width: 100%; }
-            .student-actions { width: 100%; text-align: right; }
+            .student-actions { width: 100%; text-align: right; justify-content: flex-end;}
         }
     </style>
 </head>
@@ -205,16 +182,6 @@
         <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
         <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Processing Payment...</h2>
         <p style="font-weight:bold;">Generating PDF & Saving Data<br>Please wait...</p>
-    </div>
-
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>Admin Login</h2>
-            <input type="email" id="email" class="login-input" placeholder="Email Address">
-            <input type="password" id="password" class="login-input" placeholder="Password">
-            <button class="login-btn" onclick="checkLogin()">LOGIN</button>
-            <p id="login-error" style="color: #ff4444; margin-top: 10px; display: none; font-weight: bold;">Wrong Email or Password!</p>
-        </div>
     </div>
 
     <div id="dashboard">
@@ -267,6 +234,34 @@
         </div>
 
         <div id="students-container"></div>
+    </div>
+
+    <div class="modal-overlay" id="edit-student-modal">
+        <div class="details-box" style="max-width: 500px;">
+            <button class="close-modal" onclick="document.getElementById('edit-student-modal').style.display='none'" style="color:#D8FF00;">X</button>
+            <h2 id="edit-modal-title" style="text-align: center; color: #D8FF00; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">EDIT STUDENT</h2>
+            
+            <input type="text" id="edit-student-name" class="add-input" style="width: 100%; margin-bottom: 10px;" placeholder="Student Name">
+            <input type="text" id="edit-parent-name" class="add-input" style="width: 100%; margin-bottom: 10px;" placeholder="Father/Mother Name">
+            
+            <div id="edit-arts-box" style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; display: none; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <div style="width: 100%; text-align: center; color:#D8FF00; font-weight:bold; margin-bottom: 5px;">Update ARTS Subjects:</div>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-arts" value="ECONOMICS"> ECONOMICS (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-arts" value="ENGLISH"> ENGLISH (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-arts" value="GEOGRAPHY"> GEOGRAPHY (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-arts" value="POL. SCIENCE"> POL. SCIENCE (₹400)</label>
+            </div>
+
+            <div id="edit-commerce-box" style="margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; display: none; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                <div style="width: 100%; text-align: center; color:#D8FF00; font-weight:bold; margin-bottom: 5px;">Update COMMERCE Subjects:</div>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-com" value="ACCOUNTANCY"> ACCOUNTANCY (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-com" value="BUSINESS STUDIES"> BUSINESS STUDIES (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-com" value="ECONOMICS"> ECONOMICS (₹400)</label>
+                <label style="color:#fff; font-weight:bold; cursor:pointer;"><input type="checkbox" class="edit-sub-checkbox-com" value="ENGLISH"> ENGLISH (₹400)</label>
+            </div>
+            
+            <button class="save-pay-btn" onclick="saveEditedStudent()" style="background:#D8FF00; color:#000;">SAVE CHANGES</button>
+        </div>
     </div>
 
     <div class="modal-overlay" id="month-details-modal">
@@ -357,24 +352,48 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
         const database = firebase.database();
-        const DB_PATH = "class12_students"; // PATH CHANGED FOR CLASS 12
+        const DB_PATH = "class12_students"; 
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
-        const ADMIN_EMAIL = "thecatalystassam@gmail.com";
-        const PASS_1 = "thecatalystassamnitusarkar19471999";
-        const PASS_2 = "thecatalystassamtapanmandal19462000";
         const ACTION_PASS = "123456"; 
 
         const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
         
         let currentStudentIndex = -1;
         let currentMonthIndex = -1;
+        let editingStudentIndex = -1; 
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
         let studentsData = [];
+
+        // ================= FIREBASE MASTER SECURITY CHECK =================
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is securely logged in via Admin Dashboard
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('year-selector').value = currentYear;
+                if(studentsData.length > 0) renderStudents();
+            } else {
+                // Kicks user out if they bypass Admin Dashboard
+                window.location.href = 'admin_dashboard.html';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem("adminLoggedIn");
+                window.location.href = "admin_dashboard.html";
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        }
+        // =================================================================
 
         function toggleSubjectSelection() {
             let course = document.getElementById('new-course').value;
@@ -426,34 +445,6 @@
             renderStudents();
         }
 
-        window.onload = function() {
-            if(localStorage.getItem("adminLoggedIn") === "true") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                document.getElementById('year-selector').value = currentYear;
-                renderStudents();
-            }
-        };
-
-        function checkLogin() {
-            let email = document.getElementById('email').value.trim();
-            let pass = document.getElementById('password').value.trim();
-
-            if(email === ADMIN_EMAIL && (pass === PASS_1 || pass === PASS_2)) {
-                localStorage.setItem("adminLoggedIn", "true");
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                renderStudents();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem("adminLoggedIn");
-            window.location.href = "admin_dashboard.html";
-        }
-
         function addStudent() {
             let name = document.getElementById('new-student-name').value.trim();
             let parent = document.getElementById('new-parent-name').value.trim();
@@ -502,6 +493,75 @@
             toggleSubjectSelection();
             document.querySelectorAll('.sub-checkbox-arts').forEach(cb => cb.checked = false);
             document.querySelectorAll('.sub-checkbox-com').forEach(cb => cb.checked = false);
+        }
+
+        function openEditStudentModal(index) {
+            let passPrompt = prompt("Enter Admin Password to Edit Student:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+
+            editingStudentIndex = index;
+            let student = studentsData[index];
+
+            document.getElementById('edit-student-name').value = student.name;
+            document.getElementById('edit-parent-name').value = student.parent || "";
+
+            let savedSubjects = Array.isArray(student.subjects) ? student.subjects : [];
+
+            if (student.courseType === "ARTS STREAM") {
+                document.getElementById('edit-modal-title').innerText = "EDIT STUDENT (ARTS STREAM)";
+                document.getElementById('edit-arts-box').style.display = "flex";
+                document.getElementById('edit-commerce-box').style.display = "none";
+                
+                document.querySelectorAll('.edit-sub-checkbox-arts').forEach(cb => {
+                    cb.checked = savedSubjects.includes(cb.value);
+                });
+            } else if (student.courseType === "COMMERCE STREAM") { 
+                document.getElementById('edit-modal-title').innerText = "EDIT STUDENT (COMMERCE STREAM)";
+                document.getElementById('edit-arts-box').style.display = "none";
+                document.getElementById('edit-commerce-box').style.display = "flex";
+                
+                document.querySelectorAll('.edit-sub-checkbox-com').forEach(cb => {
+                    cb.checked = savedSubjects.includes(cb.value);
+                });
+            }
+
+            document.getElementById('edit-student-modal').style.display = 'flex';
+        }
+
+        function saveEditedStudent() {
+            let newName = document.getElementById('edit-student-name').value.trim();
+            let newParent = document.getElementById('edit-parent-name').value.trim();
+            
+            if(newName === "" || newParent === "") { alert("Please fill Name and Parent details!"); return; }
+
+            let student = studentsData[editingStudentIndex];
+            let selectedSubjects = [];
+
+            if (student.courseType === "ARTS STREAM") {
+                document.querySelectorAll('.edit-sub-checkbox-arts:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                });
+            } else if (student.courseType === "COMMERCE STREAM") { 
+                document.querySelectorAll('.edit-sub-checkbox-com:checked').forEach(cb => {
+                    selectedSubjects.push(cb.value);
+                });
+            }
+            
+            if(selectedSubjects.length === 0) { alert("Please tick at least 1 subject!"); return; }
+
+            let newMonthlyFee = selectedSubjects.length * 400;
+
+            studentsData[editingStudentIndex].name = newName;
+            studentsData[editingStudentIndex].parent = newParent;
+            studentsData[editingStudentIndex].subjects = selectedSubjects;
+            studentsData[editingStudentIndex].monthlyFee = newMonthlyFee;
+
+            saveData(); 
+
+            document.getElementById('edit-student-modal').style.display = 'none';
+            alert(`✅ Student updated successfully!\nNew Monthly Fee: ₹${newMonthlyFee}`);
+            
+            renderStudents(); 
         }
 
         function deleteStudent(index) {
@@ -612,9 +672,12 @@
                 });
 
                 monthsHTML += `</div>`;
-                let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
+                
+                let actionsHTML = `<div class="student-actions">`;
+                actionsHTML += `<button class="edit-btn" onclick="openEditStudentModal(${sIndex})">EDIT</button>`;
+                actionsHTML += `<button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
 
-                row.innerHTML = infoHTML + statusHTML + monthsHTML + deleteHTML;
+                row.innerHTML = infoHTML + statusHTML + monthsHTML + actionsHTML;
                 container.appendChild(row);
             });
         }
@@ -822,7 +885,7 @@
                     let payload = {
                         student_name: document.getElementById('rec-name').value,
                         parent_name: document.getElementById('rec-parent').value,
-                        student_class: "Class 12", // YAHAN CLASS 12 HO GAYA HAI
+                        student_class: "Class 12", 
                         course_type: document.getElementById('rec-course').value,
                         medium: document.getElementById('rec-medium').value,
                         final_subjects: Array.from(checkboxes).map(cb => cb.value).join(", ") + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
