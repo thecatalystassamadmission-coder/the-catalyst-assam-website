@@ -6,6 +6,7 @@
     <title>Live Monthly Class Routine - The Catalyst Assam</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
@@ -233,7 +234,7 @@
 
     <div id="loading-overlay">
         <div style="font-size: 4rem; margin-bottom: 10px; animation: bounce-vertical 1s infinite;">🚀</div>
-        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Syncing...</h2>
+        <h2 style="color:#D8FF00; text-shadow:0 0 15px rgba(216,255,0,0.8);">Saving Routine...</h2>
     </div>
 
     <div id="login-modal" class="modal-overlay">
@@ -298,16 +299,19 @@
     <script>
         // 🔥 FIREBASE INITIALIZATION
         const firebaseConfig = {
-            apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
-            authDomain: "the-catalyst-assam-payment.firebaseapp.com",
-            databaseURL: "https://the-catalyst-assam-payment-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "the-catalyst-assam-payment",
-            storageBucket: "the-catalyst-assam-payment.firebasestorage.app",
-            messagingSenderId: "256883795397",
-            appId: "1:256883795397:web:9c55da88762ce2293157ac"
+            apiKey: "AIzaSyDznd0PdSqe7ZXegRX69mJ7HAtZqRxUqNo",
+            authDomain: "attendance-routine.firebaseapp.com",
+            databaseURL: "https://attendance-routine-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "attendance-routine",
+            storageBucket: "attendance-routine.firebasestorage.app",
+            messagingSenderId: "1000359427978",
+            appId: "1:1000359427978:web:c99eca90840d7b2146d273",
+            measurementId: "G-2E0450CRP6"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const database = firebase.database();
         const DB_PATH = "live_routines_v2"; // Changed path for new structure
 
@@ -330,47 +334,76 @@
         let sysMonthIndex = sysDate.getMonth();
         let sysYear = sysDate.getFullYear();
 
-        // On Load
+        // ================= PERSISTENT LOGIN STATE =================
         window.onload = function() {
             document.getElementById('system-date-display').innerText = `Today: ${sysDay} ${MONTHS_NAMES[sysMonthIndex]} ${sysYear}`;
-            if(localStorage.getItem("routineAdminLoggedIn") === "true") {
-                isAdmin = true;
-                document.getElementById('login-trigger-btn').innerText = "Logout Admin";
-                document.getElementById('login-trigger-btn').onclick = adminLogout;
-            }
             renderTabs();
-            fetchRoutineData();
+
+            // Firebase background mein check karega ki admin logged in hai ya nahi
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    localStorage.setItem("routineAdminLoggedIn", "true");
+                    isAdmin = true;
+                    document.getElementById('login-modal').style.display = 'none';
+                    document.getElementById('login-trigger-btn').innerText = "Logout Admin";
+                    document.getElementById('login-trigger-btn').onclick = adminLogout;
+                    fetchRoutineData(); // Admin confirm hone ke baad data load karo
+                } else {
+                    localStorage.removeItem("routineAdminLoggedIn");
+                    isAdmin = false;
+                    document.getElementById('login-trigger-btn').innerText = "Admin Edit";
+                    document.getElementById('login-trigger-btn').onclick = () => { document.getElementById('login-modal').style.display='flex'; };
+                    fetchRoutineData(); // Normal user ke liye data load karo
+                }
+            });
         };
 
-        // Admin Auth
+        // ================= PRO LOGIN FUNCTION =================
         function adminLogin() {
             let email = document.getElementById('admin-email').value.trim();
             let pass = document.getElementById('admin-pass').value.trim();
-            
-            // Password
-            if(email === "thecatalystassam@gmail.com" && pass === "thecatalystassam19472026routine") {
-                localStorage.setItem("routineAdminLoggedIn", "true");
-                isAdmin = true;
-                document.getElementById('login-modal').style.display = 'none';
-                document.getElementById('login-trigger-btn').innerText = "Logout Admin";
-                document.getElementById('login-trigger-btn').onclick = adminLogout;
-                renderTable(); // Re-render to show inputs
-            } else {
+            let loginBtn = document.querySelector('#login-modal .admin-btn');
+
+            if(email === "" || pass === "") {
                 document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-error').innerText = "❌ Please enter Email and Password!";
+                return;
             }
+
+            loginBtn.innerText = "Checking Security...";
+            loginBtn.style.opacity = "0.7";
+
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+            .then((userCredential) => {
+                document.getElementById('login-error').style.display = 'none';
+                loginBtn.innerText = "LOGIN";
+                loginBtn.style.opacity = "1";
+            })
+            .catch((error) => {
+                loginBtn.innerText = "LOGIN";
+                loginBtn.style.opacity = "1";
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('login-error').innerText = "❌ " + error.message;
+            });
         }
 
+        // ================= SECURE LOGOUT FUNCTION =================
         function adminLogout() {
-            localStorage.removeItem("routineAdminLoggedIn");
-            isAdmin = false;
-            document.getElementById('login-trigger-btn').innerText = "Admin Edit";
-            document.getElementById('login-trigger-btn').onclick = () => { document.getElementById('login-modal').style.display='flex'; };
-            renderTable(); // Re-render to remove inputs
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem("routineAdminLoggedIn");
+                location.reload(); 
+            }).catch((error) => {
+                alert("Logout Error: " + error.message);
+            });
         }
 
         // Fetch Live Data
         function fetchRoutineData() {
-            document.getElementById('loading-overlay').style.display = 'flex';
+            // MAIN FIX: Loading screen yahan se hata di taaki students ko direct data dikhe bina atke.
+            
+            // Purane listener clear karo taaki double load na ho
+            database.ref(DB_PATH).off();
+            
             database.ref(DB_PATH).on('value', (snapshot) => {
                 routineData = snapshot.val() || {};
                 // Initialize missing categories with 7 default slots if none exist
@@ -386,7 +419,9 @@
                     }
                 });
                 renderTable();
-                document.getElementById('loading-overlay').style.display = 'none';
+            }, (error) => {
+                console.error("Firebase Rule Blocked Read Access:", error);
+                renderTable(); 
             });
         }
 
