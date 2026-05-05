@@ -514,7 +514,6 @@
 
                     let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
                     let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
-                    // Check if month is in the past
                     let isPastMonth = isPastYear || (!isFutureYear && mIndex < currentMonthNum);
 
                     let dueAmount = monthlyFee - totalPaid;
@@ -528,7 +527,6 @@
                             innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
                         }
                         
-                        // Agar past month hai toh view PDF, lekin add payment ka option hide rahega
                         if(isPastMonth) {
                             onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
                         } else {
@@ -541,13 +539,11 @@
                         onclickLogic = `alert('This button will unlock when the month arrives.')`;
                     } 
                     else if (isPastMonth) {
-                        // Past Month & Unpaid - Seedha Red color me Due dikhayega
                         btnClass = "btn-unlocked";
                         innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
                         onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
                     }
                     else {
-                        // Current Month & Unpaid
                         btnClass = "btn-unlocked";
                         innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${monthlyFee}</span>`;
                         onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
@@ -564,17 +560,14 @@
             });
         }
 
-        // Sirf Past month ke liye Password puchega aur View Details kholega
         function unlockPastMonth(sIndex, mIndex) {
             let passPrompt = prompt(`Enter Admin Password to check past month (${MONTHS[mIndex]} ${currentYear}):`);
             if(passPrompt === ACTION_PASS) { 
-                // true flag ka matlab hai ki dobara password mat pucho openDetailsModal me
                 openDetailsModal(sIndex, mIndex, true); 
             } 
             else { alert("❌ Wrong Password!"); }
         }
 
-        // Updated Modal Logic
         function openDetailsModal(sIndex, mIndex, skipPassword = false) {
             if(!skipPassword) {
                 let passPrompt = prompt("Enter Admin Password to VIEW payment details:");
@@ -602,7 +595,6 @@
                 </div>`;
             });
 
-            // Calculate Due
             let monthlyFee = student.monthlyFee || 0;
             let dueAmount = monthlyFee - totalPaid;
             if(dueAmount < 0) dueAmount = 0;
@@ -611,22 +603,25 @@
                  listDiv.innerHTML = `<p style="text-align:center; color:#ff4444; font-weight:bold; margin-bottom:10px;">❌ No Payments Made in this month.</p>`;
             }
 
-            // Always Show Due Amount Details at bottom
             listDiv.innerHTML += `<div style="text-align:center; font-size:1.3rem; color:#ff4444; font-weight:900; margin-top:15px; border:2px dashed #ff4444; padding:8px; border-radius:8px; background:rgba(255,0,0,0.1);">DUE AMOUNT: ₹${dueAmount}</div>`;
 
             document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} DETAILS`;
             
-            let currentDate = new Date();
-            let actualCurrentYear = String(currentDate.getFullYear());
-            let currentMonthNum = currentDate.getMonth();
-            let isPastMonth = parseInt(currentYear) < parseInt(actualCurrentYear) || (parseInt(currentYear) === parseInt(actualCurrentYear) && mIndex < currentMonthNum);
+            // ================= NEW VISIBILITY LOGIC (FIXED) =================
+            let sysDate = new Date();
+            let currentRealMonth = sysDate.getMonth();
+            let currentRealYear = sysDate.getFullYear();
+            
+            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
+            let allowedYear = currentRealMonth === 0 ? currentRealYear - 1 : currentRealYear;
 
-            // Agar gujra hua mahina hai (Past month) toh Add Payment button hide kardo
-            if(isPastMonth || arr.length >= 5) {
+            // Sirf pichle 1 mahine mein hi "+ ADD NEW PAYMENT" button dikhega
+            if(mIndex !== allowedMonth || parseInt(currentYear) !== allowedYear || arr.length >= 5) {
                 document.getElementById('add-installment-btn').style.display = 'none';
             } else {
                 document.getElementById('add-installment-btn').style.display = 'block';
             }
+            // ================================================================
 
             document.getElementById('month-details-modal').style.display = 'flex';
         }
@@ -736,6 +731,25 @@
                 return;
             }
 
+            // ================== NEW PAST 1 MONTH SECURITY LOGIC ==================
+            let sysDate = new Date();
+            let currentRealMonth = sysDate.getMonth(); // May = 4
+            let currentRealYear = sysDate.getFullYear();
+
+            // Calculate the allowed previous month (e.g., if May, allowed is April (3))
+            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
+            let allowedYear = currentRealYear;
+            // Handle cross-year (January -> December of previous year)
+            if (currentRealMonth === 0) {
+                allowedYear = currentRealYear - 1;
+            }
+
+            if (currentMonthIndex !== allowedMonth || parseInt(currentYear) !== allowedYear) {
+                alert("❌ Error: Aap sirf pichle ek mahine (Past 1 Month) ka hi naya payment receive kar sakte hain!");
+                return;
+            }
+            // =====================================================================
+
             let amount = document.getElementById('rec-amount').value;
             let currentSlNo = document.getElementById('rec-slno').value; 
             let checkboxes = document.querySelectorAll('input[name="subject"]:checked');
@@ -785,10 +799,6 @@
                         photo: uploadedPhotoBase64
                     };
 
-                    // ========================================================
-                    // BYPASS TRICK: HUM ERROR KO BHI SUCCESS MAANENGE
-                    // Kyunki Google Sheet hamesha data le leti hai!
-                    // ========================================================
                     let isSaved = false;
 
                     function finalizeSave() {
@@ -824,7 +834,6 @@
                         finalizeSave();
                     })
                     .catch(err => {
-                        // Browser error aane par bhi hum save karenge!
                         console.log("Ignored Browser Block.");
                         finalizeSave();
                     });
