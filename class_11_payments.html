@@ -729,16 +729,21 @@
 
             document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} DETAILS`;
             
-            let currentDate = new Date();
-            let actualCurrentYear = String(currentDate.getFullYear());
-            let currentMonthNum = currentDate.getMonth();
-            let isPastMonth = parseInt(currentYear) < parseInt(actualCurrentYear) || (parseInt(currentYear) === parseInt(actualCurrentYear) && mIndex < currentMonthNum);
+            // ================= NEW VISIBILITY LOGIC (FIXED) =================
+            let sysDate = new Date();
+            let currentRealMonth = sysDate.getMonth();
+            let currentRealYear = sysDate.getFullYear();
+            
+            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
+            let allowedYear = currentRealMonth === 0 ? currentRealYear - 1 : currentRealYear;
 
-            if(isPastMonth || arr.length >= 5) {
+            // Sirf pichle 1 mahine mein hi "+ ADD NEW PAYMENT" button dikhega
+            if(mIndex !== allowedMonth || parseInt(currentYear) !== allowedYear || arr.length >= 5) {
                 document.getElementById('add-installment-btn').style.display = 'none';
             } else {
                 document.getElementById('add-installment-btn').style.display = 'block';
             }
+            // ================================================================
 
             document.getElementById('month-details-modal').style.display = 'flex';
         }
@@ -846,6 +851,25 @@
                 alert("❌ No Internet Connection! Data save nahi hoga.");
                 return;
             }
+
+            // ================== NEW PAST 1 MONTH SECURITY LOGIC ==================
+            let sysDate = new Date();
+            let currentRealMonth = sysDate.getMonth(); // May = 4
+            let currentRealYear = sysDate.getFullYear();
+
+            // Calculate the allowed previous month (e.g., if May, allowed is April (3))
+            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
+            let allowedYear = currentRealYear;
+            // Handle cross-year (January -> December of previous year)
+            if (currentRealMonth === 0) {
+                allowedYear = currentRealYear - 1;
+            }
+
+            if (currentMonthIndex !== allowedMonth || parseInt(currentYear) !== allowedYear) {
+                alert("❌ Error: Aap sirf pichle ek mahine (Past 1 Month) ka hi naya payment receive kar sakte hain!");
+                return;
+            }
+            // =====================================================================
 
             let amount = document.getElementById('rec-amount').value;
             let currentSlNo = document.getElementById('rec-slno').value; 
