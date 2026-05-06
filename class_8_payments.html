@@ -36,6 +36,7 @@
         .sub-header { color: #D8FF00; font-weight: bold; margin-top: 5px; font-size: 1.2rem; }
 
         .logout-btn { position: absolute; top: 20px; right: 20px; background: #ff4444; color: #fff; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(255,0,0,0.5);}
+        .cp-btn { position: absolute; top: 20px; right: 120px; background: #00cc44; color: #fff; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(0,204,68,0.5);}
         .back-btn { position: absolute; top: 20px; left: 20px; background: #D8FF00; color: #000; padding: 8px 15px; border:none; border-radius: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(216,255,0,0.5); text-decoration: none;}
 
         /* --- DASHBOARD MAIN --- */
@@ -124,6 +125,9 @@
         .btn-unlocked { background: #fff; color: #000; border-color: #D8FF00; box-shadow: 0 0 5px rgba(216,255,0,0.5); }
         .btn-unlocked:hover { background: #D8FF00; transform: scale(1.05);}
         .btn-paid { background: #00cc44; color: #fff; border-color: #00ff55; box-shadow: 0 0 10px rgba(0,255,85,0.5); cursor: pointer;}
+        
+        /* NEW: Early Payment Green Outline */
+        .btn-paid-early { background: #00cc44; color: #fff; border: 2px solid #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.8); cursor: pointer; }
 
         /* Right: Delete */
         .student-actions { flex: 0 0 auto; }
@@ -188,6 +192,7 @@
             <a href="admin_dashboard.html" class="back-btn">⬅ Back</a>
             <h1>THE CATALYST ASSAM</h1>
             <div class="sub-header">CLASS 8 - PAYMENT DASHBOARD</div>
+            <button class="cp-btn" onclick="document.getElementById('cp-auth-modal').style.display='flex'">⚙️ Control Panel</button>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </header>
         
@@ -226,6 +231,58 @@
         </div>
 
         <div id="students-container"></div>
+    </div>
+
+    <!-- CP AUTH MODAL -->
+    <div class="modal-overlay" id="cp-auth-modal">
+        <div class="details-box" style="max-width: 400px; text-align: center;">
+            <h2 style="color:#D8FF00; margin-bottom:15px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">ADMIN LOGIN</h2>
+            <input type="email" id="cp-email" class="add-input" placeholder="Database Email" style="width:100%; margin:10px 0; background:rgba(255,255,255,0.1); color:#fff;">
+            <input type="password" id="cp-pass" class="add-input" placeholder="Password" style="width:100%; margin:10px 0; background:rgba(255,255,255,0.1); color:#fff;">
+            <button class="save-pay-btn" onclick="verifyCPAuth()" style="background:#D8FF00; color:#000;">LOGIN SECURELY</button>
+            <button class="close-modal" style="color:#D8FF00;" onclick="document.getElementById('cp-auth-modal').style.display='none'">X</button>
+        </div>
+    </div>
+
+    <!-- CONTROL PANEL SETTINGS MODAL -->
+    <div class="modal-overlay" id="cp-settings-modal">
+        <div class="details-box" style="max-width: 500px;">
+            <button class="close-modal" style="color:#D8FF00;" onclick="document.getElementById('cp-settings-modal').style.display='none'">X</button>
+            <h2 style="color:#D8FF00; text-align:center; margin-bottom:15px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">⚙️ FEE CONTROL PANEL</h2>
+            
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#fff;">Package Fee /mo:</div>
+                <input type="number" id="set-pkg" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            
+            <!-- NEW INDIVIDUAL SUBJECT FEES -->
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#fff;">Maths Fee /mo:</div>
+                <input type="number" id="set-maths" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#fff;">Science Fee /mo:</div>
+                <input type="number" id="set-science" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#fff;">English Fee /mo:</div>
+                <input type="number" id="set-english" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#fff;">Social Science Fee /mo:</div>
+                <input type="number" id="set-social" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            <!-- END NEW FEES -->
+            
+            <div class="rec-input-group" style="margin-top: 15px;">
+                <div class="rec-label" style="color:#fff;">New Admission Fee:</div>
+                <input type="number" id="set-adm" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
+            </div>
+            
+            <p style="color:#ccc; font-size:0.8rem; margin-top:10px; line-height:1.4;">* <b>Rules:</b> Changed Fees will automatically apply to Current Month and Future Months. Past dues will remain exactly unchanged based on historical data. Admission fee changes will only apply to new students from today onwards.</p>
+            
+            <button class="save-pay-btn" onclick="saveSettings()" style="background:#D8FF00; color:#000; margin-top:20px;">UPDATE ALL FEES</button>
+        </div>
     </div>
 
     <div class="modal-overlay" id="month-details-modal">
@@ -285,6 +342,14 @@
                 </div>
             </div>
 
+            <!-- ADMISSION FEE BLOCK -->
+            <div class="rec-input-group" id="adm-fee-group" style="display: none; background: rgba(255, 204, 0, 0.2); border: 1px dashed #ff9800; border-radius: 5px; padding: 5px; margin-top: 5px;">
+                <div class="rec-label" id="adm-fee-label" style="width: 70%; color: #d84500;">Admission Fee (One-time): ₹100</div>
+                <div style="width: 30%; display: flex; align-items: center; justify-content: flex-end;">
+                    <label class="checkbox-label" style="color:#d84500;"><input type="checkbox" id="rec-adm-fee" class="view-lock" data-adm-amt="100" onchange="calculateLiveTotal()"> Include</label>
+                </div>
+            </div>
+
             <div style="margin-top: 40px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end;">
                 <div style="font-size: 0.7rem; color: #666; font-style: italic;">*System Generated Receipt</div>
                 <div style="text-align: center;">
@@ -302,6 +367,32 @@
         </div>
     </div>
 
+    <!-- NEW EDIT MODAL -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="details-box" style="max-width: 450px;">
+            <button class="close-modal" onclick="document.getElementById('edit-modal').style.display='none'" style="color:#D8FF00;">X</button>
+            <h2 style="text-align: center; color: #D8FF00; margin-bottom: 20px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">EDIT STUDENT</h2>
+            
+            <div class="rec-input-group"><div class="rec-label" style="color:#fff;">Student Name:</div><input type="text" id="edit-name" class="rec-input" style="color:#fff; border-bottom:1px solid #C47BE4;"></div>
+            <div class="rec-input-group"><div class="rec-label" style="color:#fff;">S/o, D/o:</div><input type="text" id="edit-parent" class="rec-input" style="color:#fff; border-bottom:1px solid #C47BE4;"></div>
+            
+            <div class="rec-input-group">
+                <div class="rec-label" style="color:#D8FF00;">Admission Date:</div>
+                <input type="date" id="edit-adm-date" class="rec-input" style="color:#D8FF00; background:rgba(0,0,0,0.3); padding:5px; border-radius:5px; border:1px solid #D8FF00;">
+            </div>
+            
+            <div style="margin-top:15px; color:#D8FF00; font-weight:bold;">Update Subjects:</div>
+            <div class="checkbox-container" style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-top:5px; justify-content:center;">
+                <label class="checkbox-label" style="color:#fff;"><input type="checkbox" class="edit-sub-checkbox" value="Maths"> Maths</label>
+                <label class="checkbox-label" style="color:#fff;"><input type="checkbox" class="edit-sub-checkbox" value="Science"> Science</label>
+                <label class="checkbox-label" style="color:#fff;"><input type="checkbox" class="edit-sub-checkbox" value="English"> English</label>
+                <label class="checkbox-label" style="color:#fff;"><input type="checkbox" class="edit-sub-checkbox" value="Social Science"> Social Science</label>
+            </div>
+            
+            <button class="save-pay-btn" onclick="saveEditedStudent()" style="background:#D8FF00; color:#000; margin-top:20px;">SAVE CHANGES</button>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyC8ocSx1TcmnAtDzwUx82HW6SYd7hLCszc",
@@ -316,9 +407,9 @@
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        
         const database = firebase.database();
         const DB_PATH = "class8_students"; 
+        const SETTINGS_PATH = "class8_settings";
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfJPXjOZopc_9dPhO4GthO8kBjIhsj39JzZE_hSerUglIb6VVY2suaHLZ5_EzD6Wpe/exec"; 
         
@@ -331,6 +422,144 @@
         let currentYear = "2026"; 
         let uploadedPhotoBase64 = "";
         let studentsData = [];
+        let editingStudentIndex = -1;
+
+        // ================= GLOBAL FEES SETTINGS =================
+        let globalSettings = {
+            package: 1000,
+            maths: 350,
+            science: 350,
+            english: 350,
+            social: 350,
+            admission: 100,
+            history: [] 
+        };
+
+        database.ref(SETTINGS_PATH).on('value', snap => {
+            if(snap.exists()) {
+                let data = snap.val();
+                // Merge data carefully for backward compatibility
+                globalSettings.package = data.package !== undefined ? data.package : 1000;
+                // If old 'subject' key exists, use it as fallback
+                let oldSub = data.subject !== undefined ? data.subject : 350;
+                globalSettings.maths = data.maths !== undefined ? data.maths : oldSub;
+                globalSettings.science = data.science !== undefined ? data.science : oldSub;
+                globalSettings.english = data.english !== undefined ? data.english : oldSub;
+                globalSettings.social = data.social !== undefined ? data.social : oldSub;
+                globalSettings.admission = data.admission !== undefined ? data.admission : 100;
+                globalSettings.history = data.history || [];
+            }
+            if (document.getElementById('dashboard').style.display === 'block') {
+                renderStudents();
+            }
+        });
+
+        // ================= DYNAMIC FEE CALCULATOR =================
+        function getEffectiveFee(year, month, courseType, subjectsArray) {
+            let effPackage = globalSettings.package || 1000;
+            let effMaths = globalSettings.maths || 350;
+            let effScience = globalSettings.science || 350;
+            let effEnglish = globalSettings.english || 350;
+            let effSocial = globalSettings.social || 350;
+            
+            let sortedHistory = (globalSettings.history || []).slice().sort((a, b) => {
+                if (a.year !== b.year) return a.year - b.year;
+                return a.month - b.month;
+            });
+
+            sortedHistory.forEach(h => {
+                if (h.year < year || (h.year === year && h.month <= month)) {
+                    if (h.package !== undefined) effPackage = h.package;
+                    
+                    // Old history fallback
+                    if (h.subject !== undefined) {
+                        effMaths = h.subject; effScience = h.subject; 
+                        effEnglish = h.subject; effSocial = h.subject;
+                    }
+                    
+                    if (h.maths !== undefined) effMaths = h.maths;
+                    if (h.science !== undefined) effScience = h.science;
+                    if (h.english !== undefined) effEnglish = h.english;
+                    if (h.social !== undefined) effSocial = h.social;
+                }
+            });
+
+            if (courseType === "Package") return effPackage;
+            
+            let totalFee = 0;
+            if (subjectsArray && Array.isArray(subjectsArray) && subjectsArray.length > 0) {
+                subjectsArray.forEach(sub => {
+                    if(sub === "Maths") totalFee += effMaths;
+                    if(sub === "Science") totalFee += effScience;
+                    if(sub === "English") totalFee += effEnglish;
+                    if(sub === "Social Science") totalFee += effSocial;
+                });
+            } else {
+                totalFee = effMaths; // Ultimate fallback if empty but single subject
+            }
+            return totalFee;
+        }
+
+        // ================= CP AUTH & SETTINGS =================
+        function verifyCPAuth() {
+            let email = document.getElementById('cp-email').value;
+            let pass = document.getElementById('cp-pass').value;
+            
+            if(email === "" || pass === "") { alert("Please enter database email and password."); return; }
+            
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    document.getElementById('cp-auth-modal').style.display = 'none';
+                    document.getElementById('cp-email').value = "";
+                    document.getElementById('cp-pass').value = "";
+                    openControlPanel();
+                })
+                .catch((error) => {
+                    alert("❌ Invalid Database Email or Password! Access Denied.");
+                });
+        }
+
+        function openControlPanel() {
+            document.getElementById('set-pkg').value = globalSettings.package || 1000;
+            document.getElementById('set-maths').value = globalSettings.maths || 350;
+            document.getElementById('set-science').value = globalSettings.science || 350;
+            document.getElementById('set-english').value = globalSettings.english || 350;
+            document.getElementById('set-social').value = globalSettings.social || 350;
+            document.getElementById('set-adm').value = globalSettings.admission || 100;
+            document.getElementById('cp-settings-modal').style.display = 'flex';
+        }
+
+        function saveSettings() {
+            let p = parseInt(document.getElementById('set-pkg').value) || 1000;
+            let m_fee = parseInt(document.getElementById('set-maths').value) || 350;
+            let s_fee = parseInt(document.getElementById('set-science').value) || 350;
+            let e_fee = parseInt(document.getElementById('set-english').value) || 350;
+            let soc_fee = parseInt(document.getElementById('set-social').value) || 350;
+            let a = parseInt(document.getElementById('set-adm').value) || 100;
+            
+            let d = new Date();
+            let y = d.getFullYear();
+            let m = d.getMonth();
+            
+            globalSettings.package = p;
+            globalSettings.maths = m_fee;
+            globalSettings.science = s_fee;
+            globalSettings.english = e_fee;
+            globalSettings.social = soc_fee;
+            globalSettings.admission = a;
+            
+            if(!globalSettings.history) globalSettings.history = [];
+            globalSettings.history = globalSettings.history.filter(h => !(h.year === y && h.month === m));
+            globalSettings.history.push({ year: y, month: m, package: p, maths: m_fee, science: s_fee, english: e_fee, social: soc_fee, admission: a });
+            
+            database.ref(SETTINGS_PATH).set(globalSettings).then(() => {
+                alert("✅ Custom Subject Fees Updated Successfully!\nFuture months will use the new fees. Past dues remain completely unchanged.");
+                document.getElementById('cp-settings-modal').style.display = 'none';
+                renderStudents();
+            });
+        }
+        // =======================================================
+
 
         // ================= FIREBASE MASTER SECURITY CHECK =================
         firebase.auth().onAuthStateChanged((user) => {
@@ -383,6 +612,12 @@
                 if(!student.payments["2027"]) student.payments["2027"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
                 if(!student.payments["2028"]) student.payments["2028"] = [[],[],[],[],[],[],[],[],[],[],[],[]];
                 
+                if(student.admissionDate === undefined) student.admissionDate = "";
+                if(student.admFeePaid === undefined) student.admFeePaid = false;
+                
+                // Fallbacks if absent
+                if(student.baseAdmFee === undefined) student.baseAdmFee = 100;
+
                 if(student.monthlyFee === undefined) {
                     if(student.courseType === "Single Subject") {
                         student.monthlyFee = (student.subjects ? student.subjects.length : 1) * 350;
@@ -411,22 +646,27 @@
             if(name === "" || parent === "") { alert("Please fill all details!"); return; }
 
             let selectedSubjects = [];
-            let monthlyFee = 0;
-
+            
             if(course === "Package") {
                 selectedSubjects = ["Maths", "Science", "English"];
-                monthlyFee = 1000;
             } else {
                 document.querySelectorAll('.sub-checkbox:checked').forEach(cb => selectedSubjects.push(cb.value));
                 if(selectedSubjects.length === 0) { alert("Please tick at least 1 subject for Single Subject!"); return; }
-                monthlyFee = selectedSubjects.length * 350;
             }
 
             let passPrompt = prompt("Enter Admin Password to Add Student:");
             if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Student NOT saved."); return; }
 
+            // Store new student using globally defined fees at this exact moment
+            let d = new Date();
+            let initialMonthly = getEffectiveFee(d.getFullYear(), d.getMonth(), course, selectedSubjects);
+
             let newStudent = {
-                name: name, parent: parent, courseType: course, medium: medium, subjects: selectedSubjects, monthlyFee: monthlyFee,
+                name: name, parent: parent, courseType: course, medium: medium, subjects: selectedSubjects, 
+                monthlyFee: initialMonthly, // For historical fallback reference
+                baseAdmFee: globalSettings.admission || 100, // Locks in admission fee for THIS student permanently
+                admissionDate: "", 
+                admFeePaid: false,
                 payments: {
                     "2026": [[],[],[],[],[],[],[],[],[],[],[],[]],
                     "2027": [[],[],[],[],[],[],[],[],[],[],[],[]],
@@ -455,11 +695,63 @@
             }
         }
 
+        // ================= EDIT STUDENT LOGIC =================
+        function openEditModal(index) {
+            let passPrompt = prompt("Enter Admin Password to Edit Student:");
+            if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password!"); return; }
+
+            editingStudentIndex = index;
+            let student = studentsData[index];
+
+            document.getElementById('edit-name').value = student.name;
+            document.getElementById('edit-parent').value = student.parent || "";
+            document.getElementById('edit-adm-date').value = student.admissionDate || "";
+
+            let savedSubs = Array.isArray(student.subjects) ? student.subjects : [];
+            document.querySelectorAll('.edit-sub-checkbox').forEach(cb => {
+                cb.checked = savedSubs.includes(cb.value);
+            });
+
+            document.getElementById('edit-modal').style.display = 'flex';
+        }
+
+        function saveEditedStudent() {
+            let student = studentsData[editingStudentIndex];
+            
+            student.name = document.getElementById('edit-name').value.trim();
+            student.parent = document.getElementById('edit-parent').value.trim();
+            student.admissionDate = document.getElementById('edit-adm-date').value;
+            
+            let selectedSubs = [];
+            document.querySelectorAll('.edit-sub-checkbox:checked').forEach(cb => {
+                selectedSubs.push(cb.value);
+            });
+            student.subjects = selectedSubs;
+            
+            if (student.courseType === "Single Subject") {
+                 let d = new Date();
+                 student.monthlyFee = getEffectiveFee(d.getFullYear(), d.getMonth(), "Single Subject", selectedSubs);
+            }
+
+            saveData();
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
         function saveData() {
             database.ref(DB_PATH).set(studentsData).catch(error => {
                 alert("❌ Internet Error! Data Cloud me save nahi hua.");
             });
         }
+
+        // ================= OVERRIDE LOCK LOGIC =================
+        function overrideLock(sIndex, mIndex) {
+            let passPrompt = prompt(`Enter Admin Password to UNLOCK early payment for ${MONTHS[mIndex]} ${currentYear}:`);
+            if(passPrompt === ACTION_PASS) { 
+                openPaymentModal(sIndex, mIndex); 
+            } 
+            else { alert("❌ Wrong Password!"); }
+        }
+        // =======================================================
 
         function renderStudents() {
             const container = document.getElementById('students-container');
@@ -474,20 +766,31 @@
                 row.className = 'student-row';
 
                 let subsStr = Array.isArray(student.subjects) ? student.subjects.join(', ') : (student.subjects || "N/A");
-                let monthlyFee = student.monthlyFee || 0;
+                
+                // Fetch correct dynamic fee for Displaying on left panel
+                let displayMonthlyFee = getEffectiveFee(currentDate.getFullYear(), currentMonthNum, student.courseType, student.subjects);
+                let admDisplay = student.admissionDate ? student.admissionDate : "<span style='color:red;'>Not Set</span>";
+                let studentAdmFee = student.baseAdmFee || 100;
 
                 let infoHTML = `
                     <div class="student-info" title="${student.name} | ${student.parent}">
                         <div class="student-name">${student.name}</div>
-                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} <br> Course: ${student.courseType || 'N/A'} (₹${monthlyFee}/mo) <br> Subs: ${subsStr}</div>
+                        <div class="student-details">S/o, D/o: ${student.parent || 'N/A'} | Adm: ${admDisplay}<br> Course: ${student.courseType || 'N/A'} (₹${displayMonthlyFee}/mo) <br> Subs: ${subsStr}</div>
                     </div>`;
                 
                 let currentMonthPaid = 0;
                 let currentMonthArr = student.payments[currentYear][currentMonthNum] || [];
-                currentMonthArr.forEach(p => currentMonthPaid += parseInt(p.amount || 0));
-                
+                currentMonthArr.forEach(p => {
+                    let amt = parseInt(p.amount || 0);
+                    if (p.admFeePaidThisInstallment) {
+                        amt -= (p.admFeeAmount || 100);
+                    }
+                    if (amt < 0) amt = 0;
+                    currentMonthPaid += amt;
+                });
+
                 let statusClass = "status-none";
-                if (currentMonthPaid >= monthlyFee && monthlyFee > 0) {
+                if (currentMonthPaid >= displayMonthlyFee && displayMonthlyFee > 0) {
                     statusClass = "status-full";
                 } else if (currentMonthPaid > 0) {
                     statusClass = "status-partial";
@@ -504,58 +807,131 @@
                 
                 if(!student.payments[currentYear]) student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
 
+                let today = new Date();
+                today.setHours(0,0,0,0);
+                
+                let isAdmMonth = false;
+                let admMonth = -1, admYear = -1;
+                let targetYear = parseInt(currentYear);
+                let monthOffset = -1;
+                let admDateObj = null;
+
+                if (student.admissionDate) {
+                    admDateObj = new Date(student.admissionDate);
+                    admDateObj.setHours(0,0,0,0);
+                    admMonth = admDateObj.getMonth();
+                    admYear = admDateObj.getFullYear();
+                }
+
                 MONTHS.forEach((monthName, mIndex) => {
                     let btnClass = ""; let onclickLogic = "";
                     let innerText = monthName;
                     
+                    if (admDateObj) {
+                        isAdmMonth = (mIndex === admMonth && targetYear === admYear);
+                        monthOffset = (targetYear - admYear) * 12 + (mIndex - admMonth);
+                    }
+
+                    // Dynamically calculate the monthly fee for this specific month from History
+                    let monthlyFeeForThisMonth = getEffectiveFee(targetYear, mIndex, student.courseType, student.subjects);
+
                     let paymentsArr = student.payments[currentYear][mIndex] || [];
                     let totalPaid = 0;
-                    paymentsArr.forEach(p => totalPaid += parseInt(p.amount || 0));
+                    paymentsArr.forEach(p => {
+                        let amt = parseInt(p.amount || 0);
+                        if (p.admFeePaidThisInstallment) {
+                            amt -= (p.admFeeAmount || 100);
+                        }
+                        if (amt < 0) amt = 0;
+                        totalPaid += amt;
+                    });
 
-                    let isFutureYear = parseInt(currentYear) > parseInt(actualCurrentYear);
-                    let isPastYear = parseInt(currentYear) < parseInt(actualCurrentYear);
+                    let isFutureYear = targetYear > parseInt(actualCurrentYear);
+                    let isPastYear = targetYear < parseInt(actualCurrentYear);
                     let isPastMonth = isPastYear || (!isFutureYear && mIndex < currentMonthNum);
 
-                    let dueAmount = monthlyFee - totalPaid;
-                    if(dueAmount < 0) dueAmount = 0;
-
-                    if (paymentsArr.length > 0) {
-                        btnClass = "btn-paid";
-                        if(dueAmount > 0) {
-                            innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
-                        } else {
-                            innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
-                        }
-                        
-                        if(isPastMonth) {
-                            onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
-                        } else {
-                            onclickLogic = `openDetailsModal(${sIndex}, ${mIndex})`; 
-                        }
-                    } 
-                    else if (isFutureYear || (!isPastYear && mIndex > currentMonthNum)) {
+                    if (!student.admissionDate) {
                         btnClass = "btn-locked";
-                        innerText = `🔒<br><span style="font-size:0.65rem;">${monthName}</span>`;
-                        onclickLogic = `alert('This button will unlock when the month arrives.')`;
-                    } 
-                    else if (isPastMonth) {
-                        btnClass = "btn-unlocked";
-                        innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
-                        onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
-                    }
-                    else {
-                        btnClass = "btn-unlocked";
-                        innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${monthlyFee}</span>`;
-                        onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`; 
+                        innerText = `🔒<br><span style="font-size:0.65rem; color:#ff4444; font-weight:bold;">Set Date</span>`;
+                        onclickLogic = `alert('Please set the Admission Date using the EDIT button first!')`;
+                    } else if (monthOffset < 0) {
+                        btnClass = "btn-locked";
+                        innerText = `🚫<br><span style="font-size:0.65rem; color:#888;">Pre-Adm</span>`;
+                        onclickLogic = `alert('This month is before the student\\'s Admission Date.')`;
+                    } else if (isAdmMonth) {
+                        if (student.admFeePaid) {
+                            btnClass = "btn-paid";
+                            innerText = `ADM MTH<br><span style="color:#fff; font-size:0.65rem; font-weight:900;">PAID</span>`;
+                            onclickLogic = paymentsArr.length > 0 ? (isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`) : `alert('Admission Fee Paid! No further regular dues for this exact month.')`;
+                        } else {
+                            btnClass = "btn-unlocked";
+                            let dueColor = isPastMonth ? "red" : "#7132CA";
+                            innerText = `ADM FEE<br><span style="color:${dueColor}; font-size:0.75rem; font-weight:900;">₹${studentAdmFee} Due</span>`;
+                            onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openPaymentModal(${sIndex}, ${mIndex})`;
+                        }
+                    } else {
+                        // SUBSEQUENT MONTHS
+                        let requiredDays = monthOffset * 30;
+                        let diffDays = Math.floor((today - admDateObj) / (1000 * 60 * 60 * 24));
+                        let dueAmount = monthlyFeeForThisMonth - totalPaid;
+                        if (dueAmount < 0) dueAmount = 0;
+
+                        if (diffDays < requiredDays) {
+                            let daysLeft = requiredDays - diffDays;
+                            
+                            if (paymentsArr.length > 0) {
+                                btnClass = "btn-paid-early"; 
+                                if (dueAmount > 0) {
+                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                } else {
+                                    innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
+                                }
+                                onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`;
+                            } else {
+                                btnClass = "btn-locked";
+                                innerText = `🔒<br><span style="font-size:0.65rem; color:#ffcc00;">Wait ${daysLeft}d</span>`;
+                                onclickLogic = `overrideLock(${sIndex}, ${mIndex})`;
+                            }
+                            
+                        } else {
+                            if (paymentsArr.length > 0 && dueAmount === 0) {
+                                btnClass = "btn-paid";
+                                innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
+                                onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`;
+                            } else if (paymentsArr.length > 0 && dueAmount > 0) {
+                                btnClass = "btn-paid";
+                                innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`;
+                            } else {
+                                btnClass = "btn-unlocked";
+                                if (isPastMonth) {
+                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                    onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
+                                } else {
+                                    innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${dueAmount}</span>`;
+                                    onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`;
+                                }
+                            }
+                        }
                     }
 
-                    monthsHTML += `<div class="month-btn ${btnClass}" onclick="${onclickLogic}">${innerText}</div>`;
+                    // ADM Month Indicator Tag
+                    let admTag = "";
+                    if (isAdmMonth) {
+                        admTag = `<div style="font-size:0.65rem; color:#000; background:#D8FF00; border-radius:3px; margin-bottom:2px; padding:1px 3px; font-weight:bold; box-shadow:0 0 5px rgba(216,255,0,0.5);">ADM ${MONTHS[mIndex]}</div>`;
+                    }
+                    monthsHTML += `<div class="month-btn ${btnClass}" onclick="${onclickLogic}">${admTag + innerText}</div>`;
                 });
 
                 monthsHTML += `</div>`;
-                let deleteHTML = `<div class="student-actions"><button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button></div>`;
+                
+                let actionsHTML = `
+                <div class="student-actions" style="display:flex; gap:5px;">
+                    <button class="del-btn" style="background:#00cc44;" onclick="openEditModal(${sIndex})">EDIT</button>
+                    <button class="del-btn" onclick="deleteStudent(${sIndex})">DEL</button>
+                </div>`;
 
-                row.innerHTML = infoHTML + statusHTML + monthsHTML + deleteHTML;
+                row.innerHTML = infoHTML + statusHTML + monthsHTML + actionsHTML;
                 container.appendChild(row);
             });
         }
@@ -584,44 +960,70 @@
 
             let totalPaid = 0;
             arr.forEach((p, idx) => {
-                totalPaid += parseInt(p.amount || 0);
+                let amt = parseInt(p.amount || 0);
+                if (p.admFeePaidThisInstallment) {
+                    amt -= (p.admFeeAmount || 100);
+                }
+                if (amt < 0) amt = 0;
+                totalPaid += amt;
+                
+                let displayAmount = p.amount;
+                if(p.admFeePaidThisInstallment) {
+                    displayAmount += " <span style='font-size:0.7rem; color:#ffcc00;'>(Incl. ₹" + (p.admFeeAmount || 100) + " Adm)</span>";
+                }
+
                 listDiv.innerHTML += `
                 <div class="inst-card">
                     <div>
-                        <div class="inst-amt">Payment ${idx+1}: ₹${p.amount}</div>
+                        <div class="inst-amt">Payment ${idx+1}: ₹${displayAmount}</div>
                         <div class="inst-date">Sl No: ${p.slno || 'N/A'} <br> Date: ${p.date}</div>
                     </div>
                     <button class="inst-view-btn" onclick="viewPastPayment(${idx})">View PDF</button>
                 </div>`;
             });
 
-            let monthlyFee = student.monthlyFee || 0;
-            let dueAmount = monthlyFee - totalPaid;
+            let isAdmMonth = false;
+            if(student.admissionDate) {
+                let admDateObj = new Date(student.admissionDate);
+                isAdmMonth = (mIndex === admDateObj.getMonth() && parseInt(currentYear) === admDateObj.getFullYear());
+            }
+            
+            let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), mIndex, student.courseType, student.subjects);
+            let baseMonthlyFee = isAdmMonth ? 0 : monthlyFeeForThisMonth;
+            
+            let dueAmount = baseMonthlyFee - totalPaid;
             if(dueAmount < 0) dueAmount = 0;
 
             if (arr.length === 0) {
                  listDiv.innerHTML = `<p style="text-align:center; color:#ff4444; font-weight:bold; margin-bottom:10px;">❌ No Payments Made in this month.</p>`;
             }
 
-            listDiv.innerHTML += `<div style="text-align:center; font-size:1.3rem; color:#ff4444; font-weight:900; margin-top:15px; border:2px dashed #ff4444; padding:8px; border-radius:8px; background:rgba(255,0,0,0.1);">DUE AMOUNT: ₹${dueAmount}</div>`;
+            let extraNotice = "";
+            let studentAdmFee = student.baseAdmFee || 100;
+            if(!student.admFeePaid && student.admissionDate) {
+                let admDateObj = new Date(student.admissionDate);
+                let currentCheckingDate = new Date(parseInt(currentYear), mIndex, 1);
+                let admCheckingDate = new Date(admDateObj.getFullYear(), admDateObj.getMonth(), 1);
+                if(currentCheckingDate >= admCheckingDate) {
+                    extraNotice = `<div style="color:#ffcc00; font-size:0.85rem; margin-top:5px;">+ ₹${studentAdmFee} Admission Fee Pending!</div>`;
+                }
+            }
+
+            listDiv.innerHTML += `<div style="text-align:center; font-size:1.3rem; color:#ff4444; font-weight:900; margin-top:15px; border:2px dashed #ff4444; padding:8px; border-radius:8px; background:rgba(255,0,0,0.1);">DUE AMOUNT: ₹${dueAmount} ${extraNotice}</div>`;
 
             document.getElementById('details-month-title').innerText = `${MONTHS[mIndex]} ${currentYear} DETAILS`;
             
-            // ================= NEW VISIBILITY LOGIC (FIXED) =================
             let sysDate = new Date();
             let currentRealMonth = sysDate.getMonth();
             let currentRealYear = sysDate.getFullYear();
             
-            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
-            let allowedYear = currentRealMonth === 0 ? currentRealYear - 1 : currentRealYear;
+            let monthDiff = (parseInt(currentYear) - currentRealYear) * 12 + (mIndex - currentRealMonth);
 
-            // Sirf pichle 1 mahine mein hi "+ ADD NEW PAYMENT" button dikhega
-            if(mIndex !== allowedMonth || parseInt(currentYear) !== allowedYear || arr.length >= 5) {
+            if(monthDiff < -1 || monthDiff > 2 || arr.length >= 5) {
                 document.getElementById('add-installment-btn').style.display = 'none';
             } else {
                 document.getElementById('add-installment-btn').style.display = 'block';
             }
-            // ================================================================
 
             document.getElementById('month-details-modal').style.display = 'flex';
         }
@@ -645,8 +1047,15 @@
             document.getElementById('rec-medium').value = paymentInfo.medium || student.medium || "N/A";
             document.getElementById('rec-mode').value = paymentInfo.mode;
             document.getElementById('rec-amount').value = paymentInfo.amount;
-            document.getElementById('rec-total-display').innerText = student.monthlyFee || 0;
-            document.getElementById('rec-total-display').setAttribute('data-base', student.monthlyFee || 0);
+            
+            let admDateObj = student.admissionDate ? new Date(student.admissionDate) : null;
+            let isAdmMonth = false;
+            if(admDateObj) {
+                isAdmMonth = (currentMonthIndex === admDateObj.getMonth() && parseInt(currentYear) === admDateObj.getFullYear());
+            }
+
+            let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), currentMonthIndex, student.courseType, student.subjects);
+            let displayTotal = isAdmMonth ? 0 : monthlyFeeForThisMonth;
             
             let checkboxes = document.querySelectorAll('input[name="subject"]');
             let savedSubjects = paymentInfo.subjects ? paymentInfo.subjects.split(", ") : (Array.isArray(student.subjects) ? student.subjects : []);
@@ -655,6 +1064,20 @@
             let inputs = document.querySelectorAll('.view-lock');
             inputs.forEach(el => { el.disabled = true; el.style.background = "transparent"; });
             
+            let studentAdmFee = student.baseAdmFee || 100;
+            if (paymentInfo.admFeePaidThisInstallment) {
+                document.getElementById('adm-fee-group').style.display = 'flex';
+                document.getElementById('adm-fee-label').innerHTML = "Admission Fee (One-time): ₹" + (paymentInfo.admFeeAmount || 100);
+                document.getElementById('rec-adm-fee').checked = true;
+                document.getElementById('rec-adm-fee').disabled = true;
+                displayTotal += (paymentInfo.admFeeAmount || 100); 
+            } else {
+                document.getElementById('adm-fee-group').style.display = 'none';
+            }
+
+            document.getElementById('rec-total-display').innerText = displayTotal;
+            document.getElementById('rec-total-display').setAttribute('data-base', isAdmMonth ? 0 : monthlyFeeForThisMonth);
+
             document.getElementById('watermark-paid').style.display = 'block';
             document.getElementById('photo-area').style.display = 'none'; 
             document.getElementById('save-btn').style.display = 'none'; 
@@ -662,12 +1085,21 @@
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
+        // ================= LIVE CALCULATOR WITH ADM FEE LOGIC =================
         function calculateLiveTotal() {
             let baseAmount = parseInt(document.getElementById('rec-total-display').getAttribute('data-base')) || 0;
+            
+            let admFeeBox = document.getElementById('rec-adm-fee');
+            let admFeeAmt = parseInt(admFeeBox.getAttribute('data-adm-amt')) || 100;
+            let isAdmFeeVisible = admFeeBox && admFeeBox.closest('#adm-fee-group').style.display !== 'none';
+            let admFee = (isAdmFeeVisible && admFeeBox.checked) ? admFeeAmt : 0;
+            
             let enteredAmount = parseInt(document.getElementById('rec-amount').value) || 0;
-            let finalAmount = baseAmount - enteredAmount;
+            let finalAmount = (baseAmount + admFee) - enteredAmount;
+            
             document.getElementById('rec-total-display').innerText = finalAmount < 0 ? 0 : finalAmount;
         }
+        // ======================================================================
 
         function openPaymentModal(sIndex, mIndex) {
             currentStudentIndex = sIndex;
@@ -702,13 +1134,61 @@
             document.getElementById('rec-amount').value = "";
             document.getElementById('rec-photo').value = "";
             
+            let admDateObj = student.admissionDate ? new Date(student.admissionDate) : null;
+            let isAdmMonth = false;
+            if(admDateObj) {
+                isAdmMonth = (mIndex === admDateObj.getMonth() && parseInt(currentYear) === admDateObj.getFullYear());
+            }
+
+            // ================= SHOW/HIDE ADM FEE BOX =================
+            let admFeeBox = document.getElementById('rec-adm-fee');
+            let studentAdmFee = student.baseAdmFee || 100;
+            document.getElementById('adm-fee-label').innerHTML = "Admission Fee (One-time): ₹" + studentAdmFee;
+            admFeeBox.setAttribute('data-adm-amt', studentAdmFee);
+            
+            if (!student.admFeePaid && student.admissionDate) {
+                let currentCheckingDate = new Date(parseInt(currentYear), mIndex, 1);
+                let admCheckingDate = new Date(admDateObj.getFullYear(), admDateObj.getMonth(), 1);
+                
+                if (currentCheckingDate >= admCheckingDate) {
+                    document.getElementById('adm-fee-group').style.display = 'flex';
+                    if (isAdmMonth && admFeeBox) {
+                        admFeeBox.checked = true; // Auto-force check for pure admission month
+                    } else if(admFeeBox) {
+                        admFeeBox.checked = false;
+                    }
+                } else {
+                    document.getElementById('adm-fee-group').style.display = 'none';
+                    if(admFeeBox) admFeeBox.checked = false;
+                }
+            } else {
+                document.getElementById('adm-fee-group').style.display = 'none';
+                if(admFeeBox) admFeeBox.checked = false;
+            }
+            if(admFeeBox) admFeeBox.disabled = false;
+            // =========================================================
+
+            let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), mIndex, student.courseType, student.subjects);
+            let monthlyFeeForThisModal = isAdmMonth ? 0 : monthlyFeeForThisMonth;
+            
             let arr = student.payments[currentYear][mIndex] || [];
-            let prevPaid = arr.reduce((sum, p) => sum + parseInt(p.amount || 0), 0);
-            let currentDue = (student.monthlyFee || 0) - prevPaid;
+            let prevPaid = arr.reduce((sum, p) => {
+                let amt = parseInt(p.amount || 0);
+                if (p.admFeePaidThisInstallment) {
+                    amt -= (p.admFeeAmount || 100);
+                }
+                if (amt < 0) amt = 0;
+                return sum + amt;
+            }, 0);
+
+            let currentDue = monthlyFeeForThisModal - prevPaid;
             if(currentDue < 0) currentDue = 0;
 
             document.getElementById('rec-total-display').setAttribute('data-base', currentDue);
-            document.getElementById('rec-total-display').innerText = currentDue;
+            
+            let initialAdmFee = (admFeeBox && admFeeBox.checked && document.getElementById('adm-fee-group').style.display !== 'none') ? studentAdmFee : 0;
+            document.getElementById('rec-total-display').innerText = currentDue + initialAdmFee;
+
             uploadedPhotoBase64 = "";
             
             let savedSubjects = Array.isArray(student.subjects) ? student.subjects : [];
@@ -725,37 +1205,38 @@
         }
 
         function savePayment() {
-            // Check Internet Connection
             if (!navigator.onLine) {
                 alert("❌ No Internet Connection! Data save nahi hoga.");
                 return;
             }
 
-            // ================== NEW PAST 1 MONTH SECURITY LOGIC ==================
             let sysDate = new Date();
-            let currentRealMonth = sysDate.getMonth(); // May = 4
+            let currentRealMonth = sysDate.getMonth();
             let currentRealYear = sysDate.getFullYear();
 
-            // Calculate the allowed previous month (e.g., if May, allowed is April (3))
-            let allowedMonth = (currentRealMonth - 1 + 12) % 12;
-            let allowedYear = currentRealYear;
-            // Handle cross-year (January -> December of previous year)
-            if (currentRealMonth === 0) {
-                allowedYear = currentRealYear - 1;
-            }
+            let monthDiff = (parseInt(currentYear) - currentRealYear) * 12 + (currentMonthIndex - currentRealMonth);
 
-            if (currentMonthIndex !== allowedMonth || parseInt(currentYear) !== allowedYear) {
-                alert("❌ Error: Aap sirf pichle ek mahine (Past 1 Month) ka hi naya payment receive kar sakte hain!");
+            if (monthDiff < -1 || monthDiff > 2) {
+                alert("❌ Error: Aap sirf Past 1 Month, Current Month, ya Future 2 Months tak ka hi naya payment receive kar sakte hain!");
                 return;
             }
-            // =====================================================================
 
             let amount = document.getElementById('rec-amount').value;
             let currentSlNo = document.getElementById('rec-slno').value; 
             let checkboxes = document.querySelectorAll('input[name="subject"]:checked');
-            
+            let student = studentsData[currentStudentIndex];
+            let studentAdmFee = student.baseAdmFee || 100;
+
             if(checkboxes.length === 0) { alert("Please tick at least one Subject!"); return; }
             if(amount === "") { alert("Please enter the Amount!"); return; }
+
+            let admFeeBox = document.getElementById('rec-adm-fee');
+            let includesAdmFee = (admFeeBox && admFeeBox.checked && admFeeBox.closest('#adm-fee-group').style.display !== 'none');
+            
+            if (includesAdmFee && parseInt(amount) < studentAdmFee) {
+                alert(`❌ Error: Admission Fee include kiya gaya hai. Amount kam se kam ₹${studentAdmFee} hona chahiye!`);
+                return;
+            }
 
             let passPrompt = prompt("Enter Admin Password to MARK AS PAID & SAVE:");
             if(passPrompt !== ACTION_PASS) { alert("❌ Wrong Password! Payment NOT saved."); return; }
@@ -772,7 +1253,6 @@
             element.scrollTop = 0;
 
             setTimeout(function() {
-                // PDF processing
                 let opt = { margin: 5, filename: 'Receipt_' + currentSlNo + '.pdf', image: { type: 'jpeg', quality: 0.90 }, html2canvas: { scale: 1.5, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
 
                 html2pdf().set(opt).from(element).outputPdf('datauristring').then(function(pdfBase64) {
@@ -783,8 +1263,13 @@
                     document.getElementById('save-btn').style.display = 'block';
                     document.getElementById('photo-area').style.display = 'block';
 
-                    let currentInstCount = (studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex] || []).length + 1;
+                    let currentInstCount = (student.payments[currentYear][currentMonthIndex] || []).length + 1;
                     let monthLabel = `${MONTHS[currentMonthIndex]} ${currentYear} (Inst ${currentInstCount})`;
+
+                    let finalSubsStr = Array.from(checkboxes).map(cb => cb.value).join(", ");
+                    if (includesAdmFee) {
+                        finalSubsStr += ` + Admission Fee(₹${studentAdmFee})`; 
+                    }
 
                     let payload = {
                         student_name: document.getElementById('rec-name').value,
@@ -792,7 +1277,7 @@
                         student_class: "Class 8", 
                         course_type: document.getElementById('rec-course').value,
                         medium: document.getElementById('rec-medium').value,
-                        final_subjects: Array.from(checkboxes).map(cb => cb.value).join(", ") + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
+                        final_subjects: finalSubsStr + ` [${monthLabel}] [Sl No: ${currentSlNo}]`,
                         amount: amount,
                         payment_mode: document.getElementById('rec-mode').value,
                         pdf_data: pdfBase64,
@@ -802,7 +1287,7 @@
                     let isSaved = false;
 
                     function finalizeSave() {
-                        if (isSaved) return; // double entry se bachne ke liye
+                        if (isSaved) return; 
                         isSaved = true;
 
                         let paymentMetadata = {
@@ -810,12 +1295,19 @@
                             date: document.getElementById('rec-date').value,
                             course: document.getElementById('rec-course').value,
                             medium: document.getElementById('rec-medium').value,
-                            subjects: Array.from(checkboxes).map(cb => cb.value).join(", "),
+                            subjects: finalSubsStr, 
                             mode: document.getElementById('rec-mode').value,
-                            amount: amount
+                            amount: amount,
+                            admFeePaidThisInstallment: includesAdmFee,
+                            admFeeAmount: studentAdmFee // Specifically log the applied admission fee
                         };
 
-                        studentsData[currentStudentIndex].payments[currentYear][currentMonthIndex].push(paymentMetadata);
+                        student.payments[currentYear][currentMonthIndex].push(paymentMetadata);
+                        
+                        if (includesAdmFee) {
+                            student.admFeePaid = true;
+                        }
+
                         saveData(); 
 
                         document.getElementById('loading-overlay').style.display = 'none';
@@ -823,7 +1315,6 @@
                         closeModal();
                     }
 
-                    // CORS block ko permanently avoid karne ka tarika
                     fetch(SCRIPT_URL, { 
                         method: "POST", 
                         mode: "no-cors",
