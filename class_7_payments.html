@@ -233,7 +233,6 @@
         <div id="students-container"></div>
     </div>
 
-    <!-- CP AUTH MODAL -->
     <div class="modal-overlay" id="cp-auth-modal">
         <div class="details-box" style="max-width: 400px; text-align: center;">
             <h2 style="color:#D8FF00; margin-bottom:15px; border-bottom: 2px dashed #C47BE4; padding-bottom: 10px;">ADMIN LOGIN</h2>
@@ -244,7 +243,6 @@
         </div>
     </div>
 
-    <!-- CONTROL PANEL SETTINGS MODAL -->
     <div class="modal-overlay" id="cp-settings-modal">
         <div class="details-box" style="max-width: 500px;">
             <button class="close-modal" style="color:#D8FF00;" onclick="document.getElementById('cp-settings-modal').style.display='none'">X</button>
@@ -255,7 +253,6 @@
                 <input type="number" id="set-pkg" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
             </div>
             
-            <!-- NEW INDIVIDUAL SUBJECT FEES -->
             <div class="rec-input-group">
                 <div class="rec-label" style="color:#fff;">Maths Fee /mo:</div>
                 <input type="number" id="set-maths" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
@@ -272,8 +269,6 @@
                 <div class="rec-label" style="color:#fff;">Social Science Fee /mo:</div>
                 <input type="number" id="set-social" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
             </div>
-            <!-- END NEW FEES -->
-            
             <div class="rec-input-group" style="margin-top: 15px;">
                 <div class="rec-label" style="color:#fff;">New Admission Fee:</div>
                 <input type="number" id="set-adm" class="rec-input" style="color:#D8FF00; border-bottom:1px solid #D8FF00;">
@@ -342,7 +337,6 @@
                 </div>
             </div>
 
-            <!-- ADMISSION FEE BLOCK -->
             <div class="rec-input-group" id="adm-fee-group" style="display: none; background: rgba(255, 204, 0, 0.2); border: 1px dashed #ff9800; border-radius: 5px; padding: 5px; margin-top: 5px;">
                 <div class="rec-label" id="adm-fee-label" style="width: 70%; color: #d84500;">Admission Fee (One-time): ₹100</div>
                 <div style="width: 30%; display: flex; align-items: center; justify-content: flex-end;">
@@ -367,7 +361,6 @@
         </div>
     </div>
 
-    <!-- NEW EDIT MODAL -->
     <div class="modal-overlay" id="edit-modal">
         <div class="details-box" style="max-width: 450px;">
             <button class="close-modal" onclick="document.getElementById('edit-modal').style.display='none'" style="color:#D8FF00;">X</button>
@@ -1290,6 +1283,13 @@
                         if (isSaved) return; 
                         isSaved = true;
 
+                        let catDate = new Date();
+                        let catDiff = (parseInt(currentYear) - catDate.getFullYear()) * 12 + (currentMonthIndex - catDate.getMonth());
+                        let pCat = "Current Month";
+                        if (catDiff === -1) pCat = "Past Month";
+                        else if (catDiff === 1) pCat = "Current Waiting Month";
+                        else if (catDiff === 2) pCat = "Future Month";
+
                         let paymentMetadata = {
                             slno: currentSlNo,
                             date: document.getElementById('rec-date').value,
@@ -1299,8 +1299,18 @@
                             mode: document.getElementById('rec-mode').value,
                             amount: amount,
                             admFeePaidThisInstallment: includesAdmFee,
-                            admFeeAmount: studentAdmFee // Specifically log the applied admission fee
+                            admFeeAmount: studentAdmFee, // Specifically log the applied admission fee
+                            payment_category: pCat
                         };
+
+                        // --- THE FIX: PREVENT FIREBASE UNDEFINED ARRAY CRASH ---
+                        if (!student.payments[currentYear]) {
+                            student.payments[currentYear] = [[],[],[],[],[],[],[],[],[],[],[],[]];
+                        }
+                        if (!student.payments[currentYear][currentMonthIndex]) {
+                            student.payments[currentYear][currentMonthIndex] = [];
+                        }
+                        // -------------------------------------------------------
 
                         student.payments[currentYear][currentMonthIndex].push(paymentMetadata);
                         
