@@ -167,6 +167,10 @@
         .inst-amt { font-size: 1.2rem; font-weight: bold; color: #D8FF00;}
         .inst-date { font-size: 0.8rem; color: #ccc;}
         .inst-view-btn { background: #C47BE4; color: #fff; border: none; padding: 5px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;}
+
+        /* NEW: Delete Button Style */
+        .inst-del-btn { background: #ff4444; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-left: 5px; transition: 0.3s;}
+        .inst-del-btn:hover { background: #cc0000; transform: scale(1.1);}
         
         #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; justify-content: center; align-items: center; flex-direction: column; color: #D8FF00; text-align: center;}
 
@@ -965,31 +969,26 @@
                         btnClass = "btn-locked";
                         innerText = `🚫<br><span style="font-size:0.65rem; color:#888;">Pre-Adm</span>`;
                         onclickLogic = `alert('This month is before the student\\'s Admission Date.')`;
-                    } else if (isAdmMonth) {
-                        if (student.admFeePaid) {
-                            btnClass = "btn-paid";
-                            innerText = `ADM MTH<br><span style="color:#fff; font-size:0.65rem; font-weight:900;">PAID</span>`;
-                            onclickLogic = paymentsArr.length > 0 ? (isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`) : `alert('Admission Fee Paid! No further regular dues for this exact month.')`;
-                        } else {
-                            btnClass = "btn-unlocked";
-                            let dueColor = isPastMonth ? "red" : "#7132CA";
-                            innerText = `ADM FEE<br><span style="color:${dueColor}; font-size:0.75rem; font-weight:900;">₹${studentAdmFee} Due</span>`;
-                            onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openPaymentModal(${sIndex}, ${mIndex})`;
-                        }
                     } else {
-                        // SUBSEQUENT MONTHS
+                        // COMBINED LOGIC FOR ADM MONTH AND REGULAR MONTHS
                         let requiredDays = monthOffset * 30;
                         let diffDays = Math.floor((today - admDateObj) / (1000 * 60 * 60 * 24));
+                        
                         let dueAmount = monthlyFeeForThisMonth - totalPaid;
                         if (dueAmount < 0) dueAmount = 0;
 
-                        if (diffDays < requiredDays) {
+                        // Add Admission Fee to total display if not paid yet
+                        let totalDueDisplay = dueAmount;
+                        if (isAdmMonth && !student.admFeePaid) {
+                            totalDueDisplay += studentAdmFee; 
+                        }
+
+                        if (diffDays < requiredDays && !isAdmMonth) {
                             let daysLeft = requiredDays - diffDays;
-                            
                             if (paymentsArr.length > 0) {
                                 btnClass = "btn-paid-early"; 
-                                if (dueAmount > 0) {
-                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                if (totalDueDisplay > 0) {
+                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${totalDueDisplay}</span>`;
                                 } else {
                                     innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
                                 }
@@ -999,23 +998,22 @@
                                 innerText = `🔒<br><span style="font-size:0.65rem; color:#ffcc00;">Wait ${daysLeft}d</span>`;
                                 onclickLogic = `overrideLock(${sIndex}, ${mIndex})`;
                             }
-                            
                         } else {
-                            if (paymentsArr.length > 0 && dueAmount === 0) {
+                            if (paymentsArr.length > 0 && totalDueDisplay === 0) {
                                 btnClass = "btn-paid";
                                 innerText = `${monthName}<br><span style="color:transparent; font-size:0.65rem;">.</span>`;
                                 onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`;
-                            } else if (paymentsArr.length > 0 && dueAmount > 0) {
+                            } else if (paymentsArr.length > 0 && totalDueDisplay > 0) {
                                 btnClass = "btn-paid";
-                                innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${totalDueDisplay}</span>`;
                                 onclickLogic = isPastMonth ? `unlockPastMonth(${sIndex}, ${mIndex})` : `openDetailsModal(${sIndex}, ${mIndex})`;
                             } else {
                                 btnClass = "btn-unlocked";
                                 if (isPastMonth) {
-                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${dueAmount}</span>`;
+                                    innerText = `${monthName}<br><span style="color:red; font-size:0.65rem; font-weight:900; text-shadow:none;">Due: ${totalDueDisplay}</span>`;
                                     onclickLogic = `unlockPastMonth(${sIndex}, ${mIndex})`;
                                 } else {
-                                    innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${dueAmount}</span>`;
+                                    innerText = `${monthName}<br><span style="font-size:0.75rem; color:#7132CA; font-weight:900;">₹${totalDueDisplay}</span>`;
                                     onclickLogic = `openPaymentModal(${sIndex}, ${mIndex})`;
                                 }
                             }
@@ -1085,18 +1083,15 @@
                         <div class="inst-amt">Payment ${idx+1}: ₹${displayAmount}</div>
                         <div class="inst-date">Sl No: ${p.slno || 'N/A'} <br> Date: ${p.date}</div>
                     </div>
-                    <button class="inst-view-btn" onclick="viewPastPayment(${idx})">View PDF</button>
+                    <div style="display: flex;">
+                        <button class="inst-view-btn" onclick="viewPastPayment(${idx})">View PDF</button>
+                        <button class="inst-del-btn" onclick="deletePayment(${idx})" title="Cancel Payment">🗑️</button>
+                    </div>
                 </div>`;
             });
 
-            let isAdmMonth = false;
-            if(student.admissionDate) {
-                let admDateObj = new Date(student.admissionDate);
-                isAdmMonth = (mIndex === admDateObj.getMonth() && parseInt(currentYear) === admDateObj.getFullYear());
-            }
-            
             let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), mIndex, student.courseType, student.subjects);
-            let baseMonthlyFee = isAdmMonth ? 0 : monthlyFeeForThisMonth;
+            let baseMonthlyFee = monthlyFeeForThisMonth;
             
             let dueAmount = baseMonthlyFee - totalPaid;
             if(dueAmount < 0) dueAmount = 0;
@@ -1155,14 +1150,8 @@
             document.getElementById('rec-mode').value = paymentInfo.mode;
             document.getElementById('rec-amount').value = paymentInfo.amount;
             
-            let admDateObj = student.admissionDate ? new Date(student.admissionDate) : null;
-            let isAdmMonth = false;
-            if(admDateObj) {
-                isAdmMonth = (currentMonthIndex === admDateObj.getMonth() && parseInt(currentYear) === admDateObj.getFullYear());
-            }
-
             let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), currentMonthIndex, student.courseType, student.subjects);
-            let displayTotal = isAdmMonth ? 0 : monthlyFeeForThisMonth;
+            let displayTotal = monthlyFeeForThisMonth;
             
             let checkboxes = document.querySelectorAll('input[name="subject"]');
             let savedSubjects = paymentInfo.subjects ? paymentInfo.subjects.split(", ") : (Array.isArray(student.subjects) ? student.subjects : []);
@@ -1183,7 +1172,7 @@
             }
 
             document.getElementById('rec-total-display').innerText = displayTotal;
-            document.getElementById('rec-total-display').setAttribute('data-base', isAdmMonth ? 0 : monthlyFeeForThisMonth);
+            document.getElementById('rec-total-display').setAttribute('data-base', monthlyFeeForThisMonth);
 
             document.getElementById('watermark-paid').style.display = 'block';
             document.getElementById('photo-area').style.display = 'none'; 
@@ -1276,7 +1265,7 @@
             // =========================================================
 
             let monthlyFeeForThisMonth = getEffectiveFee(parseInt(currentYear), mIndex, student.courseType, student.subjects);
-            let monthlyFeeForThisModal = isAdmMonth ? 0 : monthlyFeeForThisMonth;
+            let monthlyFeeForThisModal = monthlyFeeForThisMonth;
             
             let arr = student.payments[currentYear][mIndex] || [];
             let prevPaid = arr.reduce((sum, p) => {
@@ -1454,6 +1443,39 @@
                     });
                 });
             }, 1000); 
+        }
+
+        // ================= DELETE/CANCEL PAYMENT LOGIC =================
+        function deletePayment(installmentIndex) {
+            let passPrompt = prompt("⚠️ DANGER ZONE: Enter Admin Password (123456) to CANCEL this payment:");
+            if(passPrompt !== ACTION_PASS) { 
+                alert("❌ Wrong Password! Payment Delete nahi hua."); 
+                return; 
+            }
+
+            if(!confirm("Are you SURE you want to DELETE this payment permanently?")) {
+                return;
+            }
+
+            let student = studentsData[currentStudentIndex];
+            let paymentToDelete = student.payments[currentYear][currentMonthIndex][installmentIndex];
+
+            // SMART LOGIC: Agar is payment me Admission Fee di gayi thi, toh use wapas DUE kar do!
+            if (paymentToDelete.admFeePaidThisInstallment) {
+                student.admFeePaid = false;
+            }
+
+            // Payment ko array se hatao
+            student.payments[currentYear][currentMonthIndex].splice(installmentIndex, 1);
+
+            // Database me save karo
+            saveData();
+            
+            alert("✅ Payment Successfully Cancelled & Deleted!");
+            
+            // Screen ko turant refresh karo (bina password mange)
+            openDetailsModal(currentStudentIndex, currentMonthIndex, true); 
+            renderStudents();
         }
     </script>
 </body>
